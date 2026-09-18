@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { 
-  FaClock, FaGlobe, FaStar, FaArrowRight, FaCheckCircle, 
-  FaAward, FaChalkboardTeacher, FaGraduationCap, FaTools, 
-  FaLaptopCode, FaBullhorn, FaCut, FaPhoneAlt, FaWhatsapp, 
-  FaPlayCircle, FaChevronLeft, FaChevronRight, FaRegCheckCircle, 
+import {
+  FaClock, FaGlobe, FaStar, FaArrowRight, FaCheckCircle,
+  FaAward, FaChalkboardTeacher, FaGraduationCap, FaTools,
+  FaLaptopCode, FaBullhorn, FaCut, FaPhoneAlt, FaWhatsapp,
+  FaPlayCircle, FaChevronLeft, FaChevronRight, FaRegCheckCircle,
   FaUserGraduate, FaCertificate, FaRocket, FaHandsHelping, FaEye,
   FaBookOpen
 } from 'react-icons/fa';
@@ -122,13 +122,13 @@ const TiltedCard = ({ children, className = '' }) => {
   };
 
   return (
-    <div 
-      className="tilted-card-wrapper w-full h-full cursor-pointer" 
-      onMouseMove={handleMouseMove} 
+    <div
+      className="tilted-card-wrapper w-full h-full cursor-pointer"
+      onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div 
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} 
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={`w-full h-full relative transition-shadow duration-300 ${className}`}
       >
         {children}
@@ -426,13 +426,13 @@ const Home = () => {
   }, []);
 
   const categories = ['All', 'Digital Marketing', 'Technology', 'Digital Services', 'Fashion & Tailoring', 'Web Development', 'Accounting & Tally', 'Mobile Hardware'];
-  const filteredCourses = selectedCategory === 'All' 
-    ? courses 
+  const filteredCourses = selectedCategory === 'All'
+    ? courses
     : courses.filter(c => (c.category || '').toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes((c.category || '').toLowerCase()));
 
   return (
     <div className="bg-slate-50 min-h-screen font-inter text-slate-800">
-      <SEO 
+      <SEO
         title="Skill Tech Academy - Learn Digital Skills & Professional Courses"
         description="Empowering individuals with practical digital skills, computer hardware, digital seva, and tailoring courses in Telangana. Unrelenting Evolution Pvt. Ltd."
         keywords="Skill Tech Academy, computer courses Mahabubnagar, digital marketing training, hardware tech, digital seva csc, tailoring institute"
@@ -440,7 +440,7 @@ const Home = () => {
       />
 
       {/* Top Scroll Indicator */}
-      <motion.div 
+      <motion.div
         className="fixed top-20 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 origin-left z-40"
         style={{ scaleX }}
       />
@@ -449,18 +449,18 @@ const Home = () => {
       {/* 🚀 HERO SECTION WITH VIBRANT BRAND BLUE GRADIENT & RESPONSIVE SLIDER     */}
       {/* ========================================================================= */}
       <section className="relative pt-6 sm:pt-8 pb-12 md:pb-16 overflow-hidden bg-gradient-to-b from-[#1e40af] via-[#172554] to-[#0f172a]">
-        
+
         {/* Soft Ambient Radiant Lighting */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[420px] bg-gradient-to-b from-blue-400/25 via-cyan-400/10 to-transparent blur-3xl pointer-events-none" />
         <div className="absolute top-4 left-6 sm:left-12 w-72 sm:w-96 h-72 sm:h-96 bg-cyan-400/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-6 right-6 sm:right-12 w-72 sm:w-96 h-72 sm:h-96 bg-emerald-400/15 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Top Hero Text Intro */}
           <div className="text-center max-w-4xl mx-auto pt-2 pb-6 sm:pb-8 md:pt-4 md:pb-10 relative z-10">
             {/* Institute Tag Badge */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
@@ -473,7 +473,7 @@ const Home = () => {
             </motion.div>
 
             {/* Main Headline */}
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -485,7 +485,7 @@ const Home = () => {
               </span>
             </motion.h1>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -495,7 +495,7 @@ const Home = () => {
             </motion.p>
 
             {/* Credibility Pills */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
@@ -516,21 +516,21 @@ const Home = () => {
             </motion.div>
 
             {/* CTAs */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-sm sm:max-w-none mx-auto"
             >
-              <Link 
+              <Link
                 to="/courses"
                 className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 group"
               >
                 <span>{t('hero_explore')}</span>
                 <FaArrowRight className="text-xs sm:text-sm group-hover:translate-x-1 transition-transform" />
               </Link>
-              
-              <a 
+
+              <a
                 href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20know%20more%20about%20your%20courses."
                 target="_blank"
                 rel="noreferrer"
@@ -543,13 +543,13 @@ const Home = () => {
           </div>
 
           {/* 🌟 NORMAL RESPONSIVE HERO BANNER SLIDER (NO HOVER EFFECTS) 🌟 */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             className="relative rounded-2xl sm:rounded-3xl p-1 sm:p-1.5 bg-gradient-to-b from-blue-400/30 via-indigo-700/20 to-slate-900/60 shadow-2xl shadow-blue-950/80 border border-blue-400/20"
           >
-            <div 
+            <div
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
               onTouchStart={handleTouchStart}
@@ -566,9 +566,9 @@ const Home = () => {
                   transition={{ duration: 0.45, ease: "easeInOut" }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  <img 
-                    src={BANNER_SLIDES[currentSlide].src} 
-                    alt={BANNER_SLIDES[currentSlide].alt} 
+                  <img
+                    src={BANNER_SLIDES[currentSlide].src}
+                    alt={BANNER_SLIDES[currentSlide].alt}
                     className="w-full h-full object-cover object-center select-none"
                     loading="eager"
                   />
@@ -596,7 +596,7 @@ const Home = () => {
               </div>
 
               {/* Left Chevron Button */}
-              <button 
+              <button
                 onClick={prevSlide}
                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-950/65 hover:bg-blue-600 active:scale-90 text-white backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg transition-all"
                 aria-label="Previous Slide"
@@ -605,7 +605,7 @@ const Home = () => {
               </button>
 
               {/* Right Chevron Button */}
-              <button 
+              <button
                 onClick={nextSlide}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-950/65 hover:bg-blue-600 active:scale-90 text-white backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg transition-all"
                 aria-label="Next Slide"
@@ -625,14 +625,13 @@ const Home = () => {
                 {/* Slider Pagination Dots */}
                 <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-950/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 pointer-events-auto mx-auto sm:mx-0">
                   {BANNER_SLIDES.map((_, idx) => (
-                    <button 
+                    <button
                       key={idx}
                       onClick={() => setCurrentSlide(idx)}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        idx === currentSlide 
-                          ? 'w-6 sm:w-7 bg-blue-500 shadow-sm shadow-blue-400/50' 
+                      className={`h-2 rounded-full transition-all duration-300 ${idx === currentSlide
+                          ? 'w-6 sm:w-7 bg-blue-500 shadow-sm shadow-blue-400/50'
                           : 'w-2 bg-white/40 hover:bg-white/75'
-                      }`}
+                        }`}
                       aria-label={`Slide ${idx + 1}`}
                     />
                   ))}
@@ -654,7 +653,7 @@ const Home = () => {
       <section className="py-6 sm:py-10 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-            
+
             {/* 1. Courses */}
             <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all overflow-hidden">
               <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-blue-600 text-white flex items-center justify-center text-lg sm:text-2xl shadow-md shadow-blue-500/25 shrink-0">
@@ -725,18 +724,18 @@ const Home = () => {
       <section className="py-20 bg-slate-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left Content (7 cols) */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider">
                 <FaHandsHelping />
                 <span>Empowering Careers & Skills</span>
               </div>
-              
+
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 font-outfit tracking-tight">
                 About <span className="text-blue-600">Skill Tech Academy</span>
               </h2>
-              
+
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
                 {t('about_who_desc')}
               </p>
@@ -760,18 +759,18 @@ const Home = () => {
               </div>
 
               <div className="pt-2 flex flex-wrap gap-4">
-                <Link 
+                <Link
                   to="/about"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition-all hover:scale-105"
                 >
                   <span>Learn More About Us</span>
                   <FaArrowRight size={12} />
                 </Link>
-                <Link 
+                <Link
                   to="/contact"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm border border-slate-300 transition-all"
                 >
-                  <span>Visit Campus</span>
+                  <span>Contact Us</span>
                 </Link>
               </div>
             </div>
@@ -779,9 +778,9 @@ const Home = () => {
             {/* Right Image Feature (5 cols) with image clarity & badge */}
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white image-clarity-card group">
-                <img 
-                  src="/about-img.jpg" 
-                  alt="Skill Tech Academy Team" 
+                <img
+                  src="/about-img.jpg"
+                  alt="Skill Tech Academy Team"
                   className="w-full h-[420px] object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
@@ -816,7 +815,7 @@ const Home = () => {
       {/* ========================================================================= */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
             <div>
@@ -831,7 +830,7 @@ const Home = () => {
               </p>
             </div>
 
-            <Link 
+            <Link
               to="/courses"
               className="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-700 bg-blue-50 px-5 py-2.5 rounded-full transition-colors"
             >
@@ -846,11 +845,10 @@ const Home = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all ${
-                  selectedCategory === cat
+                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all ${selectedCategory === cat
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -860,15 +858,15 @@ const Home = () => {
           {/* Course Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredCourses.slice(0, 8).map((course) => (
-              <TiltedCard 
+              <TiltedCard
                 key={course._id || course.id}
                 className="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 flex flex-col h-full overflow-hidden hover:border-blue-300 group"
               >
                 {/* Course Thumbnail */}
                 <div className="relative h-48 w-full overflow-hidden bg-slate-100 image-clarity-card">
-                  <img 
-                    src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800'} 
-                    alt={course.title} 
+                  <img
+                    src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800'}
+                    alt={course.title}
                     className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-blue-600 shadow-sm">
@@ -894,7 +892,7 @@ const Home = () => {
                     <h3 className="text-lg font-bold text-slate-900 font-outfit line-clamp-2 group-hover:text-blue-600 transition-colors mb-2">
                       {course.title}
                     </h3>
-                    
+
                     <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">
                       {course.description}
                     </p>
@@ -923,7 +921,7 @@ const Home = () => {
                         )}
                       </div>
 
-                      <button 
+                      <button
                         onClick={() => navigate(`/courses/${course.slug}`)}
                         className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all hover:scale-105"
                       >
@@ -944,7 +942,7 @@ const Home = () => {
       {/* ========================================================================= */}
       <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/80 px-3.5 py-1.5 rounded-full inline-block mb-3 border border-cyan-500/30">
               {t('home_how_badge')}
@@ -984,7 +982,7 @@ const Home = () => {
                 icon: <FaAward className="text-amber-400 text-2xl" />
               }
             ].map((item, idx) => (
-              <div 
+              <div
                 key={idx}
                 className="p-8 rounded-3xl bg-slate-800/80 border border-slate-700/80 hover:border-blue-500/60 transition-all group relative"
               >
@@ -1012,7 +1010,7 @@ const Home = () => {
       {/* ========================================================================= */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3.5 py-1.5 rounded-full inline-block mb-3">
               {t('home_why_badge')}
@@ -1083,7 +1081,7 @@ const Home = () => {
       {/* ========================================================================= */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-3.5 py-1.5 rounded-full inline-block mb-3">
               {t('testimonials_badge')}
@@ -1098,7 +1096,7 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {TESTIMONIALS.slice(0, 3).map((item) => (
-              <div 
+              <div
                 key={item.id}
                 className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between hover:shadow-xl hover:border-blue-300 transition-all group"
               >
@@ -1115,9 +1113,9 @@ const Home = () => {
                 </div>
 
                 <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
+                  <img
+                    src={item.image}
+                    alt={item.name}
                     className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
                   />
                   <div>
@@ -1155,14 +1153,14 @@ const Home = () => {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link 
+            <Link
               to="/register"
               className="px-8 py-4 rounded-full bg-white text-blue-700 font-bold text-base shadow-2xl hover:bg-slate-100 hover:scale-105 transition-all duration-300"
             >
               {t('home_cta_btn')}
             </Link>
 
-            <a 
+            <a
               href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20enroll%20in%20a%20course."
               target="_blank"
               rel="noreferrer"
@@ -1172,7 +1170,7 @@ const Home = () => {
               <span>{t('home_cta_whatsapp')}</span>
             </a>
 
-            <a 
+            <a
               href="tel:+919900864102"
               className="px-6 py-4 rounded-full bg-blue-900/60 border border-white/20 text-white font-bold text-base hover:bg-blue-900 transition-all duration-300 flex items-center gap-2"
             >

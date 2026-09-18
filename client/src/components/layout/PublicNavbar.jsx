@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaHome, FaBookOpen, FaInfoCircle, FaPhoneAlt, 
-  FaUser, FaGlobe, FaBars, FaTimes, 
-  FaGraduationCap, FaWhatsapp, FaNewspaper 
+import {
+  FaHome, FaBookOpen, FaInfoCircle, FaPhoneAlt,
+  FaUser, FaGlobe, FaBars, FaTimes,
+  FaGraduationCap, FaWhatsapp, FaNewspaper
 } from 'react-icons/fa';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -50,34 +50,31 @@ const PublicNavbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 h-20 flex items-center ${
-          isScrolled 
-            ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-blue-900/5 border-b border-blue-100/60' 
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 h-20 flex items-center ${isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-blue-900/5 border-b border-blue-100/60'
             : 'bg-white/90 backdrop-blur-sm border-b border-gray-100'
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex justify-between items-center w-full">
-            
+
             {/* Left: Brand Logo & Name */}
             <div className="flex items-center gap-3">
 
               {/* Brand Logo & Name */}
               <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group">
                 <div className="relative rounded-xl overflow-hidden shadow-xs border border-slate-200/80 bg-slate-900 shrink-0">
-                  <img 
-                    src="/logo.png" 
-                    alt="Skill Tech Academy Logo" 
-                    className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                  <img
+                    src="/logo.png"
+                    alt="Skill Tech Academy Logo"
+                    className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-outfit font-extrabold text-base sm:text-xl text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
                     Skill Tech <span className="text-blue-600">Academy</span>
                   </span>
-                  <span className="text-[9px] sm:text-[11px] font-semibold text-emerald-600 tracking-wider uppercase font-inter leading-none mt-0.5">
-                    Unrelenting Evolution Pvt. Ltd.
-                  </span>
+
                 </div>
               </Link>
             </div>
@@ -88,11 +85,10 @@ const PublicNavbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-4 py-2 rounded-full font-outfit text-sm font-semibold transition-all duration-200 ${
-                    isActive(link.path)
+                  className={`relative px-4 py-2 rounded-full font-outfit text-sm font-semibold transition-all duration-200 ${isActive(link.path)
                       ? 'text-white bg-blue-600 shadow-md shadow-blue-500/25'
                       : 'text-slate-600 hover:text-blue-600 hover:bg-white/80'
-                  }`}
+                    }`}
                 >
                   {link.name}
                 </Link>
@@ -205,11 +201,10 @@ const PublicNavbar = () => {
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-outfit text-base font-bold transition-all ${
-                      isActive(link.path)
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-outfit text-base font-bold transition-all ${isActive(link.path)
                         ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                         : 'text-slate-700 hover:bg-slate-100'
-                    }`}
+                      }`}
                   >
                     <span className="text-base">{link.icon}</span>
                     <span>{link.name}</span>

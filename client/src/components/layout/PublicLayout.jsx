@@ -5,8 +5,8 @@ import PublicNavbar from './PublicNavbar';
 import TopNav from './TopNav';
 import BottomNav from './BottomNav';
 import { useLanguage } from '../../context/LanguageContext';
-import { 
-  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaShieldAlt, 
+import {
+  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaShieldAlt,
   FaAward, FaWhatsapp, FaGraduationCap, FaArrowRight,
   FaCheckCircle, FaLaptopCode, FaTools, FaShareAlt
 } from 'react-icons/fa';
@@ -41,7 +41,7 @@ const PublicLayout = () => {
   return (
     <div className="min-h-screen flex flex-col font-inter bg-slate-50 selection:bg-blue-600 selection:text-white">
       {isLoggedIn ? <TopNav /> : <PublicNavbar />}
-      
+
       {/* Main Content Area - pb-24 provides clearance for sticky mobile bottom navigation */}
       <main className="flex-grow pt-20 pb-24 md:pb-0">
         <Outlet />
@@ -54,10 +54,10 @@ const PublicLayout = () => {
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
+
           {/* Top Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-slate-800">
-            
+
             {/* Column 1: Organization Branding (4 cols) */}
             <div className="lg:col-span-4 space-y-5">
               <div className="flex items-center gap-3">
@@ -68,9 +68,7 @@ const PublicLayout = () => {
                   <h3 className="text-xl font-extrabold tracking-tight text-white font-outfit">
                     Skill Tech <span className="text-blue-500">Academy</span>
                   </h3>
-                  <p className="text-[11px] font-bold text-emerald-400 tracking-wider uppercase">
-                    Unrelenting Evolution Pvt. Ltd.
-                  </p>
+
                 </div>
               </div>
 
@@ -102,16 +100,16 @@ const PublicLayout = () => {
 
               {/* WhatsApp & Call Direct Action */}
               <div className="flex items-center gap-3 pt-2">
-                <a 
-                  href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20enrolling." 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20enrolling."
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-md shadow-emerald-900/30"
                 >
                   <FaWhatsapp size={15} />
                   <span>WhatsApp Inquiry</span>
                 </a>
-                <a 
+                <a
                   href="tel:+919900864102"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-900/30"
                 >
