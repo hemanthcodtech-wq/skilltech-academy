@@ -41,7 +41,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
           {course.thumbnailUrl ? (
             <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-brand-green/20 text-brand-green font-bold">No Image</div>
+            <div className="w-full h-full flex items-center justify-center bg-indigo-600/20 text-indigo-600 font-bold">No Image</div>
           )}
           <button
             onClick={handleToggleWishlist}
@@ -59,9 +59,9 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
           </h1>
           
           <div className="flex items-center gap-3 mb-5">
-            <span className="text-brand-green font-bold text-sm">{course.level}</span>
+            <span className="text-indigo-600 font-bold text-sm">{course.level}</span>
             {isEnrolled && (
-              <span className="bg-brand-green/10 text-brand-green-dark text-xs font-bold px-3 py-1 rounded-full border border-brand-green/20 flex items-center gap-1">
+              <span className="bg-indigo-600/10 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full border border-indigo-600/20 flex items-center gap-1">
                 <FaCheck size={10} /> Enrolled
               </span>
             )}
@@ -93,7 +93,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
               <ul className="space-y-3">
                 {learnItems.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <FaCheck className="text-brand-green-dark mt-0.5 shrink-0 text-sm" />
+                    <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
                     <span className="text-sm text-gray-700 font-semibold">{item}</span>
                   </li>
                 ))}
@@ -108,8 +108,8 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
             onClick={handleEnroll}
             className={`w-full font-bold py-4 rounded-[20px] transition-all text-[15px] shadow-lg ${
               isEnrolled 
-                ? 'bg-[#C08552] hover:bg-[#a06b3e] text-white shadow-[#C08552]/20' 
-                : 'bg-brand-green-dark hover:bg-brand-green text-white shadow-[0_8px_20px_rgba(20,83,45,0.2)]'
+                ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-[#C08552]/20' 
+                : 'bg-indigo-600-dark hover:bg-indigo-600 text-white shadow-[0_8px_20px_rgba(20,83,45,0.2)]'
             }`}
           >
             {isEnrolled ? 'Go to Learning (Enrolled)' : t('course_enroll')}
@@ -125,7 +125,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
         
         {/* Hero Section with Glassmorphism */}
         <div className="relative pt-36 pb-24 overflow-hidden">
-          <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-brand-green/20 rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[100px] pointer-events-none"></div>
           <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-[#d67b22]/15 rounded-full blur-[100px] pointer-events-none"></div>
           
           <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-12 items-center">
@@ -133,14 +133,14 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
             {/* Left Content */}
             <div className="flex-1 space-y-6">
               <div className="flex items-center gap-3">
-                <span className="bg-white/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-green shadow-sm border border-white/50">
+                <span className="bg-white/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-indigo-600 shadow-sm border border-white/50">
                   {course.category}
                 </span>
-                <span className="bg-brand-green/10 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-green-dark">
+                <span className="bg-indigo-600/10 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-indigo-800">
                   {course.level}
                 </span>
                 {isEnrolled && (
-                  <span className="bg-brand-green text-white px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                  <span className="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
                     <FaCheck size={11} /> Enrolled
                   </span>
                 )}
@@ -151,8 +151,8 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
               </h1>
               
               <div className="flex items-center gap-6 text-gray-700 font-outfit font-semibold text-lg">
-                <div className="flex items-center gap-2"><FaClock className="text-brand-green" /> {course.duration}</div>
-                <div className="flex items-center gap-2"><FaGlobe className="text-brand-green" /> {course.language || 'English'}</div>
+                <div className="flex items-center gap-2"><FaClock className="text-indigo-600" /> {course.duration}</div>
+                <div className="flex items-center gap-2"><FaGlobe className="text-indigo-600" /> {course.language || 'English'}</div>
               </div>
             </div>
 
@@ -163,7 +163,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
                 {course.thumbnailUrl ? (
                   <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-brand-green bg-brand-green/10">No Image</div>
+                  <div className="w-full h-full flex items-center justify-center text-indigo-600 bg-indigo-600/10">No Image</div>
                 )}
               </div>
             </div>
@@ -180,7 +180,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
               {/* About Block */}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
                 <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-5">{t('course_about')}</h2>
-                <div className="w-16 h-1 bg-brand-green mb-6 rounded-full"></div>
+                <div className="w-16 h-1 bg-indigo-600 mb-6 rounded-full"></div>
                 <p className="text-gray-700 font-inter leading-relaxed text-lg">{descTe}</p>
               </motion.div>
 
@@ -188,12 +188,12 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
               {learnItems.length > 0 && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
                   <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">{t('course_learn')}</h2>
-                  <div className="w-16 h-1 bg-brand-green mb-8 rounded-full"></div>
+                  <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {learnItems.map((item, idx) => (
                       <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
-                        <div className="w-8 h-8 rounded-full bg-brand-green/20 flex items-center justify-center shrink-0">
-                          <FaCheck className="text-brand-green-dark text-[14px]" />
+                        <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
+                          <FaCheck className="text-indigo-800 text-[14px]" />
                         </div>
                         <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
                       </div>
@@ -209,7 +209,7 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
                 <h3 className="text-2xl font-black text-gray-900 text-center mb-6">{isEnrolled ? 'Already Enrolled' : t('course_ready')}</h3>
                 
                 {isEnrolled && (
-                  <div className="mb-6 p-3.5 bg-green-50 rounded-xl border border-green-200 text-center">
+                  <div className="mb-6 p-3.5 bg-emerald-50 rounded-xl border border-green-200 text-center">
                     <span className="text-xs font-bold text-green-800 flex items-center justify-center gap-1.5">
                       <FaCheck size={12}/> You have active access to this course.
                     </span>
@@ -221,8 +221,8 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
                     onClick={handleEnroll}
                     className={`flex-1 py-4 px-6 text-white text-xl font-bold rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg ${
                       isEnrolled 
-                        ? 'bg-[#C08552] hover:bg-[#a06b3e] shadow-[#C08552]/30' 
-                        : 'bg-brand-green hover:bg-brand-green-dark shadow-[0_10px_25px_rgba(41,120,56,0.4)]'
+                        ? 'bg-indigo-600 hover:bg-indigo-700 shadow-[#C08552]/30' 
+                        : 'bg-indigo-600 hover:bg-indigo-600-dark shadow-[0_10px_25px_rgba(41,120,56,0.4)]'
                     }`}
                   >
                     {isEnrolled ? 'Go to Learning' : t('course_enroll')}
@@ -347,7 +347,7 @@ const CourseDetails = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-bg-cream">
-        <div className="w-12 h-12 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

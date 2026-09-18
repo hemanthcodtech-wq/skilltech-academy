@@ -17,6 +17,12 @@ const translations = {
     nav_bottom_about: 'About',
     nav_bottom_login: 'Login',
 
+    // Dashboard Nav
+    dash_nav_home: 'Home',
+    dash_nav_courses: 'Courses',
+    dash_nav_learning: 'My Learning',
+    dash_nav_profile: 'Profile',
+
     // Hero
     hero_badge: 'A Future-Focused Training Institute',
     hero_title_1: 'Unlock Your Potential With',
@@ -154,6 +160,12 @@ const translations = {
     nav_bottom_blog: 'బ్లాగ్',
     nav_bottom_about: 'గురించి',
     nav_bottom_login: 'లాగిన్',
+
+    // Dashboard Nav
+    dash_nav_home: 'హోమ్',
+    dash_nav_courses: 'కోర్సులు',
+    dash_nav_learning: 'నా లెర్నింగ్',
+    dash_nav_profile: 'ప్రొఫైల్',
 
     hero_badge: 'భవిష్యత్ నైపుణ్యాల శిక్షణా కేంద్రం',
     hero_title_1: 'మీ ప్రతిభను వెలికితీయండి',

@@ -77,7 +77,7 @@ const MyLearning = () => {
     const colors = {
       'Yoga': 'bg-[#f4efe6] text-amber-800',
       'Meditation': 'bg-[#e9f1e8] text-green-800',
-      'General': 'bg-[#e8ebf4] text-blue-800'
+      'General': 'bg-[#e8ebf4] text-indigo-800'
     };
     return colors[category] || colors['General'];
   };
@@ -103,7 +103,7 @@ const MyLearning = () => {
                   <>
                     <h3 className="text-xl md:text-2xl font-black text-gray-800 line-clamp-1">{upcomingClass.title || upcomingClass.courseId?.title}</h3>
                     <div className="flex items-center justify-center md:justify-start gap-2 mt-2 text-sm font-medium text-gray-600">
-                      <FaVideo className="text-yellow-500"/>
+                      <FaVideo className="text-amber-500"/>
                       <span>{new Date(`${upcomingClass.date.split('T')[0]}T${upcomingClass.time}:00`).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                       <span className="w-px h-3 bg-gray-300 mx-1"></span>
                       <span>{new Date(upcomingClass.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
@@ -126,7 +126,7 @@ const MyLearning = () => {
             </div>
 
             <div className="pt-4">
-              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><FaGraduationCap className="text-yellow-500" /> My Enrolled Courses</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><FaGraduationCap className="text-amber-500" /> My Enrolled Courses</h2>
               {/* Course Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {courses.map((course, index) => {

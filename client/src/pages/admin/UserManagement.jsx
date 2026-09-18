@@ -77,7 +77,7 @@ const UserManagement = () => {
       {/* Top Banner Header */}
       <div className="bg-white/60 backdrop-blur-2xl rounded-[2.5rem] p-6 lg:p-8 border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
             Student Management
           </div>
           <h1 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">Registered Learners</h1>
@@ -92,14 +92,14 @@ const UserManagement = () => {
             placeholder="Search by email, phone, name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 bg-white/90 border border-gray-200/80 rounded-2xl text-xs lg:text-sm font-medium text-gray-800 placeholder-gray-400 shadow-xs focus:ring-2 focus:ring-brand-green/20 focus:border-brand-green outline-none transition-all"
+            className="w-full pl-11 pr-4 py-3 bg-white/90 border border-gray-200/80 rounded-2xl text-xs lg:text-sm font-medium text-gray-800 placeholder-gray-400 shadow-xs focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none transition-all"
           />
         </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center p-20">
-          <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="bg-white/75 backdrop-blur-2xl rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-white/80 overflow-hidden">
@@ -118,7 +118,7 @@ const UserManagement = () => {
                   <tr key={user._id} className="hover:bg-white/90 transition-colors">
                     <td className="p-5 pl-8">
                       <div className="flex items-center gap-3.5">
-                        <div className="w-11 h-11 rounded-2xl bg-brand-green/10 text-brand-green flex items-center justify-center font-bold text-sm border border-brand-green/20 shrink-0">
+                        <div className="w-11 h-11 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center font-bold text-sm border border-indigo-600/20 shrink-0">
                           {user.name ? user.name.charAt(0).toUpperCase() : <FaUser />}
                         </div>
                         <div>
@@ -140,7 +140,7 @@ const UserManagement = () => {
                     <td className="p-5 pr-8 text-right">
                       <button 
                         onClick={() => handleOpenUser(user)}
-                        className="px-4 py-2 bg-brand-green/10 hover:bg-brand-green hover:text-white text-brand-green-dark font-bold text-xs rounded-xl transition-all shadow-xs"
+                        className="px-4 py-2 bg-indigo-600/10 hover:bg-indigo-600 hover:text-white text-indigo-700 font-bold text-xs rounded-xl transition-all shadow-xs"
                       >
                         View Enrollments
                       </button>
@@ -187,14 +187,14 @@ const UserManagement = () => {
               </div>
               
               <div className="p-6 md:p-8 flex-1 space-y-6">
-                <div className="flex items-center gap-4 p-5 bg-[#FAF7F2] rounded-3xl border border-gray-200/60">
-                  <div className="w-14 h-14 rounded-2xl bg-brand-green text-white flex items-center justify-center text-xl font-bold shadow-md">
+                <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-3xl border border-gray-200/60">
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl font-bold shadow-md">
                     {selectedUser.name ? selectedUser.name.charAt(0).toUpperCase() : <FaUser />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-base font-extrabold text-gray-900 truncate">{selectedUser.name || selectedUser.emailOrPhone}</h3>
                     <p className="text-xs text-gray-500 truncate">{selectedUser.emailOrPhone}</p>
-                    <span className="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 uppercase">
+                    <span className="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-indigo-800 uppercase">
                       Verified Student
                     </span>
                   </div>
@@ -202,12 +202,12 @@ const UserManagement = () => {
 
                 <div>
                   <h3 className="font-extrabold text-sm text-gray-900 mb-3 flex items-center gap-2">
-                    <FaBook className="text-brand-green" /> Enrolled Course History
+                    <FaBook className="text-indigo-600" /> Enrolled Course History
                   </h3>
                   
                   {loadingDetails ? (
                     <div className="flex justify-center py-12">
-                      <div className="w-8 h-8 border-3 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                   ) : userDetails?.enrollments?.length > 0 ? (
                     <div className="space-y-3.5">
@@ -233,7 +233,7 @@ const UserManagement = () => {
                             </div>
                             <div>
                               <span className="text-gray-400 block font-medium">Certificate:</span>
-                              <span className={`font-mono font-bold ${enrollment.completed ? 'text-brand-green' : 'text-amber-600'}`}>
+                              <span className={`font-mono font-bold ${enrollment.completed ? 'text-indigo-600' : 'text-amber-600'}`}>
                                 {enrollment.completed ? (enrollment.certificateId || 'SDF-CERT-Issued') : 'Pending Completion'}
                               </span>
                             </div>
@@ -274,7 +274,7 @@ const UserManagement = () => {
                                     href={enrollment.certificateUrl}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="px-3 py-1.5 bg-brand-green text-white hover:bg-brand-green-dark text-xs font-bold rounded-lg transition-colors shadow-xs"
+                                    className="px-3 py-1.5 bg-indigo-600 text-white hover:bg-indigo-700 text-xs font-bold rounded-lg transition-colors shadow-xs"
                                   >
                                     View Certificate ↗
                                   </a>
@@ -283,7 +283,7 @@ const UserManagement = () => {
                                     href={`${import.meta.env.VITE_API_BASE_URL}/courses/certificate/${enrollment._id}/download`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="px-3 py-1.5 bg-brand-green text-white hover:bg-brand-green-dark text-xs font-bold rounded-lg transition-colors shadow-xs"
+                                    className="px-3 py-1.5 bg-indigo-600 text-white hover:bg-indigo-700 text-xs font-bold rounded-lg transition-colors shadow-xs"
                                   >
                                     PDF Certificate ↗
                                   </a>

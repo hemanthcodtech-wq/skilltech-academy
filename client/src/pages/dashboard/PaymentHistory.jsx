@@ -63,10 +63,10 @@ const PaymentHistory = () => {
       
       {/* Mobile Header */}
       <div className="flex items-center mb-6 mt-2 md:hidden">
-        <button onClick={() => navigate(-1)} className="mr-4 text-brand-green-dark">
+        <button onClick={() => navigate(-1)} className="mr-4 text-indigo-800">
           <FaArrowLeft size={18} />
         </button>
-        <h1 className="text-xl font-bold text-brand-green-dark">Payment History</h1>
+        <h1 className="text-xl font-bold text-indigo-800">Payment History</h1>
       </div>
 
       {/* Desktop Header */}
@@ -77,7 +77,7 @@ const PaymentHistory = () => {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : history.length > 0 ? (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mt-6">
@@ -97,7 +97,7 @@ const PaymentHistory = () => {
                   <tr key={record._id} className="hover:bg-gray-50/60 transition-colors">
                     <td className="p-5 pl-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-brand-green/10 text-brand-green flex items-center justify-center shrink-0">
+                        <div className="w-11 h-11 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center shrink-0">
                           <FaFileInvoiceDollar size={20} />
                         </div>
                         <div>
@@ -120,7 +120,7 @@ const PaymentHistory = () => {
                     <td className="p-5 pr-6 text-right">
                       <button 
                         onClick={() => handleDownloadReceipt(record)}
-                        className="px-3.5 py-2 bg-brand-green/10 hover:bg-brand-green hover:text-white text-brand-green-dark font-bold text-xs rounded-xl transition-all inline-flex items-center gap-1.5"
+                        className="px-3.5 py-2 bg-indigo-600/10 hover:bg-indigo-600 hover:text-white text-indigo-800 font-bold text-xs rounded-xl transition-all inline-flex items-center gap-1.5"
                       >
                         <FaDownload size={11} /> View Receipt
                       </button>
@@ -152,12 +152,12 @@ const PaymentHistory = () => {
               className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100"
             >
               {/* Modal Top Bar */}
-              <div className="bg-brand-green-dark p-6 text-white flex justify-between items-center">
+              <div className="bg-indigo-600-dark p-6 text-white flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <img src="/logo.png" alt="SDF Logo" className="h-10 w-auto bg-white/10 p-1.5 rounded-lg" />
                   <div>
                     <h3 className="font-extrabold text-base leading-tight">Swamy Dwija Foundation</h3>
-                    <p className="text-xs text-brand-green-light/80">Official Payment Receipt</p>
+                    <p className="text-xs text-indigo-600-light/80">Official Payment Receipt</p>
                   </div>
                 </div>
                 <button
@@ -190,7 +190,7 @@ const PaymentHistory = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Course Enrolled:</span>
-                    <span className="font-bold text-brand-green-dark text-right max-w-xs">{selectedReceipt.course?.title}</span>
+                    <span className="font-bold text-indigo-800 text-right max-w-xs">{selectedReceipt.course?.title}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Course Duration / Access:</span>
@@ -214,7 +214,7 @@ const PaymentHistory = () => {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={handlePrint}
-                    className="flex-1 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-md"
+                    className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-md"
                   >
                     <FaPrint size={14} /> Print / Save PDF
                   </button>

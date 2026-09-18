@@ -66,16 +66,16 @@ const Settings = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div></div>;
+    return <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div></div>;
   }
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-24 md:pb-8 px-4 py-4 md:px-0 font-inter">
       <div className="flex items-center mb-6 mt-2 md:hidden">
-        <button onClick={() => navigate(-1)} className="mr-4 text-brand-green">
+        <button onClick={() => navigate(-1)} className="mr-4 text-indigo-600">
           <FaArrowLeft size={20} />
         </button>
-        <h1 className="text-xl font-bold text-brand-green">Settings</h1>
+        <h1 className="text-xl font-bold text-indigo-600">Settings</h1>
       </div>
 
       <div className="hidden md:block mb-8">
@@ -84,7 +84,7 @@ const Settings = () => {
       </div>
       
       {message.text && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl ${message.type === 'success' ? 'bg-emerald-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
           {message.text}
         </motion.div>
       )}
@@ -98,7 +98,7 @@ const Settings = () => {
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                   <FaUser />
                 </div>
-                <input type="text" name="firstName" value={profile.firstName || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" placeholder="John" />
+                <input type="text" name="firstName" value={profile.firstName || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" placeholder="John" />
               </div>
             </div>
             
@@ -108,7 +108,7 @@ const Settings = () => {
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                   <FaUser />
                 </div>
-                <input type="text" name="lastName" value={profile.lastName || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" placeholder="Doe" />
+                <input type="text" name="lastName" value={profile.lastName || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" placeholder="Doe" />
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@ const Settings = () => {
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                 <FaEnvelope />
               </div>
-              <input type="text" name="emailOrPhone" value={profile.emailOrPhone || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" />
+              <input type="text" name="emailOrPhone" value={profile.emailOrPhone || ''} onChange={handleChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" />
             </div>
           </div>
 
@@ -131,13 +131,13 @@ const Settings = () => {
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                 <FaLock />
               </div>
-              <input type="password" name="password" value={profile.password} onChange={handleChange} placeholder="Leave blank to keep current password" className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" />
+              <input type="password" name="password" value={profile.password} onChange={handleChange} placeholder="Leave blank to keep current password" className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none transition-all" />
             </div>
           </div>
 
           <div className="pt-4">
-            <button type="submit" disabled={saving} className="w-full md:w-auto px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl transition-all shadow-[0_4px_14px_0_rgba(41,120,56,0.39)] flex items-center justify-center gap-2 disabled:opacity-70">
-              {saving ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <FaSave />}
+            <button type="submit" disabled={saving} className="w-full md:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl transition-all shadow-[0_4px_14px_0_rgba(41,120,56,0.39)] flex items-center justify-center gap-2 disabled:opacity-70">
+              {saving ? <div className="w-5 h-5 border-indigo-600 border-white border-t-transparent rounded-full animate-spin"></div> : <FaSave />}
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>

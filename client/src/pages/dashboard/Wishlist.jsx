@@ -61,10 +61,10 @@ const Wishlist = () => {
       
       {/* Mobile Header */}
       <div className="flex items-center mb-6 mt-2 md:hidden">
-        <button onClick={() => navigate(-1)} className="mr-4 text-brand-green-dark">
+        <button onClick={() => navigate(-1)} className="mr-4 text-indigo-800">
           <FaArrowLeft size={18} />
         </button>
-        <h1 className="text-xl font-bold text-brand-green-dark">My Wishlist</h1>
+        <h1 className="text-xl font-bold text-indigo-800">My Wishlist</h1>
       </div>
 
       {/* Desktop Header */}
@@ -75,7 +75,7 @@ const Wishlist = () => {
 
       {loading ? (
         <div className="flex justify-center py-24">
-          <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : wishlist.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -96,7 +96,7 @@ const Wishlist = () => {
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 left-3 bg-brand-green-dark/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  <div className="absolute top-3 left-3 bg-indigo-600-dark/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                     {course.category || 'Technology'}
                   </div>
                   <button
@@ -112,10 +112,10 @@ const Wishlist = () => {
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div>
                     <div className="flex items-center justify-between text-xs font-semibold text-gray-500 mb-2">
-                      <span className="text-brand-green font-bold uppercase">{course.level || 'Beginner'}</span>
+                      <span className="text-indigo-600 font-bold uppercase">{course.level || 'Beginner'}</span>
                       <span>{course.accessValidity || '2 Months'} Access</span>
                     </div>
-                    <h3 className="font-bold text-gray-900 text-lg line-clamp-2 hover:text-brand-green transition-colors">
+                    <h3 className="font-bold text-gray-900 text-lg line-clamp-2 hover:text-indigo-600 transition-colors">
                       <Link to={`/courses/${course.slug || course._id}`}>
                         {course.title}
                       </Link>
@@ -131,14 +131,14 @@ const Wishlist = () => {
                     {isEnrolled ? (
                       <button
                         onClick={() => navigate(`/dashboard/learning/${course._id}`)}
-                        className="px-4 py-2.5 bg-brand-green/10 text-brand-green-dark hover:bg-brand-green hover:text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition-all"
+                        className="px-4 py-2.5 bg-indigo-600/10 text-indigo-800 hover:bg-indigo-600 hover:text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition-all"
                       >
                         <FaCheck size={11} /> Enrolled
                       </button>
                     ) : (
                       <button
                         onClick={() => navigate(`/courses/${course.slug || course._id}`)}
-                        className="px-5 py-2.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all shadow-[0_4px_12px_rgba(41,120,56,0.25)]"
+                        className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all shadow-[0_4px_12px_rgba(41,120,56,0.25)]"
                       >
                         Enroll Now <FaArrowRight size={10} />
                       </button>
@@ -158,7 +158,7 @@ const Wishlist = () => {
           <p className="text-gray-500 mb-8 text-sm">Explore our catalog of career-focused tech, digital, and vocational courses and bookmark your favorites!</p>
           <button
             onClick={() => navigate('/courses')}
-            className="px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-2xl transition-all shadow-[0_4px_14px_rgba(41,120,56,0.3)] inline-flex items-center gap-2"
+            className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-2xl transition-all shadow-[0_4px_14px_rgba(41,120,56,0.3)] inline-flex items-center gap-2"
           >
             <FaGraduationCap size={16} /> Explore Courses
           </button>

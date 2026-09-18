@@ -51,10 +51,10 @@ const ProfileMenu = () => {
         
         {/* Mobile Header (Hidden on Desktop) */}
         <div className="flex items-center mb-6 mt-2 md:hidden">
-          <button onClick={() => navigate(-1)} className="mr-4 text-brand-green">
+          <button onClick={() => navigate(-1)} className="mr-4 text-indigo-600">
             <FaArrowLeft size={20} />
           </button>
-          <h1 className="text-xl font-bold text-brand-green">Profile</h1>
+          <h1 className="text-xl font-bold text-indigo-600">Profile</h1>
         </div>
 
         {/* Glassmorphism Container */}
@@ -68,7 +68,7 @@ const ProfileMenu = () => {
           <div className="w-full md:w-2/5 bg-white/50 p-8 md:p-12 flex flex-col border-b md:border-b-0 md:border-r border-white/60 relative">
             
             <div className="flex-1 flex flex-col justify-center">
-              <div className="w-16 h-1 bg-brand-green mb-6 rounded-full hidden md:block"></div>
+              <div className="w-16 h-1 bg-indigo-600 mb-6 rounded-full hidden md:block"></div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-2">
                 {profile.firstName ? `${profile.firstName} ${profile.lastName || ''}`.trim() : 'Student'}
               </h2>
@@ -103,7 +103,7 @@ const ProfileMenu = () => {
                     }}
                     className={`w-full flex items-center p-4 md:p-5 rounded-2xl bg-white/60 border border-white/80 shadow-sm hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:bg-white hover:-translate-y-1 transition-all duration-300 group ${item.title === 'Logout' ? 'sm:col-span-2 mt-4' : ''}`}
                   >
-                    <div className={`w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center mr-4 transition-colors duration-300 ${item.title === 'Logout' ? 'bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white' : 'bg-brand-green/10 text-brand-green group-hover:bg-brand-green group-hover:text-white'}`}>
+                    <div className={`w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center mr-4 transition-colors duration-300 ${item.title === 'Logout' ? 'bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white' : 'bg-indigo-600/10 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white'}`}>
                       <item.icon size={24} />
                     </div>
                     <div className="flex-1 text-left">
@@ -111,7 +111,7 @@ const ProfileMenu = () => {
                         {item.title}
                       </span>
                     </div>
-                    <FaChevronRight size={14} className={`transition-colors ${item.title === 'Logout' ? 'text-red-200 group-hover:text-red-400' : 'text-gray-300 group-hover:text-brand-green'}`} />
+                    <FaChevronRight size={14} className={`transition-colors ${item.title === 'Logout' ? 'text-red-200 group-hover:text-red-400' : 'text-gray-300 group-hover:text-indigo-600'}`} />
                   </button>
                 </motion.div>
               ))}

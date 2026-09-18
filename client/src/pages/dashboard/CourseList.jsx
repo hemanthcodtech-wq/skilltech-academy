@@ -117,7 +117,7 @@ const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClic
         ) : (
           <div className="w-full h-full flex items-center justify-center text-slate-300"><FaImage size={24} className="md:w-10 md:h-10" /></div>
         )}
-        <div className="hidden md:block absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[10px] font-bold text-blue-600 shadow-xs uppercase tracking-wider border border-blue-100">
+        <div className="hidden md:block absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[10px] font-bold text-indigo-600 shadow-xs uppercase tracking-wider border border-indigo-100">
           {course.category}
         </div>
         
@@ -141,18 +141,18 @@ const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClic
         </div>
       </div>
       <div className="flex-1 flex flex-col justify-between md:justify-start py-0.5 pr-1 md:pr-0">
-        <span className="md:hidden text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-0.5 block">
+        <span className="md:hidden text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-0.5 block">
           {course.category}
         </span>
-        <h3 className="text-sm md:text-lg font-bold text-slate-900 leading-snug line-clamp-2 md:mb-1 group-hover:text-blue-600 transition-colors font-outfit">
+        <h3 className="text-sm md:text-lg font-bold text-slate-900 leading-snug line-clamp-2 md:mb-1 group-hover:text-indigo-600 transition-colors font-outfit">
           {titleTe}
         </h3>
         <p className="text-[11px] md:text-xs font-medium text-slate-500 mt-0.5 md:mb-3">
           {course.level || 'Beginner'} • {course.duration || 'Flexible'}
         </p>
         <div className="flex items-center justify-between pt-1 md:pt-2 border-t border-slate-100 mt-auto">
-          <span className="text-base md:text-xl font-black text-blue-600 font-outfit">₹{course.price}</span>
-          <span className="text-[11px] font-bold text-blue-600 group-hover:underline">
+          <span className="text-base md:text-xl font-black text-indigo-600 font-outfit">₹{course.price}</span>
+          <span className="text-[11px] font-bold text-indigo-600 group-hover:underline">
             View Details →
           </span>
         </div>
@@ -271,11 +271,11 @@ const CourseList = () => {
         
         {/* Header */}
         <div className="text-center mb-8 md:mb-10">
-          <span className="inline-block px-3.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-100">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-indigo-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 border border-indigo-100">
             Industry-Standard Curriculum
           </span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-outfit text-slate-900 mb-3 tracking-tight">
-            Explore Our <span className="text-blue-600">Professional Courses</span>
+            Explore Our <span className="text-indigo-600">Professional Courses</span>
           </h1>
           <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
             Hands-on training designed by industry mentors to help you build practical skills, secure placements, and start your own enterprise.
@@ -304,7 +304,7 @@ const CourseList = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 selectedCategory === cat 
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20' 
+                  ? 'bg-indigo-600 text-white border-blue-600 shadow-md shadow-blue-500/20' 
                   : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
               }`}
             >
@@ -324,7 +324,7 @@ const CourseList = () => {
             <p className="text-slate-500 text-xs sm:text-sm mb-4">Try selecting another category or clear your search term.</p>
             <button 
               onClick={() => { setSelectedCategory('All'); setSearchTerm(''); }}
-              className="px-5 py-2 rounded-full bg-blue-600 text-white font-bold text-xs shadow-sm hover:bg-blue-700"
+              className="px-5 py-2 rounded-full bg-indigo-600 text-white font-bold text-xs shadow-sm hover:bg-blue-700"
             >
               Reset Filters
             </button>

@@ -1,14 +1,16 @@
-import React from 'react';
-import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Outlet, NavLink, useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
   FaTachometerAlt, FaBook, FaUsers, FaCalendarAlt, FaSignOutAlt, 
   FaFolderOpen, FaExternalLinkAlt, FaShieldAlt, FaAward, 
-  FaChalkboardTeacher, FaUserShield, FaNewspaper 
+  FaChalkboardTeacher, FaUserShield, FaNewspaper, FaBars, FaTimes
 } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
@@ -20,15 +22,14 @@ const AdminLayout = () => {
     { name: 'Dashboard', path: '/admin/dashboard', icon: FaTachometerAlt },
     { name: 'Courses', path: '/admin/courses', icon: FaBook },
     { name: 'Blogs & Articles', path: '/admin/blogs', icon: FaNewspaper },
-    { name: 'Instructors', path: '/admin/instructors', icon: FaChalkboardTeacher },
-    { name: 'Moderators', path: '/admin/moderators', icon: FaUserShield },
     { name: 'Materials', path: '/admin/materials', icon: FaFolderOpen },
     { name: 'Certificates & Invoices', path: '/admin/records', icon: FaAward },
     { name: 'Learners', path: '/admin/users', icon: FaUsers },
+    { name: 'Partners', path: '/admin/partners', icon: FaUserShield },
   ];
 
   return (
-    <div className="flex h-screen bg-[#FAF7F2] font-inter overflow-hidden relative">
+    <div className="flex h-screen bg-slate-50 font-inter overflow-hidden relative">
 
       {/* Desktop Sidebar (Hidden on Mobile) */}
       <aside className="hidden md:flex md:static inset-y-0 left-0 w-64 lg:w-72 bg-white/75 backdrop-blur-2xl text-gray-800 flex-col shadow-[4px_0_30px_rgba(0,0,0,0.03)] z-30 shrink-0 border-r border-white/60">
@@ -36,7 +37,7 @@ const AdminLayout = () => {
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Skill Tech Logo" className="h-9 w-auto object-contain drop-shadow-sm" />
             <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-wider text-blue-700">STA ADMIN</span>
+              <span className="font-extrabold text-sm tracking-wider text-indigo-700">STA ADMIN</span>
               <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Skill Tech Academy</span>
             </div>
           </div>
@@ -51,8 +52,8 @@ const AdminLayout = () => {
               className={({ isActive }) =>
                 `flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 ${
                   isActive 
-                    ? 'bg-brand-green text-white shadow-[0_8px_20px_rgba(41,120,56,0.25)] font-bold' 
-                    : 'text-gray-600 hover:bg-white/80 hover:text-brand-green font-semibold hover:shadow-xs'
+                    ? 'bg-indigo-600 text-white shadow-[0_8px_20px_rgba(41,120,56,0.25)] font-bold' 
+                    : 'text-gray-600 hover:bg-white/80 hover:text-indigo-600 font-semibold hover:shadow-xs'
                 }`
               }
             >
@@ -70,9 +71,9 @@ const AdminLayout = () => {
             to="/"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-600 hover:bg-white/80 hover:text-brand-green font-semibold transition-all text-sm group"
+            className="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-gray-600 hover:bg-white/80 hover:text-indigo-600 font-semibold transition-all text-sm group"
           >
-            <FaExternalLinkAlt size={14} className="text-gray-400 group-hover:text-brand-green" />
+            <FaExternalLinkAlt size={14} className="text-gray-400 group-hover:text-indigo-600" />
             <span>View Public Site</span>
           </Link>
         </nav>
@@ -89,10 +90,10 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#FAF7F2] relative overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 bg-slate-50 relative overflow-hidden">
         
         {/* Ambient liquid background orbs */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-green/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
         <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-[#d67b22]/8 rounded-full blur-[140px] pointer-events-none"></div>
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#70a448]/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -111,12 +112,12 @@ const AdminLayout = () => {
 
           {/* Desktop Right */}
           <div className="hidden md:flex items-center gap-3 lg:gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50/90 border border-green-200/80 rounded-full text-green-800 text-xs font-bold shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50/90 border border-indigo-200/80 rounded-full text-indigo-800 text-xs font-bold shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span>
               <span>System Live</span>
             </div>
             <div className="flex items-center gap-2.5 pl-3 border-l border-gray-200/80">
-              <div className="w-9 h-9 rounded-xl bg-brand-green text-white flex items-center justify-center font-black text-xs shadow-md">
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-xs shadow-md">
                 SA
               </div>
               <div className="flex flex-col">
@@ -142,28 +143,118 @@ const AdminLayout = () => {
       </div>
 
       {/* Mobile Bottom Navigation (Sticky) */}
-      <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] z-50 md:hidden">
-        <div className="flex justify-around items-center h-16 px-2">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-                  isActive ? 'text-brand-green font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'
-                }`
-              }
+      <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.08)] z-50 md:hidden">
+        
+        {/* Mobile "More" Menu Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ duration: 0.2 }}
+              className="absolute bottom-16 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] p-4 rounded-t-3xl"
             >
-              {({ isActive }) => (
-                <>
-                  <item.icon size={20} className={isActive ? 'text-brand-green' : ''} />
-                  <span className={`text-[10px] font-semibold ${isActive ? 'text-brand-green font-bold' : ''}`}>
-                    {item.name}
-                  </span>
-                </>
-              )}
-            </NavLink>
-          ))}
+              <div className="flex justify-between items-center mb-4 px-2">
+                <span className="text-sm font-extrabold text-gray-800">More Options</span>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 bg-gray-100 rounded-full text-gray-500 hover:text-gray-800"
+                >
+                  <FaTimes size={12} />
+                </button>
+              </div>
+              <div className="grid grid-cols-4 gap-4">
+                {navItems.slice(4).map((item) => {
+                  const isActive = location.pathname.includes(item.path);
+                  return (
+                    <NavLink
+                      key={item.name}
+                      to={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex flex-col items-center justify-center space-y-1.5 p-2 rounded-xl transition-colors ${
+                        isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50'
+                      }`}
+                    >
+                      <item.icon size={22} className={isActive ? 'text-indigo-600' : ''} />
+                      <span className="text-[10px] font-semibold text-center leading-tight">
+                        {item.name}
+                      </span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex justify-around items-center h-16 px-1 pb-safe relative">
+          {/* 1. Dashboard */}
+          <NavLink
+            to={navItems[0].path}
+            className={({ isActive }) => `flex flex-col items-center justify-center w-[60px] h-full space-y-1 transition-colors ${isActive ? 'text-indigo-600 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'}`}
+          >
+            {({ isActive }) => (
+              <>
+                <FaTachometerAlt size={20} />
+                <span className={`text-[10px] font-semibold whitespace-nowrap`}>Dash</span>
+              </>
+            )}
+          </NavLink>
+
+          {/* 2. Blogs */}
+          <NavLink
+            to={navItems[2].path}
+            className={({ isActive }) => `flex flex-col items-center justify-center w-[60px] h-full space-y-1 transition-colors ${isActive ? 'text-indigo-600 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'}`}
+          >
+            {({ isActive }) => (
+              <>
+                <FaNewspaper size={20} />
+                <span className={`text-[10px] font-semibold whitespace-nowrap`}>Blogs</span>
+              </>
+            )}
+          </NavLink>
+
+          {/* 3. Center Highlighted (Courses) */}
+          <NavLink
+            to={navItems[1].path}
+            className="relative -top-6 flex flex-col items-center justify-center w-[60px]"
+          >
+            {({ isActive }) => (
+              <>
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all border-[6px] border-slate-50 ${isActive ? 'bg-indigo-600 shadow-indigo-600/40 text-white scale-110' : 'bg-slate-800 text-white hover:bg-slate-700'}`}>
+                  <FaBook size={22} />
+                </div>
+                <span className={`text-[10px] font-bold mt-1 ${isActive ? 'text-indigo-600' : 'text-gray-600'}`}>Courses</span>
+              </>
+            )}
+          </NavLink>
+
+          {/* 4. Materials */}
+          <NavLink
+            to={navItems[3].path}
+            className={({ isActive }) => `flex flex-col items-center justify-center w-[60px] h-full space-y-1 transition-colors ${isActive ? 'text-indigo-600 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'}`}
+          >
+            {({ isActive }) => (
+              <>
+                <FaFolderOpen size={20} />
+                <span className={`text-[10px] font-semibold whitespace-nowrap`}>Materials</span>
+              </>
+            )}
+          </NavLink>
+          
+          {/* Menu Toggle Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`flex flex-col items-center justify-center w-[72px] h-full space-y-1 transition-colors ${
+              isMobileMenuOpen ? 'text-indigo-600 font-bold' : 'text-gray-400 hover:text-gray-600 font-medium'
+            }`}
+          >
+            <FaBars size={20} className={isMobileMenuOpen ? 'text-indigo-600' : ''} />
+            <span className={`text-[10px] font-semibold whitespace-nowrap ${isMobileMenuOpen ? 'text-indigo-600 font-bold' : ''}`}>
+              Menu
+            </span>
+          </button>
         </div>
       </div>
       

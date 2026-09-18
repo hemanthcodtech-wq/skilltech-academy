@@ -63,10 +63,10 @@ const HelpSupport = () => {
       
       {/* Mobile Header */}
       <div className="flex items-center mb-6 mt-2 md:hidden">
-        <button onClick={() => navigate(-1)} className="mr-4 text-brand-green-dark">
+        <button onClick={() => navigate(-1)} className="mr-4 text-indigo-800">
           <FaArrowLeft size={18} />
         </button>
-        <h1 className="text-xl font-bold text-brand-green-dark">Help & Support</h1>
+        <h1 className="text-xl font-bold text-indigo-800">Help & Support</h1>
       </div>
 
       {/* Desktop Header */}
@@ -95,14 +95,14 @@ const HelpSupport = () => {
         {/* Email Support */}
         <a
           href="mailto:support@skilltechacademy.com"
-          className="bg-brand-green/10 hover:bg-brand-green/20 border border-brand-green/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
+          className="bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-600/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
         >
-          <div className="w-14 h-14 bg-brand-green text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md group-hover:scale-110 transition-transform">
+          <div className="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md group-hover:scale-110 transition-transform">
             <FaEnvelope />
           </div>
           <h3 className="font-bold text-gray-900 text-base">Email Support</h3>
           <p className="text-xs text-gray-500 mt-1">support@skilltechacademy.com</p>
-          <span className="mt-3 text-xs font-bold text-brand-green bg-white px-3 py-1 rounded-full shadow-xs">Send Email &rarr;</span>
+          <span className="mt-3 text-xs font-bold text-indigo-600 bg-white px-3 py-1 rounded-full shadow-xs">Send Email &rarr;</span>
         </a>
 
         {/* Helpline Support */}
@@ -125,7 +125,7 @@ const HelpSupport = () => {
         {/* Left Column: FAQs (3 Cols) */}
         <div className="lg:col-span-3 space-y-4">
           <div className="flex items-center gap-2 mb-2">
-            <FaQuestionCircle className="text-brand-green text-xl" />
+            <FaQuestionCircle className="text-indigo-600 text-xl" />
             <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions</h2>
           </div>
 
@@ -139,7 +139,7 @@ const HelpSupport = () => {
                     className="w-full px-5 py-4 text-left font-bold text-gray-800 flex justify-between items-center gap-4 hover:bg-gray-50/70 transition-colors"
                   >
                     <span className="text-sm md:text-base">{faq.q}</span>
-                    <FaChevronDown className={`text-gray-400 text-xs transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-green' : ''}`} />
+                    <FaChevronDown className={`text-gray-400 text-xs transition-transform duration-300 ${isOpen ? 'rotate-180 text-indigo-600' : ''}`} />
                   </button>
                   {isOpen && (
                     <motion.div
@@ -166,7 +166,7 @@ const HelpSupport = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-6 bg-green-50 border border-green-200 rounded-2xl text-center text-green-800 space-y-2"
+                className="p-6 bg-emerald-50 border border-green-200 rounded-2xl text-center text-green-800 space-y-2"
               >
                 <FaCheckCircle className="text-3xl text-green-600 mx-auto" />
                 <h4 className="font-bold text-base">Message Sent Successfully!</h4>
@@ -182,7 +182,7 @@ const HelpSupport = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Anjali Sharma"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-green outline-none text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm"
                   />
                 </div>
 
@@ -194,7 +194,7 @@ const HelpSupport = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="anjali@example.com"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-green outline-none text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm"
                   />
                 </div>
 
@@ -203,7 +203,7 @@ const HelpSupport = () => {
                   <select
                     value={formData.queryType}
                     onChange={(e) => setFormData({ ...formData, queryType: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-green outline-none text-sm cursor-pointer"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm cursor-pointer"
                   >
                     <option value="General">General Inquiry</option>
                     <option value="Classes">Live Zoom Classes & Schedule</option>
@@ -220,13 +220,13 @@ const HelpSupport = () => {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Describe how we can help you..."
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-brand-green outline-none text-sm resize-none"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm resize-none"
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(41,120,56,0.3)]"
+                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(41,120,56,0.3)]"
                 >
                   <FaPaperPlane size={13} /> Submit Message
                 </button>

@@ -131,7 +131,7 @@ const Checkout = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-bg-cream">
-        <div className="w-12 h-12 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -144,12 +144,12 @@ const Checkout = () => {
           animate={{ scale: 1, opacity: 1 }}
           className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center"
         >
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500">
             <FaCheckCircle size={40} />
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h2>
           <p className="text-gray-600 mb-6">You have been enrolled into {course?.title}. Redirecting you to your schedule...</p>
-          <div className="w-8 h-8 border-4 border-brand-green border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
         </motion.div>
       </div>
     );
@@ -161,7 +161,7 @@ const Checkout = () => {
         
         {/* Header */}
         <div className="mb-8 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green">
+          <div className="w-10 h-10 rounded-full bg-indigo-600/10 flex items-center justify-center text-indigo-600">
             <FaLock size={16} />
           </div>
           <h1 className="text-2xl font-bold text-gray-800">Secure Checkout</h1>
@@ -176,7 +176,7 @@ const Checkout = () => {
             <form onSubmit={handleCheckout} className="space-y-6">
               <div className="mb-4">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Registered Student Account</label>
-                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="student@example.com" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all outline-none text-sm font-medium" />
+                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="student@example.com" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-brand-green/20 transition-all outline-none text-sm font-medium" />
               </div>
 
               {/* Payment Terms Agreement Checkbox */}
@@ -185,16 +185,16 @@ const Checkout = () => {
                   type="checkbox" 
                   checked={agreed} 
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 rounded border-gray-300 text-brand-green focus:ring-brand-green/20 w-4 h-4 cursor-pointer" 
+                  className="mt-0.5 rounded border-gray-300 text-indigo-600 focus:ring-brand-green/20 w-4 h-4 cursor-pointer" 
                 />
                 <span className="leading-relaxed">
-                  I have read and agree to the <Link to="/terms" target="_blank" className="text-brand-green font-bold hover:underline">Terms of Service</Link>, <Link to="/privacy" target="_blank" className="text-brand-green font-bold hover:underline">Privacy Policy</Link>, and <Link to="/refund-policy" target="_blank" className="text-brand-green font-bold hover:underline">Refund & Cancellation Policy</Link>.
+                  I have read and agree to the <Link to="/terms" target="_blank" className="text-indigo-600 font-bold hover:underline">Terms of Service</Link>, <Link to="/privacy" target="_blank" className="text-indigo-600 font-bold hover:underline">Privacy Policy</Link>, and <Link to="/refund-policy" target="_blank" className="text-indigo-600 font-bold hover:underline">Refund & Cancellation Policy</Link>.
                 </span>
               </label>
 
               <div className="pt-2">
-                <button disabled={processing} type="submit" className="w-full py-4 bg-brand-green hover:bg-brand-green-dark text-white text-lg font-bold rounded-xl shadow-lg shadow-brand-green/30 hover:shadow-brand-green/50 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-3">
-                  {processing ? <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Processing...</> : (
+                <button disabled={processing} type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-600-dark text-white text-lg font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-3">
+                  {processing ? <><div className="w-5 h-5 border-indigo-600 border-white border-t-transparent rounded-full animate-spin"></div> Processing...</> : (
                     <>
                       Proceed to Pay ₹{course?.price}
                     </>

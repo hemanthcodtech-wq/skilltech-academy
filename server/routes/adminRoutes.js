@@ -312,13 +312,13 @@ router.post('/certificate/custom-generate-and-send', protect, admin, async (req,
 
     try {
       const Course = require('../models/Course');
-      const foundCourse = await Course.findOne({ title: { $regex: new RegExp(`^${courseTitle.trim()}$`, 'i') } }).populate('instructorId', 'name speciality');
+      const foundCourse = await Course.findOne({ title: { $regex: new RegExp(`^${courseTitle.trim()}$`, 'i') } });
       if (foundCourse) {
         if (!finalInstructorName || finalInstructorName === 'RISHI KRISHNA') {
-          finalInstructorName = foundCourse.instructorId?.name || foundCourse.instructor || 'Lead Yoga Guru';
+          finalInstructorName = 'Lead Yoga Guru';
         }
         if (!finalInstructorTitle) {
-          finalInstructorTitle = foundCourse.instructorId?.speciality || 'Yoga Instructor';
+          finalInstructorTitle = 'Yoga Instructor';
         }
         if (!finalDuration) {
           finalDuration = foundCourse.duration || '30 Days\n(20 Hours)';
@@ -435,13 +435,13 @@ router.post('/certificate/preview-pdf', protect, admin, async (req, res) => {
 
     try {
       const Course = require('../models/Course');
-      const foundCourse = await Course.findOne({ title: { $regex: new RegExp(`^${(courseTitle || '').trim()}$`, 'i') } }).populate('instructorId', 'name speciality');
+      const foundCourse = await Course.findOne({ title: { $regex: new RegExp(`^${(courseTitle || '').trim()}$`, 'i') } });
       if (foundCourse) {
         if (!finalInstructorName || finalInstructorName === 'RISHI KRISHNA') {
-          finalInstructorName = foundCourse.instructorId?.name || foundCourse.instructor || 'Lead Yoga Guru';
+          finalInstructorName = 'Lead Yoga Guru';
         }
         if (!finalInstructorTitle) {
-          finalInstructorTitle = foundCourse.instructorId?.speciality || 'Yoga Instructor';
+          finalInstructorTitle = 'Yoga Instructor';
         }
         if (!finalDuration) {
           finalDuration = foundCourse.duration || '30 Days\n(20 Hours)';
@@ -487,16 +487,21 @@ router.get('/settings/stats', async (req, res) => {
         stats: {
           studentsCount: 5000,
           studentsSuffix: '+',
-          studentsLabel: 'Transformed Seekers',
-          coursesCount: 25,
+          studentsLabel: 'Active Students',
+          coursesCount: 50,
           coursesSuffix: '+',
-          coursesLabel: 'Master Curricula',
+          coursesLabel: 'Professional Courses',
+          satisfactionRate: 95,
+          satisfactionSuffix: '%',
+          satisfactionLabel: 'Success & Placement Rate',
+          practicalRate: 100,
+          practicalSuffix: '%',
+          practicalLabel: 'Practical Hands-On',
+          
+          // Keeping these for schema compatibility
           instructorsCount: 15,
           instructorsSuffix: '+',
           instructorsLabel: 'Expert Gurus',
-          satisfactionRate: 99,
-          satisfactionSuffix: '%',
-          satisfactionLabel: 'Satisfaction',
           communitiesCount: 15,
           communitiesSuffix: '+',
           communitiesLabel: 'Global Communities',
@@ -526,6 +531,65 @@ router.put('/settings/stats', protect, admin, async (req, res) => {
     res.json({ success: true, message: 'Platform stats updated successfully!', data: setting.stats });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error updating stats settings', error: error.message });
+  }
+});
+
+// --- Partner Management Routes ---
+
+// Get all partners
+router.get('/partners', protect, admin, async (req, res) => {
+  try {
+    const partners = await User.find({ role: 'partner' }).select('-password').sort('-createdAt');
+    res.json({ success: true, data: partners });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch partners' });
+  }
+});
+
+// Create a new partner
+router.post('/partners', protect, admin, async (req, res) => {
+  try {
+    const { name, email, phone, password } = req.body;
+    
+    const userExists = await User.findOne({ $or: [{ email }, { phone }] });
+    if (userExists) {
+      return res.status(400).json({ success: false, message: 'User with this email or phone already exists' });
+    }
+
+    const partner = await User.create({
+      name,
+      email,
+      phone,
+      emailOrPhone: email || phone,
+      password,
+      role: 'partner',
+      isEmailVerified: true,
+      status: 'active'
+    });
+
+    res.status(201).json({ success: true, data: {
+      _id: partner._id,
+      name: partner.name,
+      email: partner.email,
+      phone: partner.phone,
+      role: partner.role
+    }, message: 'Partner created successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to create partner', error: error.message });
+  }
+});
+
+// Delete partner
+router.delete('/partners/:id', protect, admin, async (req, res) => {
+  try {
+    const partner = await User.findById(req.params.id);
+    if (!partner || partner.role !== 'partner') {
+      return res.status(404).json({ success: false, message: 'Partner not found' });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Partner deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete partner' });
   }
 });
 

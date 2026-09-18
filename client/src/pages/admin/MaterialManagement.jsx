@@ -125,7 +125,7 @@ const MaterialManagement = () => {
       {/* Top Banner Header */}
       <div className="bg-white/60 backdrop-blur-2xl rounded-[2.5rem] p-6 lg:p-8 border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
             Learning Resources
           </div>
           <h1 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">Class Materials & Recordings</h1>
@@ -137,7 +137,7 @@ const MaterialManagement = () => {
             setFormData({ ...formData, courseId: selectedCourseId });
             setIsModalOpen(true);
           }}
-          className="bg-brand-green hover:bg-brand-green-dark text-white font-bold py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2.5 w-max text-xs lg:text-sm group"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2.5 w-max text-xs lg:text-sm group"
         >
           <FaPlus size={12} className="group-hover:rotate-90 transition-transform" />
           <span>Upload Material</span>
@@ -147,7 +147,7 @@ const MaterialManagement = () => {
       {/* Course Selector Filter Card */}
       <div className="bg-white/70 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-white/80 p-5 lg:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-brand-green/10 text-brand-green flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center font-bold">
             <FaBook />
           </div>
           <div>
@@ -159,7 +159,7 @@ const MaterialManagement = () => {
         <select 
           value={selectedCourseId} 
           onChange={(e) => setSelectedCourseId(e.target.value)}
-          className="w-full md:w-80 p-3.5 bg-white/90 border border-gray-200/80 rounded-2xl outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all font-bold text-gray-900 shadow-xs text-sm"
+          className="w-full md:w-80 p-3.5 bg-white/90 border border-gray-200/80 rounded-2xl outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition-all font-bold text-gray-900 shadow-xs text-sm"
         >
           {courses.map(c => <option key={c._id} value={c._id}>{c.title}</option>)}
         </select>
@@ -167,7 +167,7 @@ const MaterialManagement = () => {
 
       {loading ? (
         <div className="flex justify-center p-20">
-          <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
@@ -186,17 +186,17 @@ const MaterialManagement = () => {
                       </span>
                     )}
                   </div>
-                  <span className="text-xs font-bold text-gray-500 bg-[#FAF7F2] border border-gray-200/50 px-3 py-1 rounded-xl">
+                  <span className="text-xs font-bold text-gray-500 bg-slate-50 border border-gray-200/50 px-3 py-1 rounded-xl">
                     {new Date(mat.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                <h3 className="text-base font-extrabold text-gray-900 group-hover:text-brand-green transition-colors leading-snug">{mat.topicsCovered}</h3>
+                <h3 className="text-base font-extrabold text-gray-900 group-hover:text-indigo-600 transition-colors leading-snug">{mat.topicsCovered}</h3>
               </div>
 
               <div className="flex items-center gap-2.5 pt-5 border-t border-gray-100 mt-6">
                 <button 
                   onClick={() => setPreviewMaterial(mat)} 
-                  className="flex-1 bg-brand-green/10 hover:bg-brand-green hover:text-white text-brand-green-dark font-bold py-2.5 rounded-xl text-center transition-all flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider"
+                  className="flex-1 bg-indigo-600/10 hover:bg-indigo-600 hover:text-white text-indigo-700 font-bold py-2.5 rounded-xl text-center transition-all flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider"
                 >
                   <FaEye size={12} /> Preview
                 </button>
@@ -257,7 +257,7 @@ const MaterialManagement = () => {
           <div className="fixed inset-0 z-40 flex justify-end">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-brand-green-dark/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-indigo-700/20 backdrop-blur-sm"
               onClick={() => !submitting && setIsModalOpen(false)}
             />
             <motion.div 
@@ -266,32 +266,32 @@ const MaterialManagement = () => {
             >
               <button 
                 onClick={() => !submitting && setIsModalOpen(false)}
-                className="absolute top-6 right-6 text-gray-500 hover:text-brand-green bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20"
+                className="absolute top-6 right-6 text-gray-500 hover:text-indigo-600 bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20"
               >
                 <FaTimes />
               </button>
               
-              <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><FaBook className="text-brand-green"/> Add Material</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><FaBook className="text-indigo-600"/> Add Material</h2>
               
               <form onSubmit={handleSubmit} className="space-y-5 flex-1">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Course</label>
-                  <select required value={formData.courseId} onChange={e => setFormData({...formData, courseId: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-brand-green transition-all">
+                  <select required value={formData.courseId} onChange={e => setFormData({...formData, courseId: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-indigo-600 transition-all">
                     <option value="">Select a course...</option>
                     {courses.map(c => <option key={c._id} value={c._id}>{c.title}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date of Class</label>
-                  <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-brand-green transition-all" />
+                  <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-indigo-600 transition-all" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Topics Covered</label>
-                  <input type="text" required placeholder="e.g. Advanced Poses" value={formData.topicsCovered} onChange={e => setFormData({...formData, topicsCovered: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-brand-green transition-all" />
+                  <input type="text" required placeholder="e.g. Advanced Poses" value={formData.topicsCovered} onChange={e => setFormData({...formData, topicsCovered: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-indigo-600 transition-all" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Material Type</label>
-                  <select required value={formData.materialType} onChange={e => setFormData({...formData, materialType: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-brand-green transition-all">
+                  <select required value={formData.materialType} onChange={e => setFormData({...formData, materialType: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-indigo-600 transition-all">
                     <option value="Recording">Recording</option>
                     <option value="PDF">PDF</option>
                     <option value="Other">Other</option>
@@ -299,10 +299,10 @@ const MaterialManagement = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Drive Link (URL)</label>
-                  <input type="url" required placeholder="https://drive.google.com/..." value={formData.driveLink} onChange={e => setFormData({...formData, driveLink: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-brand-green transition-all" />
+                  <input type="url" required placeholder="https://drive.google.com/..." value={formData.driveLink} onChange={e => setFormData({...formData, driveLink: e.target.value})} className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:border-indigo-600 transition-all" />
                 </div>
                 <div className="pt-6">
-                  <button type="submit" disabled={submitting} className="w-full bg-brand-green hover:bg-brand-green-dark text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-70 flex justify-center items-center gap-2">
+                  <button type="submit" disabled={submitting} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-70 flex justify-center items-center gap-2">
                     {submitting ? 'Adding...' : 'Add Material'}
                   </button>
                 </div>

@@ -150,7 +150,7 @@ const StudentClasses = () => {
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         
         {/* Back Button */}
-        <button onClick={() => navigate(-1)} className="text-[#C08552] flex items-center gap-2 font-semibold mb-6 hover:text-[#a06b3e] transition-colors">
+        <button onClick={() => navigate(-1)} className="text-indigo-600 flex items-center gap-2 font-semibold mb-6 hover:text-[#a06b3e] transition-colors">
           <FaArrowLeft size={14} /> Back to Learning
         </button>
 
@@ -220,14 +220,14 @@ const StudentClasses = () => {
 
                   <button 
                     onClick={() => setActiveTab('classes')}
-                    className={`rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border transition-all duration-300 ${activeTab === 'classes' ? 'bg-[#C08552] border-[#C08552] text-white shadow-[#C08552]/20' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}`}
+                    className={`rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border transition-all duration-300 ${activeTab === 'classes' ? 'bg-indigo-600 border-[#C08552] text-white shadow-[#C08552]/20' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}`}
                   >
                     <span className={`text-[13px] font-bold ${activeTab === 'classes' ? 'text-white' : 'text-gray-700'}`}>All Classes</span>
                     <FaChevronRight className={`${activeTab === 'classes' ? 'text-white' : 'text-gray-400'} text-[12px]`} />
                   </button>
                   <button 
                     onClick={() => setActiveTab('materials')}
-                    className={`rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border transition-all duration-300 ${activeTab === 'materials' ? 'bg-[#C08552] border-[#C08552] text-white shadow-[#C08552]/20' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}`}
+                    className={`rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border transition-all duration-300 ${activeTab === 'materials' ? 'bg-indigo-600 border-[#C08552] text-white shadow-[#C08552]/20' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}`}
                   >
                     <span className={`text-[13px] font-bold ${activeTab === 'materials' ? 'text-white' : 'text-gray-700'}`}>Course Materials ({materials.length})</span>
                     <FaChevronRight className={`${activeTab === 'materials' ? 'text-white' : 'text-gray-400'} text-[12px]`} />
@@ -235,13 +235,13 @@ const StudentClasses = () => {
                   <button 
                     onClick={handleClaimCertificate}
                     disabled={completing}
-                    className="rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border border-brand-green/30 bg-green-50 hover:bg-green-100 text-brand-green transition-all duration-300 col-span-2 lg:col-span-1"
+                    className="rounded-xl py-4 px-5 flex items-center justify-between shadow-sm border border-indigo-600/30 bg-emerald-50 hover:bg-green-100 text-indigo-600 transition-all duration-300 col-span-2 lg:col-span-1"
                   >
                     <span className="text-[13px] font-extrabold flex items-center gap-2">
                       <FaAward className="text-yellow-600" />
                       {completing ? 'Generating Certificate...' : 'Get Certificate of Completion'}
                     </span>
-                    <FaChevronRight className="text-brand-green text-[12px]" />
+                    <FaChevronRight className="text-indigo-600 text-[12px]" />
                   </button>
                 </div>
               </div>
@@ -265,10 +265,10 @@ const StudentClasses = () => {
                           <motion.div 
                             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}
                             key={cls._id} 
-                            className={`bg-white rounded-[20px] p-5 flex flex-col justify-between border shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-lg transition-all duration-300 group ${isToday ? 'border-brand-green ring-2 ring-brand-green/20' : 'border-gray-200'}`}
+                            className={`bg-white rounded-[20px] p-5 flex flex-col justify-between border shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-lg transition-all duration-300 group ${isToday ? 'border-indigo-600 ring-2 ring-brand-green/20' : 'border-gray-200'}`}
                           >
                             <div className="flex items-start gap-4 mb-5">
-                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 group-hover:scale-110 transition-transform ${isToday ? 'bg-brand-green/10 border-brand-green/30 text-brand-green' : isPast ? 'bg-gray-50 border-gray-100 text-gray-400' : 'bg-amber-50 border-amber-100 text-[#C08552]'}`}>
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 group-hover:scale-110 transition-transform ${isToday ? 'bg-indigo-600/10 border-indigo-600/30 text-indigo-600' : isPast ? 'bg-gray-50 border-gray-100 text-gray-400' : 'bg-amber-50 border-amber-100 text-indigo-600'}`}>
                                 <FaCalendarAlt size={18} />
                               </div>
                               <div className="flex flex-col pt-1 flex-1 min-w-0">
@@ -303,7 +303,7 @@ const StudentClasses = () => {
                                 cls.zoomLink ? (
                                   <button 
                                     onClick={() => setSelectedLiveClass(cls)}
-                                    className="text-[11px] font-bold text-white tracking-wider uppercase bg-brand-green hover:bg-brand-green-dark px-4 py-2 rounded-full shadow-md shadow-brand-green/30 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                                    className="text-[11px] font-bold text-white tracking-wider uppercase bg-indigo-600 hover:bg-indigo-600-dark px-4 py-2 rounded-full shadow-md shadow-indigo-600/30 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
                                   >
                                     <FaVideo size={12}/> JOIN LIVE
                                   </button>
@@ -313,13 +313,13 @@ const StudentClasses = () => {
                               ) : isPast ? (
                                 <button 
                                   onClick={() => handleViewClassMaterial(cls)} 
-                                  className="text-[11px] font-bold text-brand-green-dark hover:text-white bg-brand-green/10 hover:bg-brand-green px-4 py-2 rounded-full border border-brand-green/20 transition-all flex items-center gap-1.5 shadow-sm"
+                                  className="text-[11px] font-bold text-indigo-800 hover:text-white bg-indigo-600/10 hover:bg-indigo-600 px-4 py-2 rounded-full border border-indigo-600/20 transition-all flex items-center gap-1.5 shadow-sm"
                                 >
                                   <FaBook size={11} /> VIEW MATERIALS
                                 </button>
                               ) : (
                                 <span className="text-[11px] font-semibold text-amber-700 bg-amber-50/80 border border-amber-200/60 px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
-                                  <FaCalendarAlt size={11} className="text-[#C08552]" /> Scheduled
+                                  <FaCalendarAlt size={11} className="text-indigo-600" /> Scheduled
                                 </span>
                               )}
                             </div>
@@ -341,7 +341,7 @@ const StudentClasses = () => {
                         >
                           <div className="flex items-start gap-4 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shrink-0 group-hover:scale-110 transition-transform">
-                              {mat.materialType === 'Recording' ? <FaVideo className="text-red-500" size={18} /> : <FaFilePdf className="text-blue-500" size={18} />}
+                              {mat.materialType === 'Recording' ? <FaVideo className="text-red-500" size={18} /> : <FaFilePdf className="text-indigo-500" size={18} />}
                             </div>
                             <div className="flex flex-col pt-1">
                               <span className="text-base font-black text-gray-800 line-clamp-2 leading-tight">{mat.topicsCovered}</span>
@@ -356,7 +356,7 @@ const StudentClasses = () => {
                             
                             <button 
                               onClick={() => setSelectedMaterial(mat)}
-                              className="text-[11px] font-bold text-white tracking-wider uppercase bg-brand-green hover:bg-brand-green-dark px-4 py-2 rounded-full shadow-sm transition-colors"
+                              className="text-[11px] font-bold text-white tracking-wider uppercase bg-indigo-600 hover:bg-indigo-600-dark px-4 py-2 rounded-full shadow-sm transition-colors"
                             >
                               VIEW
                             </button>
@@ -391,7 +391,7 @@ const StudentClasses = () => {
                   <p className="text-sm font-medium text-gray-500">{selectedMaterial.courseName} • {selectedMaterial.materialType} • {new Date(selectedMaterial.date).toLocaleDateString()}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <a href={selectedMaterial.driveLink} target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                  <a href={selectedMaterial.driveLink} target="_blank" rel="noreferrer" className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors">
                     Open in Drive
                   </a>
                   <button onClick={() => setSelectedMaterial(null)} className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
@@ -427,7 +427,7 @@ const StudentClasses = () => {
               </p>
               <button 
                 onClick={() => setNoMaterialNotice(null)}
-                className="w-full py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl transition-all shadow-md"
+                className="w-full py-3 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl transition-all shadow-md"
               >
                 Got It
               </button>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -10,8 +11,6 @@ import {
 
 const CourseManagement = () => {
   const [courses, setCourses] = useState([]);
-  const [instructors, setInstructors] = useState([]);
-  const [moderators, setModerators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
@@ -31,11 +30,10 @@ const CourseManagement = () => {
     topics: '', 
     level: 'Beginner', 
     language: 'English', 
-    accessValidity: '2 Months', 
     whatYouWillLearn: '',
-    instructorId: '',
-    moderatorId: '',
-    whatsappGroupLink: ''
+    whatsappGroupLink: '',
+    courseType: 'online',
+    sections: []
   });
 
   const [newSessionDate, setNewSessionDate] = useState('');
@@ -75,24 +73,7 @@ const CourseManagement = () => {
     fetchHolidays(new Date().getFullYear());
   }, []);
 
-  const fetchStaffList = async () => {
-    try {
-      const headers = { Authorization: `Bearer ${localStorage.getItem('adminToken')}` };
-      const [instRes, modRes] = await Promise.allSettled([
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/instructors`, { headers }),
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/moderators`, { headers })
-      ]);
-
-      if (instRes.status === 'fulfilled' && instRes.value.data?.success) {
-        setInstructors(instRes.value.data.data.filter(i => i.status !== 'inactive'));
-      }
-      if (modRes.status === 'fulfilled' && modRes.value.data?.success) {
-        setModerators(modRes.value.data.data.filter(m => m.status !== 'inactive'));
-      }
-    } catch (err) {
-      console.error('Error fetching staff list for assignments:', err);
-    }
-  };
+  const fetchStaffList = async () => {};
 
   const fetchHolidays = async (year) => {
     try {
@@ -131,8 +112,6 @@ const CourseManagement = () => {
   const handleOpenModal = (course = null) => {
     if (course) {
       setEditingCourse(course);
-      const instId = course.instructorId?._id || course.instructorId || '';
-      const modId = course.moderatorId?._id || course.moderatorId || '';
 
       setFormData({
         title: course.title || '',
@@ -149,11 +128,10 @@ const CourseManagement = () => {
         topics: course.topics ? course.topics.join('\n') : '',
         level: course.level || 'Beginner',
         language: course.language || 'English',
-        accessValidity: course.accessValidity || '2 Months',
         whatYouWillLearn: course.whatYouWillLearn ? course.whatYouWillLearn.join('\n') : '',
-        instructorId: instId,
-        moderatorId: modId,
-        whatsappGroupLink: course.whatsappGroupLink || ''
+        whatsappGroupLink: course.whatsappGroupLink || '',
+        courseType: course.courseType || 'online',
+        sections: course.sections || []
       });
     } else {
       setEditingCourse(null);
@@ -172,11 +150,10 @@ const CourseManagement = () => {
         topics: '', 
         level: 'Beginner', 
         language: 'English', 
-        accessValidity: '2 Months', 
         whatYouWillLearn: '',
-        instructorId: instructors.length > 0 ? instructors[0]._id : '',
-        moderatorId: moderators.length > 0 ? moderators[0]._id : '',
-        whatsappGroupLink: ''
+        whatsappGroupLink: '',
+        courseType: 'online',
+        sections: []
       });
     }
     setNewSessionDate('');
@@ -293,6 +270,42 @@ const CourseManagement = () => {
     }
   };
 
+  const addSection = () => {
+    setFormData({
+      ...formData,
+      sections: [...formData.sections, { title: '', lessons: [] }]
+    });
+  };
+
+  const updateSectionTitle = (index, title) => {
+    const updated = [...formData.sections];
+    updated[index].title = title;
+    setFormData({ ...formData, sections: updated });
+  };
+
+  const removeSection = (index) => {
+    const updated = formData.sections.filter((_, i) => i !== index);
+    setFormData({ ...formData, sections: updated });
+  };
+
+  const addLesson = (sectionIndex) => {
+    const updated = [...formData.sections];
+    updated[sectionIndex].lessons.push({ title: '', videoUrl: '', duration: '' });
+    setFormData({ ...formData, sections: updated });
+  };
+
+  const updateLesson = (sectionIndex, lessonIndex, field, value) => {
+    const updated = [...formData.sections];
+    updated[sectionIndex].lessons[lessonIndex][field] = value;
+    setFormData({ ...formData, sections: updated });
+  };
+
+  const removeLesson = (sectionIndex, lessonIndex) => {
+    const updated = [...formData.sections];
+    updated[sectionIndex].lessons = updated[sectionIndex].lessons.filter((_, i) => i !== lessonIndex);
+    setFormData({ ...formData, sections: updated });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
@@ -316,6 +329,8 @@ const CourseManagement = () => {
           data.append('topics', JSON.stringify(array));
         } else if (key === 'selectedSessionDates') {
           data.append('selectedSessionDates', JSON.stringify(formData.selectedSessionDates));
+        } else if (key === 'sections') {
+          data.append('sections', JSON.stringify(formData.sections));
         } else if (key === 'durationMonths') {
           data.append('durationMonths', computedDurationMonths);
         } else if (key === 'price') {
@@ -353,18 +368,18 @@ const CourseManagement = () => {
       {/* Top Banner Header */}
       <div className="bg-white/60 backdrop-blur-2xl rounded-[2.5rem] p-6 lg:p-8 border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
             Curriculum & Programs
           </div>
           <h1 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">Course Management</h1>
           <p className="text-gray-500 text-sm mt-1">
-            Configure programs, assign lead instructors & moderators, manage daily class timetables, and reschedule sessions with Zoom.
+            Configure programs, manage daily class timetables, and reschedule sessions with Zoom.
           </p>
         </div>
         
         <button
           onClick={() => handleOpenModal()}
-          className="bg-brand-green hover:bg-brand-green-dark text-white font-bold py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2.5 w-max text-xs lg:text-sm group cursor-pointer"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-[0_6px_20px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2.5 w-max text-xs lg:text-sm group cursor-pointer"
         >
           <FaPlus size={12} className="group-hover:rotate-90 transition-transform" />
           <span>Create New Course</span>
@@ -373,14 +388,11 @@ const CourseManagement = () => {
 
       {loading ? (
         <div className="flex justify-center p-20">
-          <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {courses.map(course => {
-            const assignedInstructorName = course.instructorId?.name || course.instructor;
-            const assignedInstructorSpeciality = course.instructorId?.speciality;
-            const assignedModeratorName = course.moderatorId?.name || course.moderator;
 
             return (
               <motion.div 
@@ -397,7 +409,7 @@ const CourseManagement = () => {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-100"><FaImage size={32} /></div>
                     )}
-                    <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-extrabold text-brand-green shadow-xs uppercase tracking-wider">
+                    <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-extrabold text-indigo-600 shadow-xs uppercase tracking-wider">
                       {course.category}
                     </div>
 
@@ -414,51 +426,16 @@ const CourseManagement = () => {
                 {/* Structured Content Section */}
                 <div className="p-6 flex-1 flex flex-col">
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-base lg:text-lg font-black text-gray-900 leading-snug line-clamp-2 group-hover:text-brand-green transition-colors">
+                    <h3 className="text-base lg:text-lg font-black text-gray-900 leading-snug line-clamp-2 group-hover:text-indigo-600 transition-colors">
                       {course.title}
                     </h3>
                   </div>
 
-                  {/* Assigned Faculty and Moderator Badges */}
-                  <div className="space-y-2 mb-4">
-                    <div className="p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200/80 flex items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <FaChalkboardTeacher className="text-brand-green shrink-0" size={13} />
-                        <div className="min-w-0">
-                          <span className="font-bold text-emerald-950 truncate block">
-                            {assignedInstructorName ? `Guru: ${assignedInstructorName}` : 'Instructor: Not Assigned'}
-                          </span>
-                          {assignedInstructorSpeciality && (
-                            <span className="text-[10px] text-emerald-800 truncate block">
-                              {assignedInstructorSpeciality}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-200/60 text-emerald-900 shrink-0">
-                        Faculty
-                      </span>
-                    </div>
 
-                    {assignedModeratorName && (
-                      <div className="p-2 rounded-xl bg-teal-50/80 border border-teal-200/60 flex items-center justify-between gap-2 text-xs">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <FaShieldAlt className="text-teal-700 shrink-0" size={12} />
-                          <span className="font-bold text-teal-950 truncate">
-                            Moderator: {assignedModeratorName}
-                          </span>
-                        </div>
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-teal-200/60 text-teal-900 shrink-0">
-                          Supervision
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-6 bg-[#FAF7F2] p-3.5 rounded-2xl border border-gray-200/50">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-6 bg-slate-50 p-3.5 rounded-2xl border border-gray-200/50">
                     <div>
                       <span className="text-[10px] uppercase font-bold text-gray-400 block">Fee</span>
-                      <span className="font-black text-brand-green-dark text-sm">₹{course.price || 0}</span>
+                      <span className="font-black text-indigo-700 text-sm">₹{course.price || 0}</span>
                     </div>
                     <div>
                       <span className="text-[10px] uppercase font-bold text-gray-400 block">Level</span>
@@ -470,7 +447,7 @@ const CourseManagement = () => {
                     </div>
                     <div>
                       <span className="text-[10px] uppercase font-bold text-gray-400 block">Sessions</span>
-                      <span className="font-bold text-brand-green-dark">
+                      <span className="font-bold text-indigo-700">
                         {course.sessionDates?.length || 0} Live Classes
                       </span>
                     </div>
@@ -481,7 +458,7 @@ const CourseManagement = () => {
                     <div className="flex items-center gap-1.5">
                       <button 
                         onClick={() => handleViewEnrollments(course)} 
-                        className="px-3 py-1.5 bg-brand-green/10 text-brand-green hover:bg-brand-green hover:text-white transition-all rounded-xl text-xs font-bold cursor-pointer"
+                        className="px-3 py-1.5 bg-indigo-600/10 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all rounded-xl text-xs font-bold cursor-pointer"
                       >
                         Students
                       </button>
@@ -498,7 +475,7 @@ const CourseManagement = () => {
                     <div className="flex items-center gap-1.5">
                       <button 
                         onClick={() => handleOpenModal(course)} 
-                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-800 hover:bg-brand-green hover:text-white transition-all shadow-xs cursor-pointer" 
+                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-800 hover:bg-indigo-600 hover:text-white transition-all shadow-xs cursor-pointer" 
                         title="Edit Course"
                       >
                         <FaEdit size={12} />
@@ -530,7 +507,7 @@ const CourseManagement = () => {
           <div className="fixed inset-0 z-40 flex justify-end">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-brand-green-dark/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-indigo-700/20 backdrop-blur-sm"
               onClick={() => setIsEnrolledModalOpen(false)}
             />
             <motion.div 
@@ -539,17 +516,17 @@ const CourseManagement = () => {
             >
               <button 
                 onClick={() => setIsEnrolledModalOpen(false)}
-                className="absolute top-6 right-6 text-gray-500 hover:text-brand-green bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
+                className="absolute top-6 right-6 text-gray-500 hover:text-indigo-600 bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
               >
                 <FaTimes />
               </button>
               
               <h2 className="text-xl font-bold text-gray-800 mb-2 mt-2">Enrolled Students</h2>
-              <p className="text-brand-green font-semibold text-sm mb-6 line-clamp-1">{enrolledCourse?.title}</p>
+              <p className="text-indigo-600 font-semibold text-sm mb-6 line-clamp-1">{enrolledCourse?.title}</p>
               
               <div className="flex-1 overflow-y-auto pr-2">
                 {loadingEnrollments ? (
-                  <div className="flex justify-center p-8"><div className="w-6 h-6 border-2 border-brand-green border-t-transparent rounded-full animate-spin"></div></div>
+                  <div className="flex justify-center p-8"><div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div></div>
                 ) : enrolledUsers.length === 0 ? (
                   <div className="text-center text-gray-500 py-8 bg-white/50 rounded-xl border border-dashed border-gray-300 text-sm">
                     No students are currently enrolled in this course.
@@ -560,7 +537,7 @@ const CourseManagement = () => {
                       <div key={enrollment._id} className="bg-white/80 p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-1">
                         <span className="font-bold text-gray-800 text-sm">{enrollment.studentEmail}</span>
                         <div className="flex justify-between items-center mt-1">
-                          <span className="text-xs text-gray-500">Paid: <span className="font-semibold text-brand-green">₹{enrollment.amountPaid}</span></span>
+                          <span className="text-xs text-gray-500">Paid: <span className="font-semibold text-indigo-600">₹{enrollment.amountPaid}</span></span>
                           <span className="text-[10px] uppercase font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-md">Progress: {enrollment.progress}%</span>
                         </div>
                       </div>
@@ -579,7 +556,7 @@ const CourseManagement = () => {
           <div className="fixed inset-0 z-40 flex justify-end">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-brand-green-dark/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-indigo-700/20 backdrop-blur-sm"
               onClick={() => setIsTimetableOpen(false)}
             />
             <motion.div 
@@ -588,17 +565,17 @@ const CourseManagement = () => {
             >
               <button 
                 onClick={() => setIsTimetableOpen(false)}
-                className="absolute top-6 right-6 text-gray-500 hover:text-brand-green bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
+                className="absolute top-6 right-6 text-gray-500 hover:text-indigo-600 bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
               >
                 <FaTimes />
               </button>
 
               <div className="mb-6">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-[11px] font-bold uppercase tracking-wider mb-2">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-[11px] font-bold uppercase tracking-wider mb-2">
                   <FaCalendarAlt size={10} /> Live Sessions Schedule
                 </div>
                 <h2 className="text-xl md:text-2xl font-black text-gray-900 leading-tight">Class Timetable & Sessions</h2>
-                <p className="text-brand-green font-bold text-sm mt-0.5 line-clamp-1">{timetableCourse?.title}</p>
+                <p className="text-indigo-600 font-bold text-sm mt-0.5 line-clamp-1">{timetableCourse?.title}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   Reschedule any individual class session to a new date/time. A new Zoom meeting link will be automatically generated.
                 </p>
@@ -606,7 +583,7 @@ const CourseManagement = () => {
 
               <div className="flex-1 overflow-y-auto pr-1 space-y-3">
                 {loadingTimetable ? (
-                  <div className="flex justify-center p-12"><div className="w-8 h-8 border-3 border-brand-green border-t-transparent rounded-full animate-spin"></div></div>
+                  <div className="flex justify-center p-12"><div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div></div>
                 ) : timetableClasses.length === 0 ? (
                   <div className="text-center text-gray-500 py-12 bg-white/60 rounded-2xl border border-dashed border-gray-300 text-sm">
                     No individual class sessions found for this course.
@@ -654,7 +631,7 @@ const CourseManagement = () => {
                           )}
                           <button
                             onClick={() => handleOpenRescheduleModal(cls)}
-                            className="px-4 py-2.5 bg-brand-green hover:bg-brand-green-dark text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
                           >
                             <FaSyncAlt size={11} />
                             <span>Reschedule</span>
@@ -688,7 +665,7 @@ const CourseManagement = () => {
               <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-5">
                 <div>
                   <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
-                    <FaClock className="text-brand-green" /> Reschedule Class Session
+                    <FaClock className="text-indigo-600" /> Reschedule Class Session
                   </h2>
                   <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{selectedClassToReschedule?.title}</p>
                 </div>
@@ -717,7 +694,7 @@ const CourseManagement = () => {
                     required
                     value={rescheduleForm.newTitle} 
                     onChange={e => setRescheduleForm({ ...rescheduleForm, newTitle: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-600/20 outline-none"
                   />
                 </div>
 
@@ -731,7 +708,7 @@ const CourseManagement = () => {
                       required
                       value={rescheduleForm.newDate} 
                       onChange={e => setRescheduleForm({ ...rescheduleForm, newDate: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-600/20 outline-none"
                     />
                   </div>
 
@@ -744,7 +721,7 @@ const CourseManagement = () => {
                       required
                       value={rescheduleForm.newTime} 
                       onChange={e => setRescheduleForm({ ...rescheduleForm, newTime: e.target.value })}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-600/20 outline-none"
                     />
                   </div>
                 </div>
@@ -756,7 +733,7 @@ const CourseManagement = () => {
                   <select 
                     value={rescheduleForm.durationMinutes}
                     onChange={e => setRescheduleForm({ ...rescheduleForm, durationMinutes: parseInt(e.target.value, 10) })}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-brand-green/20 outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-600/20 outline-none"
                   >
                     <option value={45}>45 Minutes</option>
                     <option value={60}>60 Minutes (1 Hour)</option>
@@ -782,7 +759,7 @@ const CourseManagement = () => {
                   <button 
                     type="submit"
                     disabled={rescheduling}
-                    className="px-7 py-3 rounded-2xl bg-brand-green hover:bg-brand-green-dark text-white font-extrabold text-xs shadow-md disabled:opacity-60 flex items-center gap-2 cursor-pointer"
+                    className="px-7 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md disabled:opacity-60 flex items-center gap-2 cursor-pointer"
                   >
                     {rescheduling ? (
                       <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Generating New Zoom Meeting...</>
@@ -797,25 +774,26 @@ const CourseManagement = () => {
       </AnimatePresence>
 
       {/* Course Form Drawer */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-40 flex justify-end">
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-brand-green-dark/20 backdrop-blur-sm"
-              onClick={() => !uploading && setIsModalOpen(false)}
-            />
-            <motion.div 
-              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-              className="bg-white/40 backdrop-blur-3xl border-l border-white/60 shadow-[-20px_0_40px_rgba(0,0,0,0.08)] w-full max-w-2xl h-full overflow-y-auto relative z-10 p-6 md:p-10 flex flex-col overflow-x-hidden"
-            >
+      {createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <div className="fixed inset-0 z-[100] flex justify-end font-inter">
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-indigo-700/20 backdrop-blur-sm"
+                onClick={() => !uploading && setIsModalOpen(false)}
+              />
+              <motion.div 
+                initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+                className="bg-white/40 backdrop-blur-3xl border-l border-white/60 shadow-[-20px_0_40px_rgba(0,0,0,0.08)] w-full max-w-2xl h-full overflow-y-auto relative z-10 p-6 md:p-10 flex flex-col overflow-x-hidden"
+              >
               {/* Glassmorphism background refraction blobs */}
-              <div className="absolute top-[-5%] right-[-10%] w-72 h-72 bg-brand-green/30 rounded-full blur-[90px] pointer-events-none"></div>
+              <div className="absolute top-[-5%] right-[-10%] w-72 h-72 bg-indigo-600/30 rounded-full blur-[90px] pointer-events-none"></div>
               <div className="absolute bottom-[20%] left-[-10%] w-64 h-64 bg-[#d67b22]/20 rounded-full blur-[90px] pointer-events-none"></div>
 
               <button 
                 onClick={() => !uploading && setIsModalOpen(false)}
-                className="absolute top-6 right-6 text-gray-500 hover:text-brand-green bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
+                className="absolute top-6 right-6 text-gray-500 hover:text-indigo-600 bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
               >
                 <FaTimes />
               </button>
@@ -828,47 +806,25 @@ const CourseManagement = () => {
                   {/* Course Title */}
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Course Title *</label>
-                    <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-brand-green focus:bg-white/70 focus:ring-2 focus:ring-brand-green/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-medium" placeholder="e.g. Master Class in Asana & Pranayama" />
+                    <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-medium" placeholder="e.g. Master Class in Asana & Pranayama" />
                   </div>
 
-                  {/* ASSIGN INSTRUCTOR SELECTOR */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                      <FaChalkboardTeacher className="text-brand-green" /> Assign Lead Instructor *
-                    </label>
-                    <select 
-                      value={formData.instructorId} 
-                      onChange={e => setFormData({...formData, instructorId: e.target.value})} 
-                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium"
-                    >
-                      <option value="">-- Select Registered Instructor --</option>
-                      {instructors.map(inst => (
-                        <option key={inst._id} value={inst._id}>
-                          {inst.name} ({inst.speciality || 'Tech Expert'})
-                        </option>
-                      ))}
-                    </select>
+                  {/* Course Type Toggle */}
+                  <div className="col-span-full mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Course Type *</label>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer p-3 border border-white/60 bg-white/50 backdrop-blur-md rounded-xl w-full hover:bg-white/70 transition-colors">
+                        <input type="radio" name="courseType" value="online" checked={formData.courseType === 'online'} onChange={e => setFormData({...formData, courseType: e.target.value})} className="text-indigo-600 focus:ring-indigo-600 h-4 w-4" />
+                        <span className="font-semibold text-gray-800">Live Classes (Online Zoom)</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer p-3 border border-white/60 bg-white/50 backdrop-blur-md rounded-xl w-full hover:bg-white/70 transition-colors">
+                        <input type="radio" name="courseType" value="pre-recorded" checked={formData.courseType === 'pre-recorded'} onChange={e => setFormData({...formData, courseType: e.target.value})} className="text-indigo-600 focus:ring-indigo-600 h-4 w-4" />
+                        <span className="font-semibold text-gray-800">Pre-recorded (Udemy Style)</span>
+                      </label>
+                    </div>
                   </div>
 
-                  {/* ASSIGN MODERATOR SELECTOR */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                      <FaUserTie className="text-gray-400 text-xs" />
-                      Assign Course Coordinator / Moderator
-                    </label>
-                    <select 
-                      value={formData.moderatorId} 
-                      onChange={e => setFormData({...formData, moderatorId: e.target.value})} 
-                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium"
-                    >
-                      <option value="">-- Optional: Assign Moderator --</option>
-                      {moderators.map(mod => (
-                        <option key={mod._id} value={mod._id}>
-                          {mod.name} ({mod.email})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+
 
                   {/* Price */}
                   <div>
@@ -878,7 +834,7 @@ const CourseManagement = () => {
                       required 
                       value={formData.price} 
                       onChange={e => setFormData({...formData, price: e.target.value})} 
-                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-brand-green focus:bg-white/70 focus:ring-2 focus:ring-brand-green/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-semibold" 
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-semibold" 
                       placeholder="e.g. 999" 
                     />
                   </div>
@@ -886,7 +842,7 @@ const CourseManagement = () => {
                   {/* Category */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category *</label>
-                    <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
+                    <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
                       <option>Digital Marketing</option>
                       <option>Technology</option>
                       <option>Digital Services</option>
@@ -902,7 +858,7 @@ const CourseManagement = () => {
                   {/* Language */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Instruction Language</label>
-                    <select value={formData.language} onChange={e => setFormData({...formData, language: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
+                    <select value={formData.language} onChange={e => setFormData({...formData, language: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
                       <option value="English">English</option>
                       <option value="Telugu">Telugu</option>
                       <option value="English & Telugu">English & Telugu</option>
@@ -914,7 +870,7 @@ const CourseManagement = () => {
                   {/* Access Validity */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Access Validity After Completion</label>
-                    <select value={formData.accessValidity} onChange={e => setFormData({...formData, accessValidity: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
+                    <select value={formData.accessValidity} onChange={e => setFormData({...formData, accessValidity: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
                       <option value="1 Month">1 Month Access</option>
                       <option value="2 Months">2 Months Access</option>
                       <option value="3 Months">3 Months Access</option>
@@ -927,19 +883,22 @@ const CourseManagement = () => {
                   {/* Level */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Proficiency Level</label>
-                    <select value={formData.level} onChange={e => setFormData({...formData, level: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
+                    <select value={formData.level} onChange={e => setFormData({...formData, level: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium">
                       <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
                     </select>
                   </div>
 
-                  {/* Dates */}
-                  <div>
+                  {/* ONLINE COURSE: Dates & Timings */}
+                  {formData.courseType === 'online' && (
+                    <>
+                      {/* Dates */}
+                      <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Start Date</label>
-                    <input type="date" value={formData.startDate} onChange={e => setFormData({...formData, startDate: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium" />
+                    <input type="date" value={formData.startDate} onChange={e => setFormData({...formData, startDate: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">End Date</label>
-                    <input type="date" value={formData.endDate} onChange={e => setFormData({...formData, endDate: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-brand-green transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium" />
+                    <input type="date" value={formData.endDate} onChange={e => setFormData({...formData, endDate: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl outline-none focus:bg-white/70 focus:border-indigo-600 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] font-medium" />
                   </div>
 
                   {/* Session Timings */}
@@ -987,7 +946,7 @@ const CourseManagement = () => {
                               if (!isPM && h >= 12) h -= 12;
                               setFormData({...formData, startTime: `${h.toString().padStart(2, '0')}:${min}`});
                             }}
-                            className="p-2 bg-transparent outline-none appearance-none cursor-pointer font-bold text-brand-green"
+                            className="p-2 bg-transparent outline-none appearance-none cursor-pointer font-bold text-indigo-600"
                           >
                             <option value="AM">AM</option><option value="PM">PM</option>
                           </select>
@@ -1034,7 +993,7 @@ const CourseManagement = () => {
                               if (!isPM && h >= 12) h -= 12;
                               setFormData({...formData, endTime: `${h.toString().padStart(2, '0')}:${min}`});
                             }}
-                            className="p-2 bg-transparent outline-none appearance-none cursor-pointer font-bold text-brand-green"
+                            className="p-2 bg-transparent outline-none appearance-none cursor-pointer font-bold text-indigo-600"
                           >
                             <option value="AM">AM</option><option value="PM">PM</option>
                           </select>
@@ -1047,7 +1006,7 @@ const CourseManagement = () => {
                   {/* Custom Calendar for Session Dates */}
                   <div className="col-span-full bg-white/50 backdrop-blur-md border border-white/60 p-5 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]">
                     <label className="block text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                      <FaCalendarAlt className="text-brand-green" /> Select Session Dates (Generates Classroom Schedule)
+                      <FaCalendarAlt className="text-indigo-600" /> Select Session Dates (Generates Classroom Schedule)
                     </label>
                     {(!formData.startDate || !formData.endDate) ? (
                       <div className="text-sm text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200">
@@ -1076,9 +1035,9 @@ const CourseManagement = () => {
                             return (
                               <div>
                                 <div className="flex justify-between items-center mb-4">
-                                  <button type="button" onClick={prevMonth} className="text-gray-400 hover:text-brand-green p-1 cursor-pointer">&larr;</button>
+                                  <button type="button" onClick={prevMonth} className="text-gray-400 hover:text-indigo-600 p-1 cursor-pointer">&larr;</button>
                                   <span className="font-bold text-gray-800">{monthNames[displayMonth.getMonth()]} {displayMonth.getFullYear()}</span>
-                                  <button type="button" onClick={nextMonth} className="text-gray-400 hover:text-brand-green p-1 cursor-pointer">&rarr;</button>
+                                  <button type="button" onClick={nextMonth} className="text-gray-400 hover:text-indigo-600 p-1 cursor-pointer">&rarr;</button>
                                 </div>
                                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
                                   {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d, i) => <div key={d} className={`text-xs font-bold ${i === 0 ? 'text-red-400' : 'text-gray-400'}`}>{d}</div>)}
@@ -1113,7 +1072,7 @@ const CourseManagement = () => {
                                           }}
                                           className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors cursor-pointer ${
                                             isDisabled ? 'text-gray-300 cursor-not-allowed' :
-                                            isSelected ? 'bg-brand-green text-white shadow-md' : 
+                                            isSelected ? 'bg-indigo-600 text-white shadow-md' : 
                                             isSpecialDay ? 'text-red-500 bg-red-50 hover:bg-red-100' :
                                             'text-gray-700 hover:bg-gray-100'
                                           }`}
@@ -1146,8 +1105,8 @@ const CourseManagement = () => {
                                 const dateFmt = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                                 const dayName = d.toLocaleDateString('en-GB', { weekday: 'short' });
                                 return (
-                                  <div key={date} className="flex items-center gap-2 bg-white text-gray-700 pl-3 pr-2 py-1.5 rounded-lg text-sm font-medium border border-brand-green/20 shadow-sm">
-                                    <span className="text-brand-green font-bold text-xs">{dayName}</span>
+                                  <div key={date} className="flex items-center gap-2 bg-white text-gray-700 pl-3 pr-2 py-1.5 rounded-lg text-sm font-medium border border-indigo-600/20 shadow-sm">
+                                    <span className="text-indigo-600 font-bold text-xs">{dayName}</span>
                                     <span>{dateFmt}</span>
                                     <button type="button" onClick={() => handleRemoveSessionDate(date)} className="text-gray-300 hover:text-red-500 ml-1 p-0.5 rounded transition-colors cursor-pointer"><FaTimes size={12}/></button>
                                   </div>
@@ -1158,31 +1117,94 @@ const CourseManagement = () => {
                         </div>
                       </div>
                     )}
-                  </div>
+                    </div>
+                    </>
+                  )}
+
+                  {/* PRE-RECORDED COURSE: Curriculum Builder */}
+                  {formData.courseType === 'pre-recorded' && (
+                    <div className="col-span-full bg-white/50 backdrop-blur-md border border-white/60 p-5 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]">
+                      <div className="flex justify-between items-center mb-4">
+                        <label className="block text-lg font-bold text-gray-800 flex items-center gap-2">
+                          <FaPlayCircle className="text-indigo-600" /> Course Curriculum (Sections & Lessons)
+                        </label>
+                        <button type="button" onClick={addSection} className="text-sm font-bold bg-indigo-600/10 text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                          <FaPlus size={10} /> Add Section
+                        </button>
+                      </div>
+
+                      {formData.sections.length === 0 ? (
+                        <div className="text-sm text-gray-400 italic bg-gray-50/50 p-4 rounded-xl text-center border border-dashed border-gray-200">
+                          Click "Add Section" to start building your curriculum.
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {formData.sections.map((section, sIndex) => (
+                            <div key={`section-${sIndex}`} className="bg-white/80 border border-gray-200 rounded-xl p-4 shadow-sm">
+                              <div className="flex justify-between items-start gap-4 mb-3">
+                                <div className="flex-1">
+                                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Section {sIndex + 1} Title</label>
+                                  <input type="text" value={section.title} onChange={e => updateSectionTitle(sIndex, e.target.value)} placeholder="e.g. Introduction to Yoga" className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-indigo-600 focus:bg-white text-sm font-semibold" required />
+                                </div>
+                                <button type="button" onClick={() => removeSection(sIndex)} className="mt-6 text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
+                                  <FaTrash size={14} />
+                                </button>
+                              </div>
+
+                              <div className="pl-4 border-l-2 border-indigo-600/30 space-y-3 mt-4">
+                                {section.lessons.map((lesson, lIndex) => (
+                                  <div key={`lesson-${sIndex}-${lIndex}`} className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex flex-col md:flex-row gap-3 items-start md:items-center relative">
+                                    <div className="flex-1 w-full">
+                                      <input type="text" value={lesson.title} onChange={e => updateLesson(sIndex, lIndex, 'title', e.target.value)} placeholder="Lesson Title" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs font-medium" required />
+                                    </div>
+                                    <div className="flex-1 w-full flex items-center gap-2">
+                                      <FaExternalLinkAlt className="text-gray-400 text-xs shrink-0" />
+                                      <input type="url" value={lesson.videoUrl} onChange={e => updateLesson(sIndex, lIndex, 'videoUrl', e.target.value)} placeholder="Video URL (e.g. YouTube link)" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" required />
+                                    </div>
+                                    <div className="w-full md:w-28 flex items-center gap-2">
+                                      <FaClock className="text-gray-400 text-xs shrink-0" />
+                                      <input type="text" value={lesson.duration} onChange={e => updateLesson(sIndex, lIndex, 'duration', e.target.value)} placeholder="05:30" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" />
+                                    </div>
+                                    <button type="button" onClick={() => removeLesson(sIndex, lIndex)} className="absolute -right-2 -top-2 md:static md:right-0 md:top-0 text-red-400 hover:text-red-600 bg-white md:bg-transparent rounded-full shadow-sm md:shadow-none p-1.5 md:p-1 transition-colors cursor-pointer">
+                                      <FaTimes size={12} />
+                                    </button>
+                                  </div>
+                                ))}
+
+                                <button type="button" onClick={() => addLesson(sIndex)} className="text-xs font-bold text-gray-500 hover:text-indigo-600 flex items-center gap-1.5 mt-2 py-1 cursor-pointer">
+                                  <FaPlus size={10} /> Add Lesson
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">About This Course</label>
-                    <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-brand-green focus:bg-white/70 focus:ring-2 focus:ring-brand-green/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder="This course helps you relax your mind..."></textarea>
+                    <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder="This course helps you relax your mind..."></textarea>
                   </div>
                   
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Topics Covered (One per line)</label>
-                    <textarea required rows="3" value={formData.topics} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-brand-green focus:bg-white/70 focus:ring-2 focus:ring-brand-green/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Introduction to Asana\nPranayama Breathing\nVedic Meditation`}></textarea>
+                    <textarea required rows="3" value={formData.topics} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Introduction to Asana\nPranayama Breathing\nVedic Meditation`}></textarea>
                   </div>
                   
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">What You Will Learn (One per line)</label>
-                    <textarea required rows="3" value={formData.whatYouWillLearn} onChange={e => setFormData({...formData, whatYouWillLearn: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-brand-green focus:bg-white/70 focus:ring-2 focus:ring-brand-green/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Stress relief techniques\nBreathing exercises\nHolistic wellness practices`}></textarea>
+                    <textarea required rows="3" value={formData.whatYouWillLearn} onChange={e => setFormData({...formData, whatYouWillLearn: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Stress relief techniques\nBreathing exercises\nHolistic wellness practices`}></textarea>
                   </div>
 
                   {/* Media Uploads */}
                   <div className="col-span-full pt-4 mt-2 border-t border-white/40">
-                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2"><FaCloudUploadAlt className="text-brand-green" /> Media Uploads</h3>
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2"><FaCloudUploadAlt className="text-indigo-600" /> Media Uploads</h3>
                     <div className="grid grid-cols-1 gap-4">
                       <div className="border border-white/60 bg-white/40 backdrop-blur-md rounded-2xl p-5 text-center hover:bg-white/60 transition-colors shadow-sm cursor-pointer group">
                         <label className="cursor-pointer block">
                           <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm border border-white group-hover:scale-110 transition-transform">
-                            <FaImage className="text-brand-green/70 text-xl" />
+                            <FaImage className="text-indigo-600/70 text-xl" />
                           </div>
                           <span className="text-sm font-semibold text-gray-700">Upload Thumbnail Image</span>
                           <p className="text-xs text-gray-500 mt-1.5">{thumbnailFile ? thumbnailFile.name : (editingCourse?.thumbnailUrl ? 'Current image saved' : 'JPG, PNG formats')}</p>
@@ -1194,7 +1216,7 @@ const CourseManagement = () => {
                 </div>
 
                 <div className="pt-8 pb-24 md:pb-4 mt-auto">
-                  <button type="submit" disabled={uploading} className="w-full bg-brand-green hover:bg-brand-green-dark text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(41,120,56,0.39)] transition-all disabled:opacity-70 flex justify-center items-center gap-2 text-lg cursor-pointer">
+                  <button type="submit" disabled={uploading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(41,120,56,0.39)] transition-all disabled:opacity-70 flex justify-center items-center gap-2 text-lg cursor-pointer">
                     {uploading ? (
                       <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Uploading...</>
                     ) : 'Save & Publish Course'}
@@ -1203,8 +1225,10 @@ const CourseManagement = () => {
               </form>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

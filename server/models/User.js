@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'admin', 'instructor', 'moderator'],
+    enum: ['student', 'admin', 'partner'],
     default: 'student',
   },
   phone: {
@@ -45,27 +45,11 @@ const userSchema = new mongoose.Schema({
     default: '',
     trim: true,
   },
-  speciality: {
-    type: String,
-    default: '', // e.g. 'Yoga', 'Meditation', 'Food Nutritionist', 'Pranayama', 'Ayurveda'
-  },
-  experience: {
-    type: String,
-    default: '', // e.g. '5+ Years', 'Senior Yoga Master'
-  },
-  bio: {
-    type: String,
-    default: '',
-  },
   status: {
     type: String,
     enum: ['active', 'inactive'],
     default: 'active',
   },
-  assignedCourses: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
-  }],
   wishlist: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course'

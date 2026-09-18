@@ -151,7 +151,7 @@ const Certificates = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
-        <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -177,7 +177,7 @@ const Certificates = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-24 right-6 z-50 bg-brand-green text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-sm flex items-center gap-2"
+            className="fixed top-24 right-6 z-50 bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-sm flex items-center gap-2"
           >
             <FaCheckCircle /> {toastMessage}
           </motion.div>
@@ -187,7 +187,7 @@ const Certificates = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8 max-w-5xl mx-auto w-full">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 rounded-xl bg-white text-brand-green hover:bg-gray-50 border border-gray-200 transition-colors shadow-xs cursor-pointer">
+          <button onClick={() => navigate(-1)} className="p-2 rounded-xl bg-white text-indigo-600 hover:bg-gray-50 border border-gray-200 transition-colors shadow-xs cursor-pointer">
             <FaArrowLeft size={16} />
           </button>
           <div>
@@ -215,7 +215,7 @@ const Certificates = () => {
                     onClick={() => setSelectedCertIndex(idx)}
                     className={`w-full text-left p-4 rounded-2xl transition-all border flex items-center justify-between cursor-pointer ${
                       selectedCertIndex === idx 
-                        ? 'bg-brand-green text-white border-brand-green shadow-md shadow-brand-green/20' 
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/20' 
                         : 'bg-white text-gray-800 border-gray-200/80 hover:bg-gray-50'
                     }`}
                   >
@@ -225,7 +225,7 @@ const Certificates = () => {
                         {enr.certificateId || `ID: STA-CERT-${enr._id.slice(-6).toUpperCase()}`}
                       </p>
                     </div>
-                    <FaAward className={selectedCertIndex === idx ? 'text-yellow-300' : 'text-brand-green'} size={22} />
+                    <FaAward className={selectedCertIndex === idx ? 'text-yellow-300' : 'text-indigo-600'} size={22} />
                   </button>
                 ))}
               </div>
@@ -249,7 +249,7 @@ const Certificates = () => {
                       </p>
                       <button
                         onClick={() => navigate(`/dashboard/learning/${inEnr.course?._id || inEnr.course}`)}
-                        className="w-full py-2 bg-gray-50 hover:bg-brand-green/10 text-brand-green text-xs font-bold rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full py-2 bg-gray-50 hover:bg-indigo-600/10 text-indigo-600 text-xs font-bold rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         View Live Schedule & Classes →
                       </button>
@@ -348,7 +348,7 @@ const Certificates = () => {
                       onClick={handleOpenEditName}
                       className="px-5 py-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-extrabold rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
                     >
-                      <FaEdit className="text-brand-green" />
+                      <FaEdit className="text-indigo-600" />
                       <span>Correct / Edit Legal Name</span>
                     </button>
 
@@ -356,11 +356,11 @@ const Certificates = () => {
                     <button
                       onClick={() => handleDownloadPDF(activeCert)}
                       disabled={downloading}
-                      className="flex-1 py-4 bg-brand-green hover:bg-brand-green-dark text-white font-extrabold rounded-2xl shadow-lg shadow-brand-green/20 hover:shadow-brand-green/40 transition-all duration-300 flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-70 cursor-pointer"
+                      className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-600-dark text-white font-extrabold rounded-2xl shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/40 transition-all duration-300 flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-70 cursor-pointer"
                     >
                       {downloading ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4 border-indigo-600 border-white border-t-transparent rounded-full animate-spin"></div>
                           <span>Generating Official PDF...</span>
                         </>
                       ) : (
@@ -390,7 +390,7 @@ const Certificates = () => {
         ) : (
           /* Empty State */
           <div className="bg-white/80 rounded-3xl p-10 md:p-14 border border-white shadow-sm text-center max-w-xl mx-auto space-y-6">
-            <div className="w-20 h-20 bg-brand-green/10 text-brand-green rounded-full flex items-center justify-center mx-auto text-3xl">
+            <div className="w-20 h-20 bg-indigo-600/10 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-3xl">
               <FaAward />
             </div>
             <div className="space-y-2">
@@ -411,7 +411,7 @@ const Certificates = () => {
                     </div>
                     <button
                       onClick={() => navigate(`/dashboard/learning/${enr.course?._id || enr.course}`)}
-                      className="px-4 py-2 bg-brand-green hover:bg-brand-green-dark text-white text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer"
+                      className="px-4 py-2 bg-indigo-600 hover:bg-indigo-600-dark text-white text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer"
                     >
                       Go to Classes →
                     </button>
@@ -421,7 +421,7 @@ const Certificates = () => {
             ) : (
               <button
                 onClick={() => navigate('/courses')}
-                className="px-8 py-3.5 bg-brand-green hover:bg-brand-green-dark text-white font-bold text-sm rounded-2xl shadow-md transition-all inline-flex items-center gap-2 cursor-pointer"
+                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold text-sm rounded-2xl shadow-md transition-all inline-flex items-center gap-2 cursor-pointer"
               >
                 <FaBookOpen /> Explore Programs
               </button>
@@ -448,7 +448,7 @@ const Certificates = () => {
             >
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <h3 className="font-black text-lg text-gray-900 flex items-center gap-2">
-                  <FaUserCheck className="text-brand-green" /> Correct Printed Legal Name
+                  <FaUserCheck className="text-indigo-600" /> Correct Printed Legal Name
                 </h3>
                 <button 
                   onClick={() => !savingName && setIsEditNameOpen(false)}
@@ -493,10 +493,10 @@ const Certificates = () => {
                   <button 
                     type="submit" 
                     disabled={savingName}
-                    className="px-6 py-2.5 rounded-xl bg-brand-green hover:bg-brand-green-dark text-white font-extrabold text-xs shadow-md disabled:opacity-60 flex items-center gap-2 cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-600-dark text-white font-extrabold text-xs shadow-md disabled:opacity-60 flex items-center gap-2 cursor-pointer"
                   >
                     {savingName ? (
-                      <><div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Regenerating...</>
+                      <><div className="w-3.5 h-3.5 border-indigo-600 border-white border-t-transparent rounded-full animate-spin"></div> Regenerating...</>
                     ) : 'Save & Regenerate Certificate'}
                   </button>
                 </div>

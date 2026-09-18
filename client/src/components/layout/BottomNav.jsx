@@ -52,7 +52,7 @@ const BottomNav = () => {
                 key={item.path}
                 to={item.path}
                 className={`relative flex flex-col items-center justify-center flex-1 h-full py-1 transition-all ${
-                  isActive ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+                  isActive ? 'text-indigo-600 font-bold' : 'text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <motion.div
@@ -63,10 +63,10 @@ const BottomNav = () => {
                 >
                   <item.icon size={19} />
                   {isActive && (
-                    <span className="w-5 h-1 bg-blue-600 rounded-full mt-1 transition-all" />
+                    <span className="w-5 h-1 bg-indigo-600 rounded-full mt-1 transition-all" />
                   )}
                 </motion.div>
-                <span className={`text-[10px] sm:text-[11px] leading-tight mt-0.5 tracking-tight ${isActive ? 'text-blue-600 font-bold' : 'text-slate-500 font-medium'}`}>
+                <span className={`text-[10px] sm:text-[11px] leading-tight mt-0.5 tracking-tight ${isActive ? 'text-indigo-600 font-bold' : 'text-slate-500 font-medium'}`}>
                   {item.name}
                 </span>
               </NavLink>
@@ -126,7 +126,7 @@ const BottomNav = () => {
                 key={item.path}
                 to={item.path}
                 className={`relative flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors ${
-                  isActive ? 'text-blue-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+                  isActive ? 'text-indigo-600 font-bold' : 'text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <motion.div
@@ -137,10 +137,10 @@ const BottomNav = () => {
                 >
                   <Icon size={item.size} />
                   {isActive && (
-                    <span className="w-5 h-1 bg-blue-600 rounded-full mt-1 transition-all" />
+                    <span className="w-5 h-1 bg-indigo-600 rounded-full mt-1 transition-all" />
                   )}
                 </motion.div>
-                <span className={`text-[10px] sm:text-[11px] leading-tight mt-0.5 tracking-tight ${isActive ? 'text-blue-600 font-bold' : 'text-slate-500 font-medium'}`}>
+                <span className={`text-[10px] sm:text-[11px] leading-tight mt-0.5 tracking-tight ${isActive ? 'text-indigo-600 font-bold' : 'text-slate-500 font-medium'}`}>
                   {item.name}
                 </span>
               </NavLink>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   FaNewspaper, FaPlus, FaSearch, FaEdit, FaTrash, 
   FaEye, FaTimes, FaCheck, FaExternalLinkAlt, FaImage, 
@@ -236,7 +237,12 @@ const BlogManagement = () => {
   const draftCount = blogs.length - publishedCount;
 
   return (
-    <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto font-inter">
+    <div className="min-h-screen bg-[#f3f4f6] relative overflow-hidden font-outfit">
+      {/* Background Orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
+      
+      <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto relative z-10">
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -256,10 +262,10 @@ const BlogManagement = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-600/10 px-3 py-1 rounded-full border border-indigo-600/20">
             Editorial Management
           </span>
-          <h1 className="text-2xl md:text-3xl font-black font-outfit text-slate-900 tracking-tight mt-1">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mt-1">
             Blog & Article Management
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
@@ -269,7 +275,7 @@ const BlogManagement = () => {
 
         <button
           onClick={() => handleOpenModal()}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-600/25 transition-all hover:scale-105 text-sm cursor-pointer shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-[0_4px_14px_0_rgba(41,120,56,0.39)] transition-all hover:scale-105 text-sm cursor-pointer shrink-0"
         >
           <FaPlus size={13} />
           <span>Write New Blog</span>
@@ -278,26 +284,26 @@ const BlogManagement = () => {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
-          <span className="text-xs font-semibold text-slate-400">Total Articles</span>
+        <div className="bg-white/40 backdrop-blur-3xl border border-white/60 p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <span className="text-xs font-semibold text-slate-500">Total Articles</span>
           <p className="text-2xl font-black text-slate-900 mt-1">{blogs.length}</p>
         </div>
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
-          <span className="text-xs font-semibold text-emerald-600">Published Live</span>
-          <p className="text-2xl font-black text-emerald-600 mt-1">{publishedCount}</p>
+        <div className="bg-white/40 backdrop-blur-3xl border border-white/60 p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <span className="text-xs font-semibold text-indigo-600">Published Live</span>
+          <p className="text-2xl font-black text-indigo-600 mt-1">{publishedCount}</p>
         </div>
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
+        <div className="bg-white/40 backdrop-blur-3xl border border-white/60 p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <span className="text-xs font-semibold text-amber-600">Drafts</span>
           <p className="text-2xl font-black text-amber-600 mt-1">{draftCount}</p>
         </div>
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
-          <span className="text-xs font-semibold text-blue-600">Total Reader Views</span>
-          <p className="text-2xl font-black text-blue-600 mt-1">{totalViews}</p>
+        <div className="bg-white/40 backdrop-blur-3xl border border-white/60 p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <span className="text-xs font-semibold text-indigo-600">Total Reader Views</span>
+          <p className="text-2xl font-black text-indigo-600 mt-1">{totalViews}</p>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-3 items-center justify-between">
+      <div className="bg-white/40 backdrop-blur-3xl p-4 rounded-2xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col md:flex-row gap-3 items-center justify-between">
         <div className="relative w-full md:w-80">
           <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
           <input
@@ -305,7 +311,7 @@ const BlogManagement = () => {
             placeholder="Search blogs by title or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            className="w-full pl-10 pr-4 py-2.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl text-xs font-medium focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600"
           />
         </div>
 
@@ -314,7 +320,7 @@ const BlogManagement = () => {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 outline-none cursor-pointer"
+            className="bg-white/50 backdrop-blur-md border border-white/60 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 outline-none cursor-pointer focus:border-indigo-600"
           >
             <option value="All">All Categories</option>
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -323,10 +329,10 @@ const BlogManagement = () => {
       </div>
 
       {/* Blog Articles Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white/40 backdrop-blur-3xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+            <thead className="bg-white/50 border-b border-white/60 text-slate-500 font-bold uppercase tracking-wider">
               <tr>
                 <th className="py-4 px-6">Article</th>
                 <th className="py-4 px-4">Category</th>
@@ -337,7 +343,7 @@ const BlogManagement = () => {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/40">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
@@ -352,7 +358,7 @@ const BlogManagement = () => {
                 </tr>
               ) : (
                 filteredBlogs.map((blog) => (
-                  <tr key={blog._id} className="hover:bg-slate-50/60 transition-colors">
+                  <tr key={blog._id} className="hover:bg-white/60 transition-colors">
                     {/* Title + Thumbnail */}
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3.5">
@@ -377,7 +383,7 @@ const BlogManagement = () => {
 
                     {/* Category */}
                     <td className="py-4 px-4">
-                      <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-[11px] border border-blue-100">
+                      <span className="px-2.5 py-1 rounded-full bg-blue-50 text-indigo-700 font-bold text-[11px] border border-blue-100">
                         {blog.category}
                       </span>
                     </td>
@@ -453,39 +459,40 @@ const BlogManagement = () => {
       </div>
 
       {/* Create / Edit Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8 flex flex-col max-h-[90vh]"
-            >
-              {/* Modal Header */}
-              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <div>
-                  <h3 className="text-lg font-black font-outfit text-slate-900">
-                    {editingBlog ? 'Edit Blog Article' : 'Write New Blog Article'}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Share tutorials, career guides, and vocational knowledge.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
-                >
-                  <FaTimes size={13} />
-                </button>
-              </div>
+      {createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <div className="fixed inset-0 z-[100] flex justify-end font-inter">
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-indigo-700/20 backdrop-blur-sm"
+                onClick={() => setIsModalOpen(false)}
+              />
+              <motion.div
+                initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+                className="bg-white/40 backdrop-blur-3xl border-l border-white/60 shadow-[-20px_0_40px_rgba(0,0,0,0.08)] w-full max-w-2xl h-full overflow-y-auto relative z-10 p-6 md:p-10 flex flex-col overflow-x-hidden"
+              >
+              {/* Glassmorphism background refraction blobs */}
+              <div className="absolute top-[-5%] right-[-10%] w-72 h-72 bg-indigo-600/30 rounded-full blur-[90px] pointer-events-none"></div>
+              <div className="absolute bottom-[20%] left-[-10%] w-64 h-64 bg-[#d67b22]/20 rounded-full blur-[90px] pointer-events-none"></div>
+
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-6 right-6 text-slate-500 hover:text-indigo-600 bg-white/60 backdrop-blur-md p-2.5 rounded-full border border-white/50 shadow-sm transition-all z-20 cursor-pointer"
+              >
+                <FaTimes />
+              </button>
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-6 relative z-10">
+                {editingBlog ? 'Edit Blog Article' : 'Write New Blog Article'}
+              </h2>
 
               {/* Modal Body Form */}
-              <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+              <form onSubmit={handleSubmit} className="space-y-6 flex-1 relative z-10 text-sm">
                 
                 {/* Title */}
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                  <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                     Article Title *
                   </label>
                   <input
@@ -494,14 +501,14 @@ const BlogManagement = () => {
                     value={formData.title}
                     onChange={handleTitleChange}
                     placeholder="e.g. How to Start a High-Margin Smartphone Repair Service"
-                    className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-sm text-slate-900 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-sm text-slate-900 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                   />
                 </div>
 
                 {/* Slug & Category */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                       URL Slug *
                     </label>
                     <input
@@ -510,18 +517,18 @@ const BlogManagement = () => {
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       placeholder="e.g. how-to-start-smartphone-repair"
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                       Category *
                     </label>
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none cursor-pointer"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none cursor-pointer shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                     >
                       {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
@@ -530,7 +537,7 @@ const BlogManagement = () => {
 
                 {/* Excerpt */}
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                  <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                     Short Summary / Excerpt * (Max 300 characters)
                   </label>
                   <textarea
@@ -540,14 +547,14 @@ const BlogManagement = () => {
                     value={formData.excerpt}
                     onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                     placeholder="Brief 1-2 sentence hook displayed on cards and search results..."
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-normal text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-normal text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                   />
                 </div>
 
                 {/* Cover Image & Presets */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-slate-700 font-bold uppercase tracking-wider text-[11px]">
+                    <label className="text-slate-700 font-semibold mb-1.5 text-sm">
                       Cover Image URL
                     </label>
                     <span className="text-[11px] text-slate-400">Quick Select Image:</span>
@@ -557,7 +564,7 @@ const BlogManagement = () => {
                     value={formData.coverImage}
                     onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
                     placeholder="https://images.unsplash.com/..."
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none mb-2"
+                    className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none mb-2"
                   />
                   <div className="flex flex-wrap gap-2">
                     {PRESET_IMAGES.map((img) => (
@@ -580,7 +587,7 @@ const BlogManagement = () => {
                 {/* Author Info & Reading Time */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                       Author Name
                     </label>
                     <input
@@ -588,12 +595,12 @@ const BlogManagement = () => {
                       value={formData.authorName}
                       onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
                       placeholder="e.g. Srinivasulu T"
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                       Author Role / Title
                     </label>
                     <input
@@ -601,12 +608,12 @@ const BlogManagement = () => {
                       value={formData.authorRole}
                       onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })}
                       placeholder="e.g. Master Instructor"
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                       Est. Reading Time
                     </label>
                     <input
@@ -614,14 +621,14 @@ const BlogManagement = () => {
                       value={formData.readingTime}
                       onChange={(e) => setFormData({ ...formData, readingTime: e.target.value })}
                       placeholder="e.g. 5 min read"
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Tags */}
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider text-[11px]">
+                  <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
                     Tags (Comma Separated)
                   </label>
                   <input
@@ -629,7 +636,7 @@ const BlogManagement = () => {
                     value={formData.tags}
                     onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                     placeholder="e.g. Mobile Repair, Hardware, Entrepreneurship, GST"
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all"
                   />
                 </div>
 
@@ -668,10 +675,10 @@ const BlogManagement = () => {
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                       placeholder="Write your article body here... Use ## for section headers, ### for subheaders, - for bullet points, and **bold** for emphasis."
-                      className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-xs text-slate-900 focus:bg-white focus:border-blue-600 focus:outline-none leading-relaxed"
+                      className="w-full p-4 bg-white/50 backdrop-blur-md border border-white/60 rounded-2xl font-mono text-sm text-slate-900 focus:bg-white/70 focus:border-indigo-600 focus:outline-none leading-relaxed"
                     />
                   ) : (
-                    <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl min-h-[250px] max-h-[350px] overflow-y-auto prose prose-slate text-xs">
+                    <div className="p-6 bg-white/50 backdrop-blur-md border border-white/60 rounded-2xl min-h-[250px] max-h-[350px] overflow-y-auto prose prose-slate text-sm">
                       {formData.content ? (
                         formData.content.split('\n').map((l, i) => (
                           <p key={i} className="mb-2 leading-relaxed">{l}</p>
@@ -727,9 +734,12 @@ const BlogManagement = () => {
               </form>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
+      </div>
     </div>
   );
 };

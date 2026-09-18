@@ -26,22 +26,16 @@ const AdminDashboard = () => {
   const [publicStats, setPublicStats] = useState({
     studentsCount: 5000,
     studentsSuffix: '+',
-    studentsLabel: 'Transformed Seekers',
-    coursesCount: 25,
+    studentsLabel: 'Active Students',
+    coursesCount: 50,
     coursesSuffix: '+',
-    coursesLabel: 'Master Curricula',
-    instructorsCount: 15,
-    instructorsSuffix: '+',
-    instructorsLabel: 'Expert Gurus',
-    satisfactionRate: 99,
+    coursesLabel: 'Professional Courses',
+    satisfactionRate: 95,
     satisfactionSuffix: '%',
-    satisfactionLabel: 'Satisfaction',
-    communitiesCount: 15,
-    communitiesSuffix: '+',
-    communitiesLabel: 'Global Communities',
-    lineageRate: 100,
-    lineageSuffix: '%',
-    lineageLabel: 'Authentic Vedic Lineage'
+    satisfactionLabel: 'Success & Placement Rate',
+    practicalRate: 100,
+    practicalSuffix: '%',
+    practicalLabel: 'Practical Hands-On'
   });
   const [savingStats, setSavingStats] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -142,7 +136,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[50vh]">
-        <div className="w-10 h-10 border-4 border-brand-green border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -157,7 +151,7 @@ const AdminDashboard = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-24 right-8 z-50 bg-brand-green text-white px-6 py-3.5 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-2 border border-brand-green-dark"
+            className="fixed top-24 right-8 z-50 bg-indigo-600 text-white px-6 py-3.5 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-2 border border-indigo-700"
           >
             <FaCheckCircle className="text-yellow-300" /> {toastMessage}
           </motion.div>
@@ -167,8 +161,8 @@ const AdminDashboard = () => {
       {/* Top Banner with Glassmorphism */}
       <div className="bg-white/60 backdrop-blur-2xl rounded-[2.5rem] p-6 lg:p-8 border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider mb-2">
-            <span className="w-2 h-2 rounded-full bg-brand-green"></span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
+            <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
             Operational Intelligence
           </div>
           <h1 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">Admin Control Center</h1>
@@ -190,7 +184,7 @@ const AdminDashboard = () => {
 
           <button
             onClick={() => navigate('/admin/courses')}
-            className="px-5 py-3 bg-brand-green hover:bg-brand-green-dark text-white rounded-2xl text-xs lg:text-sm font-bold shadow-[0_4px_16px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2 group"
+            className="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-xs lg:text-sm font-bold shadow-[0_4px_16px_rgba(41,120,56,0.3)] transition-all flex items-center gap-2 group"
           >
             <FaPlus size={12} className="group-hover:rotate-90 transition-transform" />
             <span>Create Course</span>
@@ -200,7 +194,7 @@ const AdminDashboard = () => {
             onClick={() => navigate('/admin/materials')}
             className="px-5 py-3 bg-white/90 hover:bg-white text-gray-700 border border-gray-200/80 rounded-2xl text-xs lg:text-sm font-bold shadow-xs hover:shadow-md transition-all flex items-center gap-2"
           >
-            <FaFolderOpen className="text-brand-green" />
+            <FaFolderOpen className="text-indigo-600" />
             <span>Upload Materials</span>
           </button>
         </div>
@@ -244,7 +238,7 @@ const AdminDashboard = () => {
             </div>
             <button 
               onClick={() => navigate('/admin/users')}
-              className="text-xs font-bold text-brand-green hover:text-brand-green-dark flex items-center gap-1.5 transition-colors"
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5 transition-colors"
             >
               <span>View All Users</span>
               <FaArrowRight size={10} />
@@ -255,20 +249,20 @@ const AdminDashboard = () => {
             {stats.recentActivity && stats.recentActivity.length > 0 ? (
               stats.recentActivity.map((activity, idx) => (
                 <div key={idx} className="flex items-center gap-4 p-4 bg-white/80 rounded-2xl border border-gray-100/90 shadow-xs hover:shadow-md transition-all">
-                  <div className="w-11 h-11 rounded-2xl bg-brand-green/10 text-brand-green flex items-center justify-center shrink-0 border border-brand-green/20 font-bold">
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-600/20 font-bold">
                     <FaUserCircle size={22} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold text-gray-900 truncate">{activity.studentEmail}</p>
                     <p className="text-xs text-gray-500 mt-0.5 truncate">
-                      Course: <span className="font-semibold text-brand-green-dark">{activity.course?.title || 'Program Enrollment'}</span>
+                      Course: <span className="font-semibold text-indigo-700">{activity.course?.title || 'Program Enrollment'}</span>
                     </p>
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-xs font-semibold text-gray-400 block">
                       {new Date(activity.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                     </span>
-                    <span className="text-xs font-black text-brand-green bg-green-50 border border-green-200/60 px-2.5 py-0.5 rounded-full mt-1 inline-block">
+                    <span className="text-xs font-black text-indigo-600 bg-indigo-50 border border-indigo-200/60 px-2.5 py-0.5 rounded-full mt-1 inline-block">
                       +₹{activity.amountPaid || 0}
                     </span>
                   </div>
@@ -291,7 +285,7 @@ const AdminDashboard = () => {
             </div>
             <button 
               onClick={() => navigate('/admin/courses')}
-              className="text-xs font-bold text-brand-green hover:text-brand-green-dark flex items-center gap-1.5 transition-colors"
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5 transition-colors"
             >
               <span>Manage Sessions</span>
               <FaArrowRight size={10} />
@@ -302,14 +296,14 @@ const AdminDashboard = () => {
             {stats.upcomingClasses && stats.upcomingClasses.length > 0 ? (
               stats.upcomingClasses.map((cls, idx) => (
                 <div key={idx} className="flex items-center gap-4 p-4 bg-white/80 rounded-2xl border border-gray-100/90 shadow-xs hover:shadow-md transition-all">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex flex-col items-center justify-center shrink-0 border border-blue-100 font-bold">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-indigo-700 flex flex-col items-center justify-center shrink-0 border border-blue-100 font-bold">
                     <span className="text-[10px] uppercase tracking-wider">{new Date(cls.date).toLocaleString('en-US', { month: 'short' })}</span>
                     <span className="text-base font-black leading-tight">{new Date(cls.date).getDate()}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-bold text-gray-900 text-sm truncate">{cls.title || cls.courseId?.title}</h4>
                     <div className="flex items-center gap-3 text-xs font-medium text-gray-500 mt-1">
-                      <span className="flex items-center gap-1 text-brand-green"><FaClock size={11} /> {cls.time}</span>
+                      <span className="flex items-center gap-1 text-indigo-600"><FaClock size={11} /> {cls.time}</span>
                       {cls.meetingId && <span className="text-[11px] text-gray-400 font-mono">ID: {cls.meetingId}</span>}
                     </div>
                   </div>
@@ -380,7 +374,7 @@ const AdminDashboard = () => {
                       required
                       value={publicStats.studentsCount}
                       onChange={(e) => setPublicStats({ ...publicStats, studentsCount: Number(e.target.value) })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                     />
                   </div>
                   <div>
@@ -389,7 +383,7 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.studentsSuffix}
                       onChange={(e) => setPublicStats({ ...publicStats, studentsSuffix: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                       placeholder="e.g. +"
                     />
                   </div>
@@ -399,7 +393,7 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.studentsLabel}
                       onChange={(e) => setPublicStats({ ...publicStats, studentsLabel: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-indigo-600"
                       placeholder="e.g. Transformed Seekers"
                     />
                   </div>
@@ -414,7 +408,7 @@ const AdminDashboard = () => {
                       required
                       value={publicStats.coursesCount}
                       onChange={(e) => setPublicStats({ ...publicStats, coursesCount: Number(e.target.value) })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                     />
                   </div>
                   <div>
@@ -423,7 +417,7 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.coursesSuffix}
                       onChange={(e) => setPublicStats({ ...publicStats, coursesSuffix: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                       placeholder="e.g. +"
                     />
                   </div>
@@ -433,42 +427,8 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.coursesLabel}
                       onChange={(e) => setPublicStats({ ...publicStats, coursesLabel: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-indigo-600"
                       placeholder="e.g. Master Curricula"
-                    />
-                  </div>
-                </div>
-
-                {/* Instructors Metric */}
-                <div className="grid grid-cols-3 gap-3 p-3.5 bg-gray-50 rounded-2xl border border-gray-100 items-center">
-                  <div>
-                    <label className="text-xs font-bold text-gray-700 block">Instructors Count</label>
-                    <input
-                      type="number"
-                      required
-                      value={publicStats.instructorsCount}
-                      onChange={(e) => setPublicStats({ ...publicStats, instructorsCount: Number(e.target.value) })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-gray-700 block">Suffix</label>
-                    <input
-                      type="text"
-                      value={publicStats.instructorsSuffix}
-                      onChange={(e) => setPublicStats({ ...publicStats, instructorsSuffix: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
-                      placeholder="e.g. +"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-gray-700 block">Label</label>
-                    <input
-                      type="text"
-                      value={publicStats.instructorsLabel}
-                      onChange={(e) => setPublicStats({ ...publicStats, instructorsLabel: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-brand-green"
-                      placeholder="e.g. Expert Gurus"
                     />
                   </div>
                 </div>
@@ -482,7 +442,7 @@ const AdminDashboard = () => {
                       required
                       value={publicStats.satisfactionRate}
                       onChange={(e) => setPublicStats({ ...publicStats, satisfactionRate: Number(e.target.value) })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                     />
                   </div>
                   <div>
@@ -491,7 +451,7 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.satisfactionSuffix}
                       onChange={(e) => setPublicStats({ ...publicStats, satisfactionSuffix: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                       placeholder="e.g. %"
                     />
                   </div>
@@ -501,42 +461,42 @@ const AdminDashboard = () => {
                       type="text"
                       value={publicStats.satisfactionLabel}
                       onChange={(e) => setPublicStats({ ...publicStats, satisfactionLabel: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-brand-green"
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-indigo-600"
                       placeholder="e.g. Satisfaction"
                     />
                   </div>
                 </div>
 
-                {/* Global Communities */}
+                {/* Practical Hands-On */}
                 <div className="grid grid-cols-3 gap-3 p-3.5 bg-gray-50 rounded-2xl border border-gray-100 items-center">
                   <div>
-                    <label className="text-xs font-bold text-gray-700 block">Communities Count</label>
+                    <label className="text-xs font-bold text-gray-700 block">Practical Rate</label>
                     <input
                       type="number"
                       required
-                      value={publicStats.communitiesCount}
-                      onChange={(e) => setPublicStats({ ...publicStats, communitiesCount: Number(e.target.value) })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
+                      value={publicStats.practicalRate}
+                      onChange={(e) => setPublicStats({ ...publicStats, practicalRate: Number(e.target.value) })}
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
                     />
                   </div>
                   <div>
                     <label className="text-xs font-bold text-gray-700 block">Suffix</label>
                     <input
                       type="text"
-                      value={publicStats.communitiesSuffix}
-                      onChange={(e) => setPublicStats({ ...publicStats, communitiesSuffix: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-brand-green"
-                      placeholder="e.g. +"
+                      value={publicStats.practicalSuffix}
+                      onChange={(e) => setPublicStats({ ...publicStats, practicalSuffix: e.target.value })}
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-900 outline-none focus:border-indigo-600"
+                      placeholder="e.g. %"
                     />
                   </div>
                   <div>
                     <label className="text-xs font-bold text-gray-700 block">Label</label>
                     <input
                       type="text"
-                      value={publicStats.communitiesLabel}
-                      onChange={(e) => setPublicStats({ ...publicStats, communitiesLabel: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-brand-green"
-                      placeholder="e.g. Global Communities"
+                      value={publicStats.practicalLabel}
+                      onChange={(e) => setPublicStats({ ...publicStats, practicalLabel: e.target.value })}
+                      className="w-full mt-1 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-800 outline-none focus:border-indigo-600"
+                      placeholder="e.g. Practical Hands-On"
                     />
                   </div>
                 </div>
@@ -552,7 +512,7 @@ const AdminDashboard = () => {
                   <button
                     type="submit"
                     disabled={savingStats}
-                    className="px-6 py-2.5 bg-brand-green hover:bg-brand-green-dark text-white font-extrabold rounded-xl text-xs shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
+                    className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
                   >
                     {savingStats ? (
                       <span>Saving...</span>

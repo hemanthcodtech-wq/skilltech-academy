@@ -353,6 +353,27 @@ const Home = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
+  // Public Stats State
+  const [publicStats, setPublicStats] = useState({
+    coursesCount: 50, coursesSuffix: '+', coursesLabel: t('stat_courses'),
+    studentsCount: 1000, studentsSuffix: '+', studentsLabel: t('stat_students'),
+    satisfactionRate: 95, satisfactionSuffix: '%', satisfactionLabel: t('stat_success'),
+    practicalRate: 100, practicalSuffix: '%', practicalLabel: 'Practical Hands-On'
+  });
+
+  useEffect(() => {
+    const fetchPublicStats = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/settings/stats`);
+        if (res.data.success && res.data.data) {
+          setPublicStats((prev) => ({ ...prev, ...res.data.data }));
+        }
+      } catch (err) {
+        console.error("Error fetching public stats", err);
+      }
+    };
+    fetchPublicStats();
+  }, []);
   // Scroll Progress
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -661,10 +682,10 @@ const Home = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
-                  <AnimatedCounter from={0} to={50} suffix="+" duration={2} />
+                  <AnimatedCounter from={0} to={publicStats.coursesCount} suffix={publicStats.coursesSuffix} duration={2} />
                 </div>
                 <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
-                  {t('stat_courses')}
+                  {publicStats.coursesLabel}
                 </p>
               </div>
             </div>
@@ -676,10 +697,10 @@ const Home = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
-                  <AnimatedCounter from={0} to={5000} suffix="+" duration={2.5} />
+                  <AnimatedCounter from={0} to={publicStats.studentsCount} suffix={publicStats.studentsSuffix} duration={2.5} />
                 </div>
                 <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
-                  {t('stat_students')}
+                  {publicStats.studentsLabel}
                 </p>
               </div>
             </div>
@@ -691,10 +712,10 @@ const Home = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
-                  <AnimatedCounter from={0} to={95} suffix="%" duration={2.2} />
+                  <AnimatedCounter from={0} to={publicStats.satisfactionRate} suffix={publicStats.satisfactionSuffix} duration={2.2} />
                 </div>
                 <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
-                  {t('stat_success')}
+                  {publicStats.satisfactionLabel}
                 </p>
               </div>
             </div>
@@ -706,10 +727,10 @@ const Home = () => {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
-                  100%
+                  <AnimatedCounter from={0} to={publicStats.practicalRate} suffix={publicStats.practicalSuffix} duration={2} />
                 </div>
                 <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
-                  Practical Hands-On
+                  {publicStats.practicalLabel}
                 </p>
               </div>
             </div>

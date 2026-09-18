@@ -215,9 +215,6 @@ exports.loginUser = async (req, res, next) => {
         emailOrPhone: user.emailOrPhone,
         name: user.name,
         phone: user.phone,
-        speciality: user.speciality,
-        experience: user.experience,
-        bio: user.bio,
         avatar: user.avatar,
         role: user.role,
         status: user.status || 'active',
@@ -401,11 +398,7 @@ exports.forgotPassword = async (req, res, next) => {
     const rawOrigin = req.headers.origin || process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:5173';
     const clientOrigin = rawOrigin.replace(/\/$/, '');
     let resetLink = `${clientOrigin}/forgot-password?email=${encodeURIComponent(user.emailOrPhone)}`;
-    if (user.role === 'instructor') {
-      resetLink = `${clientOrigin}/instructor/login?forgot=true&email=${encodeURIComponent(user.emailOrPhone)}`;
-    } else if (user.role === 'moderator') {
-      resetLink = `${clientOrigin}/moderator/login?forgot=true&email=${encodeURIComponent(user.emailOrPhone)}`;
-    } else if (user.role === 'admin') {
+    if (user.role === 'admin') {
       resetLink = `${clientOrigin}/admin/login?forgot=true&email=${encodeURIComponent(user.emailOrPhone)}`;
     }
 

@@ -31,24 +31,17 @@ import AdminLayout from '../components/admin/AdminLayout';
 import AdminProtectedRoute from '../components/admin/AdminProtectedRoute';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import CourseManagement from '../pages/admin/CourseManagement';
-import InstructorManagement from '../pages/admin/InstructorManagement';
-import ModeratorManagement from '../pages/admin/ModeratorManagement';
+
 import UserManagement from '../pages/admin/UserManagement';
 import MaterialManagement from '../pages/admin/MaterialManagement';
 import AdminRecords from '../pages/admin/AdminRecords';
 import BlogManagement from '../pages/admin/BlogManagement';
+import PartnerManagement from '../pages/admin/PartnerManagement';
 
-// Instructor
-import InstructorLogin from '../pages/instructor/InstructorLogin';
-import InstructorProtectedRoute from '../components/instructor/InstructorProtectedRoute';
-import InstructorLayout from '../components/instructor/InstructorLayout';
-import InstructorDashboard from '../pages/instructor/InstructorDashboard';
-
-// Moderator
-import ModeratorLogin from '../pages/moderator/ModeratorLogin';
-import ModeratorProtectedRoute from '../components/moderator/ModeratorProtectedRoute';
-import ModeratorLayout from '../components/moderator/ModeratorLayout';
-import ModeratorDashboard from '../pages/moderator/ModeratorDashboard';
+// Partner
+import PartnerProtectedRoute from '../components/partner/PartnerProtectedRoute';
+import PartnerLayout from '../components/partner/PartnerLayout';
+import PartnerDashboard from '../pages/partner/PartnerDashboard';
 
 // Dashboard / Course
 import DashboardHome from '../pages/dashboard/Home';
@@ -101,30 +94,19 @@ const AppRoutes = () => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="courses" element={<CourseManagement />} />
-            <Route path="instructors" element={<InstructorManagement />} />
-            <Route path="moderators" element={<ModeratorManagement />} />
             <Route path="materials" element={<MaterialManagement />} />
             <Route path="blogs" element={<BlogManagement />} />
             <Route path="records" element={<AdminRecords />} />
             <Route path="users" element={<UserManagement />} />
+            <Route path="partners" element={<PartnerManagement />} />
           </Route>
         </Route>
 
-        {/* Instructor Login & Protected Workspace */}
-        <Route path="/instructor/login" element={<InstructorLogin />} />
-        <Route element={<InstructorProtectedRoute />}>
-          <Route path="/instructor" element={<InstructorLayout />}>
-            <Route index element={<Navigate to="/instructor/dashboard" replace />} />
-            <Route path="dashboard" element={<InstructorDashboard />} />
-          </Route>
-        </Route>
-
-        {/* Moderator Login & Protected Workspace */}
-        <Route path="/moderator/login" element={<ModeratorLogin />} />
-        <Route element={<ModeratorProtectedRoute />}>
-          <Route path="/moderator" element={<ModeratorLayout />}>
-            <Route index element={<Navigate to="/moderator/dashboard" replace />} />
-            <Route path="dashboard" element={<ModeratorDashboard />} />
+        {/* Protected Partner Routes */}
+        <Route element={<PartnerProtectedRoute />}>
+          <Route path="/partner" element={<PartnerLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<PartnerDashboard />} />
           </Route>
         </Route>
 

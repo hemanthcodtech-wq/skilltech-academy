@@ -75,13 +75,13 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] font-inter flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 font-inter flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         
         {/* Back Link */}
         <Link 
           to="/login" 
-          className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-brand-green transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-indigo-600 transition-colors mb-6"
         >
           <FaArrowLeft size={12} />
           <span>Back to Sign In</span>
@@ -95,7 +95,7 @@ const ForgotPassword = () => {
         >
           {/* Top Logo / Icon */}
           <div className="flex flex-col items-center mb-6">
-            <div className="w-14 h-14 rounded-2xl bg-brand-green/10 flex items-center justify-center text-brand-green mb-3">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 flex items-center justify-center text-indigo-600 mb-3">
               <FaKey size={22} />
             </div>
             <h1 className="text-2xl font-black text-gray-900 tracking-tight text-center">
@@ -136,7 +136,7 @@ const ForgotPassword = () => {
                     value={emailOrPhone}
                     onChange={(e) => setEmailOrPhone(e.target.value)}
                     placeholder="student@example.com"
-                    className="w-full px-4 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all outline-none"
+                    className="w-full px-4 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition-all outline-none"
                   />
                   <FaEnvelope className="absolute right-4 top-4 text-gray-400" size={14} />
                 </div>
@@ -145,7 +145,7 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-brand-green hover:bg-brand-green-dark text-white text-sm font-bold rounded-xl shadow-md shadow-brand-green/20 hover:shadow-brand-green/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2"
+                className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white text-sm font-bold rounded-xl shadow-md shadow-indigo-600/20 hover:shadow-indigo-600/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2"
               >
                 {loading ? (
                   <>
@@ -173,7 +173,7 @@ const ForgotPassword = () => {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   placeholder="123456"
-                  className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-center text-xl font-mono tracking-widest font-black text-brand-green-dark focus:bg-white focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-center text-xl font-mono tracking-widest font-black text-indigo-800 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition-all outline-none"
                 />
               </div>
 
@@ -188,7 +188,7 @@ const ForgotPassword = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Min. 6 characters"
-                    className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all outline-none pr-10"
+                    className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition-all outline-none pr-10"
                   />
                   <button
                     type="button"
@@ -210,7 +210,7 @@ const ForgotPassword = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repeat new password"
-                  className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 transition-all outline-none"
                 />
               </div>
 
@@ -227,7 +227,7 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-brand-green hover:bg-brand-green-dark text-white text-sm font-bold rounded-xl shadow-md shadow-brand-green/20 hover:shadow-brand-green/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2"
+                className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white text-sm font-bold rounded-xl shadow-md shadow-indigo-600/20 hover:shadow-indigo-600/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2"
               >
                 {loading ? (
                   <>
@@ -244,7 +244,7 @@ const ForgotPassword = () => {
           {/* STEP 3: Success Screen */}
           {step === 3 && (
             <div className="text-center space-y-5 py-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto text-brand-green">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto text-indigo-600">
                 <FaCheckCircle size={32} />
               </div>
               <p className="text-sm text-gray-600">
@@ -253,7 +253,7 @@ const ForgotPassword = () => {
               <button
                 type="button"
                 onClick={() => navigate('/login')}
-                className="w-full py-3.5 bg-brand-green hover:bg-brand-green-dark text-white text-sm font-bold rounded-xl shadow-md transition-all duration-300"
+                className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-600-dark text-white text-sm font-bold rounded-xl shadow-md transition-all duration-300"
               >
                 Sign In Now →
               </button>
@@ -262,7 +262,7 @@ const ForgotPassword = () => {
 
           {/* Security badge */}
           <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-center gap-2 text-xs text-gray-400">
-            <FaShieldAlt className="text-brand-green" /> 256-bit Encrypted Account Recovery
+            <FaShieldAlt className="text-indigo-600" /> 256-bit Encrypted Account Recovery
           </div>
         </motion.div>
 

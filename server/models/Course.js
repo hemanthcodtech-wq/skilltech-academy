@@ -10,6 +10,11 @@ const courseSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  courseType: {
+    type: String,
+    enum: ['pre-recorded', 'online'],
+    default: 'online'
+  },
   slug: {
     type: String,
     unique: true,
@@ -37,20 +42,6 @@ const courseSchema = new mongoose.Schema({
       'Vocational Skills',
       'Other'
     ]
-  },
-  instructorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  instructor: {
-    type: String
-  },
-  moderatorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  moderator: {
-    type: String
   },
   durationMonths: {
     type: Number,
@@ -92,6 +83,14 @@ const courseSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  sections: [{
+    title: String,
+    lessons: [{
+      title: String,
+      videoUrl: String,
+      duration: String
+    }]
+  }],
   language: {
     type: String,
     default: 'English'
