@@ -42,8 +42,8 @@ const PublicLayout = () => {
     <div className="min-h-screen flex flex-col font-inter bg-slate-50 selection:bg-blue-600 selection:text-white">
       {isLoggedIn ? <TopNav /> : <PublicNavbar />}
       
-      {/* Main Content Area */}
-      <main className="flex-grow pt-20 pb-16 md:pb-0">
+      {/* Main Content Area - pb-24 provides clearance for sticky mobile bottom navigation */}
+      <main className="flex-grow pt-20 pb-24 md:pb-0">
         <Outlet />
       </main>
 
@@ -61,8 +61,8 @@ const PublicLayout = () => {
             {/* Column 1: Organization Branding (4 cols) */}
             <div className="lg:col-span-4 space-y-5">
               <div className="flex items-center gap-3">
-                <div className="bg-white p-2 rounded-2xl shadow-md shrink-0">
-                  <img src="/logo.png" alt="Skill Tech Academy" className="h-14 w-auto object-contain" />
+                <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-700/60 shrink-0 bg-slate-900 p-0.5">
+                  <img src="/logo.png" alt="Skill Tech Academy" className="h-14 w-auto object-contain rounded-xl" />
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold tracking-tight text-white font-outfit">

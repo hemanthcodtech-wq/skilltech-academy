@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaChalkboardTeacher, FaBookOpen, FaUser, FaBell, FaGraduationCap, FaGlobe, FaArrowLeft } from 'react-icons/fa';
+import { FaHome, FaChalkboardTeacher, FaBookOpen, FaUser, FaBell, FaGraduationCap, FaGlobe } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -19,9 +19,6 @@ const TopNav = () => {
     }
   }, []);
 
-  const isCourseDetails = location.pathname.startsWith('/courses/') && location.pathname !== '/courses';
-  const isCourseList = location.pathname === '/courses';
-
   const navItems = [
     { name: t('dash_nav_home'), path: '/dashboard', icon: FaHome },
     { name: t('dash_nav_courses'), path: '/courses', icon: FaGraduationCap },
@@ -32,23 +29,22 @@ const TopNav = () => {
     <header
       className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 xl:px-24 h-18 md:h-20 bg-white border-b border-gray-100 shadow-sm"
     >
-      {/* Far Left on Mobile (Back button if available, or left-align on desktop) */}
+      {/* Far Left on Mobile / Left-align on desktop */}
       <div className="flex items-center">
-        {isCourseDetails || isCourseList ? (
-          <button onClick={() => navigate(-1)} className="md:hidden flex items-center gap-1.5 text-blue-600 p-2 -ml-2 hover:bg-blue-50 rounded-full transition-colors">
-            <FaArrowLeft size={17} />
-          </button>
-        ) : null}
 
         {/* Desktop-Left Logo */}
-        <div className="hidden md:flex items-center">
-          <img src="/logo.png" alt="Logo" className="h-16 w-auto object-contain drop-shadow-sm cursor-pointer" onClick={() => navigate('/')} />
+        <div className="hidden md:flex items-center cursor-pointer" onClick={() => navigate('/')}>
+          <div className="rounded-xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xs p-0.5">
+            <img src="/logo.png" alt="Logo" className="h-12 w-auto object-contain rounded-lg" />
+          </div>
         </div>
       </div>
 
       {/* Mobile-Centered Large Logo */}
-      <div className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto">
-        <img src="/logo.png" alt="Logo" className="h-14 w-auto object-contain drop-shadow-sm cursor-pointer" onClick={() => navigate('/')} />
+      <div className="md:hidden absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto cursor-pointer" onClick={() => navigate('/')}>
+        <div className="rounded-xl overflow-hidden bg-slate-900 border border-slate-200/80 shadow-xs p-0.5">
+          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain rounded-lg" />
+        </div>
       </div>
 
       {/* Desktop Nav Links */}

@@ -8,9 +8,8 @@ const DashboardLayout = () => {
     <div className="min-h-screen bg-bg-cream font-inter">
       <TopNav />
       
-      {/* Main Content Area */}
-      {/* On desktop, add top padding for fixed navbar. On mobile, add bottom padding for fixed bottom bar */}
-      <main className="md:pt-20 pb-20 md:pb-8 min-h-screen">
+      {/* Main Content Area: clearance for fixed TopNav and sticky BottomNav */}
+      <main className="pt-20 pb-24 md:pb-8 min-h-screen">
         <Outlet />
       </main>
 

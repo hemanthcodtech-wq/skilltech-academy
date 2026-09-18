@@ -106,6 +106,7 @@ const TiltedCard = ({ children, className = '' }) => {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
 
   const handleMouseMove = (e) => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -647,61 +648,68 @@ const Home = () => {
       {/* ========================================================================= */}
       {/* 📊 PLATFORM STATISTICS COUNTERS                                           */}
       {/* ========================================================================= */}
-      <section className="py-10 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* ========================================================================= */}
+      {/* 📊 PLATFORM STATISTICS COUNTERS                                           */}
+      {/* ========================================================================= */}
+      <section className="py-6 sm:py-10 bg-white border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             
-            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex items-center gap-4 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all">
-              <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl shadow-md shadow-blue-500/25 shrink-0">
+            {/* 1. Courses */}
+            <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all overflow-hidden">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-blue-600 text-white flex items-center justify-center text-lg sm:text-2xl shadow-md shadow-blue-500/25 shrink-0">
                 <FaGraduationCap />
               </div>
-              <div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-outfit">
+              <div className="min-w-0 flex-1">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
                   <AnimatedCounter from={0} to={50} suffix="+" duration={2} />
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
                   {t('stat_courses')}
                 </p>
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex items-center gap-4 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5 transition-all">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/25 shrink-0">
+            {/* 2. Students */}
+            <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5 transition-all overflow-hidden">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-lg sm:text-2xl shadow-md shadow-emerald-500/25 shrink-0">
                 <FaUserGraduate />
               </div>
-              <div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-outfit">
+              <div className="min-w-0 flex-1">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
                   <AnimatedCounter from={0} to={5000} suffix="+" duration={2.5} />
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
                   {t('stat_students')}
                 </p>
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex items-center gap-4 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/5 transition-all">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow-md shadow-amber-500/25 shrink-0">
+            {/* 3. Success Rate */}
+            <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/5 transition-all overflow-hidden">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-amber-500 text-white flex items-center justify-center text-lg sm:text-2xl shadow-md shadow-amber-500/25 shrink-0">
                 <FaRocket />
               </div>
-              <div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-outfit">
+              <div className="min-w-0 flex-1">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
                   <AnimatedCounter from={0} to={95} suffix="%" duration={2.2} />
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
                   {t('stat_success')}
                 </p>
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex items-center gap-4 hover:border-cyan-300 hover:shadow-lg hover:shadow-cyan-500/5 transition-all">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-600 text-white flex items-center justify-center text-2xl shadow-md shadow-cyan-500/25 shrink-0">
+            {/* 4. Practical Hands-on */}
+            <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 hover:border-cyan-300 hover:shadow-lg hover:shadow-cyan-500/5 transition-all overflow-hidden">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-cyan-600 text-white flex items-center justify-center text-lg sm:text-2xl shadow-md shadow-cyan-500/25 shrink-0">
                 <FaCertificate />
               </div>
-              <div>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-outfit">
+              <div className="min-w-0 flex-1">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-outfit tracking-tight truncate">
                   100%
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 font-medium leading-snug truncate">
                   Practical Hands-On
                 </p>
               </div>

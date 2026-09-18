@@ -134,8 +134,8 @@ const Login = () => {
           
           {/* Logo Section */}
           <Link to="/" className="flex flex-col items-center mb-5 group">
-            <div className="p-2 bg-white rounded-2xl border border-slate-100 shadow-sm group-hover:shadow-md transition-shadow">
-              <img src="/logo.png" alt="Skill Tech Academy" className="h-14 w-auto object-contain" />
+            <div className="p-1 bg-slate-900 rounded-2xl border border-slate-200/80 shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
+              <img src="/logo.png" alt="Skill Tech Academy" className="h-14 w-auto object-contain rounded-xl" />
             </div>
             <div className="text-center mt-2">
               <span className="font-outfit font-black text-lg text-slate-900 tracking-tight block">

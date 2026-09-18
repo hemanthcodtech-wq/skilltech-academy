@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaHome, FaBookOpen, FaInfoCircle, FaPhoneAlt, 
-  FaUser, FaGlobe, FaArrowLeft, FaBars, FaTimes, 
+  FaUser, FaGlobe, FaBars, FaTimes, 
   FaGraduationCap, FaWhatsapp, FaNewspaper 
 } from 'react-icons/fa';
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,10 +17,6 @@ const PublicNavbar = () => {
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
   const { lang, setLang, t } = useLanguage();
-
-  const isDetailsPage = (location.pathname.startsWith('/courses/') && location.pathname !== '/courses') ||
-                        (location.pathname.startsWith('/blogs/') && location.pathname !== '/blogs');
-  const isCourseList = location.pathname === '/courses';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,32 +59,23 @@ const PublicNavbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex justify-between items-center w-full">
             
-            {/* Left: Mobile back/menu & Desktop Logo */}
+            {/* Left: Brand Logo & Name */}
             <div className="flex items-center gap-3">
-              {isDetailsPage || isCourseList ? (
-                <button 
-                  onClick={() => navigate(-1)} 
-                  className="md:hidden flex items-center justify-center w-10 h-10 text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
-                  aria-label="Go Back"
-                >
-                  <FaArrowLeft size={16} />
-                </button>
-              ) : null}
 
               {/* Brand Logo & Name */}
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative p-1 bg-gradient-to-tr from-blue-600/10 via-white to-amber-500/10 rounded-2xl border border-blue-100 group-hover:border-blue-300 transition-all shadow-xs">
+              <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group">
+                <div className="relative rounded-xl overflow-hidden shadow-xs border border-slate-200/80 bg-slate-900 shrink-0">
                   <img 
                     src="/logo.png" 
                     alt="Skill Tech Academy Logo" 
-                    className="h-12 sm:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                    className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-outfit font-extrabold text-lg sm:text-xl text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
+                  <span className="font-outfit font-extrabold text-base sm:text-xl text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
                     Skill Tech <span className="text-blue-600">Academy</span>
                   </span>
-                  <span className="text-[10px] sm:text-[11px] font-semibold text-emerald-600 tracking-wider uppercase font-inter">
+                  <span className="text-[9px] sm:text-[11px] font-semibold text-emerald-600 tracking-wider uppercase font-inter leading-none mt-0.5">
                     Unrelenting Evolution Pvt. Ltd.
                   </span>
                 </div>
