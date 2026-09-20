@@ -4,6 +4,8 @@ const User = require('../models/User');
 const Course = require('../models/Course');
 const Class = require('../models/Class');
 const Enrollment = require('../models/Enrollment');
+const Testimonial = require('../models/Testimonial');
+const CourseAccessRequest = require('../models/CourseAccessRequest');
 const courseRoutes = require('./courseRoutes');
 const { generateInvoicePDF, generateCertificatePDF } = require('../utils/pdfGenerator');
 const { uploadBufferToCloudinary } = require('../utils/cloudinaryUploader');
@@ -12,6 +14,121 @@ const { sendCourseEnrollmentEmail, sendCourseCompletionEmail } = require('../uti
 const router = express.Router();
 
 router.use('/courses', courseRoutes);
+
+// Admin: View course content access request forms
+router.get('/course-access-requests', protect, admin, async (req, res) => {
+  try {
+    const requests = await CourseAccessRequest.find()
+      .populate('course', 'title slug category price')
+      .sort('-createdAt');
+    res.json({ success: true, data: requests });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch course access requests', error: error.message });
+  }
+});
+
+// Admin: Update request status
+router.put('/course-access-requests/:id', protect, admin, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const request = await CourseAccessRequest.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true }
+    ).populate('course', 'title slug category price');
+
+    if (!request) {
+      return res.status(404).json({ success: false, message: 'Request not found' });
+    }
+
+    res.json({ success: true, message: 'Request updated successfully', data: request });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update request', error: error.message });
+  }
+});
+
+const normalizeTestimonialPayload = (payload = {}) => ({
+  name: payload.name?.trim(),
+  role: payload.role?.trim() || 'Skill Tech Learner',
+  course: payload.course?.trim() || 'Skill Tech Academy',
+  rating: Math.min(5, Math.max(1, Number(payload.rating) || 5)),
+  image: payload.image?.trim() || '',
+  text: payload.text?.trim(),
+  published: payload.published !== undefined ? Boolean(payload.published) : true,
+  sortOrder: Number(payload.sortOrder) || 0
+});
+
+// Public: Get published testimonials for Home page slider
+router.get('/testimonials', async (req, res) => {
+  try {
+    const testimonials = await Testimonial.find({ published: true })
+      .sort({ sortOrder: 1, createdAt: -1 });
+    res.json({ success: true, data: testimonials });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch testimonials', error: error.message });
+  }
+});
+
+// Admin: Get all testimonials
+router.get('/testimonials/all', protect, admin, async (req, res) => {
+  try {
+    const testimonials = await Testimonial.find().sort({ sortOrder: 1, createdAt: -1 });
+    res.json({ success: true, data: testimonials });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch admin testimonials', error: error.message });
+  }
+});
+
+// Admin: Create testimonial
+router.post('/testimonials', protect, admin, async (req, res) => {
+  try {
+    const data = normalizeTestimonialPayload(req.body);
+    if (!data.name || !data.text) {
+      return res.status(400).json({ success: false, message: 'Name and testimonial message are required.' });
+    }
+
+    const testimonial = await Testimonial.create(data);
+    res.status(201).json({ success: true, message: 'Testimonial created successfully', data: testimonial });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to create testimonial', error: error.message });
+  }
+});
+
+// Admin: Update testimonial
+router.put('/testimonials/:id', protect, admin, async (req, res) => {
+  try {
+    const data = normalizeTestimonialPayload(req.body);
+    if (!data.name || !data.text) {
+      return res.status(400).json({ success: false, message: 'Name and testimonial message are required.' });
+    }
+
+    const testimonial = await Testimonial.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!testimonial) {
+      return res.status(404).json({ success: false, message: 'Testimonial not found' });
+    }
+
+    res.json({ success: true, message: 'Testimonial updated successfully', data: testimonial });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update testimonial', error: error.message });
+  }
+});
+
+// Admin: Delete testimonial
+router.delete('/testimonials/:id', protect, admin, async (req, res) => {
+  try {
+    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ success: false, message: 'Testimonial not found' });
+    }
+    res.json({ success: true, message: 'Testimonial deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete testimonial', error: error.message });
+  }
+});
 
 // Get Dashboard Analytics
 router.get('/analytics', protect, admin, async (req, res) => {

@@ -150,7 +150,7 @@ const Certificates = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
+      <div className="dashboard-page min-h-screen flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
@@ -168,7 +168,7 @@ const Certificates = () => {
     : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col px-4 sm:px-6 lg:px-8 py-8 font-inter pb-24 md:pb-12">
+    <div className="dashboard-page min-h-screen flex flex-col px-4 sm:px-6 lg:px-8 py-8 font-inter pb-24 md:pb-12">
       
       {/* Toast message */}
       <AnimatePresence>

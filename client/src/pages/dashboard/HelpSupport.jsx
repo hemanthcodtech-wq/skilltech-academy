@@ -26,11 +26,15 @@ const HelpSupport = () => {
     },
     {
       q: "Will I receive a course completion certificate?",
-      a: "Yes! Upon successfully completing your 1-month live course attendance and practice, an official verified certificate from Swamy Dwija Foundation will be generated in your 'Certificates' tab."
+      a: "Yes! After completing your course requirements and practice, a verified Skill Tech Academy certificate will be generated in your 'Certificates' tab."
     },
     {
       q: "How do I download my payment invoice / receipt?",
       a: "Visit 'Payment History' from your Profile menu. You can view full transaction records and download an official PDF receipt for each course purchase."
+    },
+    {
+      q: "How can I contact Skill Tech Academy?",
+      a: "For course, batch, payment, or certificate questions, contact us on WhatsApp or call +91 9900 864 102. You can also email srinivasuluthuppudu@gmail.com. Our working hours are Monday to Saturday, 9:00 AM to 6:30 PM."
     }
   ];
 
@@ -52,14 +56,14 @@ const HelpSupport = () => {
       }, 5000);
     } catch (err) {
       console.error('Help support form submit error:', err);
-      alert('Could not submit message. Please contact support via WhatsApp or Email.');
+      alert('Could not submit your message. Please contact Skill Tech Academy on WhatsApp or call +91 9900 864 102.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-24 md:pb-12 px-4 md:px-0 font-inter">
+    <div className="dashboard-page max-w-5xl mx-auto space-y-8 pb-24 md:pb-12 px-4 md:px-0 font-inter">
       
       {/* Mobile Header */}
       <div className="flex items-center mb-6 mt-2 md:hidden">
@@ -72,14 +76,14 @@ const HelpSupport = () => {
       {/* Desktop Header */}
       <div className="hidden md:block mb-6">
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Help & Support</h1>
-        <p className="text-gray-500 mt-1 text-base">We are here to assist you with your classes, payments, and learning experience.</p>
+        <p className="text-gray-500 mt-1 text-base">Get help with classes, payments, certificates, and your learning experience.</p>
       </div>
 
       {/* Quick Contact Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* WhatsApp Support */}
         <a
-          href="https://wa.me/919640275275?text=Hello%20Swamy%20Dwija%20Foundation,%20I%20need%20assistance%20with%20my%20classes."
+          href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20need%20assistance%20with%20my%20classes."
           target="_blank"
           rel="noreferrer"
           className="bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
@@ -94,28 +98,28 @@ const HelpSupport = () => {
 
         {/* Email Support */}
         <a
-          href="mailto:support@skilltechacademy.com"
+          href="mailto:srinivasuluthuppudu@gmail.com"
           className="bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-600/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
         >
           <div className="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md group-hover:scale-110 transition-transform">
             <FaEnvelope />
           </div>
-          <h3 className="font-bold text-gray-900 text-base">Email Support</h3>
-          <p className="text-xs text-gray-500 mt-1">support@skilltechacademy.com</p>
+          <h3 className="font-bold text-gray-900 text-base">Academy Email</h3>
+          <p className="text-xs text-gray-500 mt-1 break-all">srinivasuluthuppudu@gmail.com</p>
           <span className="mt-3 text-xs font-bold text-indigo-600 bg-white px-3 py-1 rounded-full shadow-xs">Send Email &rarr;</span>
         </a>
 
         {/* Helpline Support */}
         <a
-          href="tel:+919640275275"
+          href="tel:+919900864102"
           className="bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 p-6 rounded-3xl flex flex-col items-center text-center shadow-sm transition-all block"
         >
           <div className="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md mx-auto">
             <FaPhoneAlt />
           </div>
           <h3 className="font-bold text-gray-900 text-base">Helpline Hours</h3>
-          <p className="text-xs text-gray-500 mt-1">Mon - Sat: 6:00 AM - 8:00 PM</p>
-          <span className="mt-3 text-xs font-bold text-amber-700 bg-white px-3 py-1 rounded-full shadow-xs inline-block">+91 9640275275</span>
+          <p className="text-xs text-gray-500 mt-1">Mon - Sat: 9:00 AM - 6:30 PM</p>
+          <span className="mt-3 text-xs font-bold text-amber-700 bg-white px-3 py-1 rounded-full shadow-xs inline-block">+91 9900 864 102</span>
         </a>
       </div>
 
@@ -160,7 +164,7 @@ const HelpSupport = () => {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-3xl border border-gray-200/80 p-6 md:p-8 shadow-sm">
             <h3 className="text-xl font-bold text-gray-900 mb-1">Send us a Message</h3>
-            <p className="text-xs text-gray-500 mb-6">Our support team will reply within 24 hours.</p>
+                <p className="text-xs text-gray-500 mb-6">Our Skill Tech Academy team will reply as soon as possible during working hours.</p>
 
             {submitted ? (
               <motion.div
@@ -170,7 +174,7 @@ const HelpSupport = () => {
               >
                 <FaCheckCircle className="text-3xl text-green-600 mx-auto" />
                 <h4 className="font-bold text-base">Message Sent Successfully!</h4>
-                <p className="text-xs text-green-700">Thank you for reaching out. We will get back to you shortly.</p>
+                <p className="text-xs text-green-700">Thank you for contacting Skill Tech Academy. We will get back to you shortly.</p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -181,7 +185,7 @@ const HelpSupport = () => {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Anjali Sharma"
+                    placeholder="Your full name"
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm"
                   />
                 </div>
@@ -193,7 +197,7 @@ const HelpSupport = () => {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="anjali@example.com"
+                    placeholder="Email address or phone number"
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-indigo-600 outline-none text-sm"
                   />
                 </div>
@@ -226,9 +230,10 @@ const HelpSupport = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-600-dark text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(41,120,56,0.3)]"
+                  disabled={loading}
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(37,99,235,0.25)]"
                 >
-                  <FaPaperPlane size={13} /> Submit Message
+                  <FaPaperPlane size={13} /> {loading ? 'Sending...' : 'Submit Message'}
                 </button>
               </form>
             )}

@@ -260,8 +260,8 @@ const DEFAULT_COURSES = [
   }
 ];
 
-// Testimonials data from reference site
-const TESTIMONIALS = [
+// Testimonials fallback data used when API data is unavailable
+const DEFAULT_TESTIMONIALS = [
   {
     id: 1,
     name: "Priya Sharma",
@@ -416,6 +416,7 @@ const Home = () => {
 
   // Testimonials Slider State
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS);
 
   // Auto slide banner
   useEffect(() => {
@@ -446,10 +447,49 @@ const Home = () => {
     fetchCourses();
   }, []);
 
+  // Fetch Home page testimonials managed by admin
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/testimonials`);
+        const list = response?.data?.data || [];
+        setTestimonials(Array.isArray(list) && list.length > 0 ? list : DEFAULT_TESTIMONIALS);
+      } catch (error) {
+        setTestimonials(DEFAULT_TESTIMONIALS);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  useEffect(() => {
+    if (!testimonials.length) return;
+    setCurrentTestimonial((prev) => (prev >= testimonials.length ? 0 : prev));
+  }, [testimonials]);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
   const categories = ['All', 'Digital Marketing', 'Technology', 'Digital Services', 'Fashion & Tailoring', 'Web Development', 'Accounting & Tally', 'Mobile Hardware'];
   const filteredCourses = selectedCategory === 'All'
     ? courses
     : courses.filter(c => (c.category || '').toLowerCase().includes(selectedCategory.toLowerCase()) || selectedCategory.toLowerCase().includes((c.category || '').toLowerCase()));
+
+  const visibleTestimonials = testimonials.length <= 3
+    ? testimonials
+    : [0, 1, 2].map((offset) => testimonials[(currentTestimonial + offset) % testimonials.length]);
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen font-inter text-slate-800">
@@ -1115,44 +1155,112 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {TESTIMONIALS.slice(0, 3).map((item) => (
-              <div
-                key={item.id}
-                className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between hover:shadow-xl hover:border-blue-300 transition-all group"
-              >
-                <div>
-                  <div className="flex items-center gap-1 text-amber-400 mb-4 text-sm">
-                    {[...Array(item.rating)].map((_, i) => (
-                      <FaStar key={i} />
-                    ))}
-                  </div>
-
-                  <p className="text-slate-600 text-sm sm:text-base italic leading-relaxed mb-6">
-                    "{item.text}"
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
-                  />
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm font-outfit">
-                      {item.name}
-                    </h4>
-                    <p className="text-xs text-blue-600 font-medium">
-                      {item.role}
-                    </p>
-                    <p className="text-[11px] text-slate-400">
-                      {item.course}
-                    </p>
-                  </div>
-                </div>
+          <div className="relative">
+            {testimonials.length > 1 && (
+              <div className="hidden md:flex absolute -top-16 right-0 gap-2">
+                <button
+                  type="button"
+                  onClick={prevTestimonial}
+                  className="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center transition-all border border-slate-200"
+                  aria-label="Previous testimonial"
+                >
+                  <FaChevronLeft size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={nextTestimonial}
+                  className="w-11 h-11 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center transition-all border border-slate-200"
+                  aria-label="Next testimonial"
+                >
+                  <FaChevronRight size={14} />
+                </button>
               </div>
-            ))}
+            )}
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentTestimonial}
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.35 }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              >
+                {visibleTestimonials.map((item) => (
+                  <div
+                    key={item._id || item.id}
+                    className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between hover:shadow-xl hover:border-blue-300 transition-all group"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1 text-amber-400 mb-4 text-sm">
+                        {[...Array(Number(item.rating) || 5)].map((_, i) => (
+                          <FaStar key={i} />
+                        ))}
+                      </div>
+
+                      <p className="text-slate-600 text-sm sm:text-base italic leading-relaxed mb-6">
+                        "{item.text}"
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center border-2 border-white shadow-md font-black">
+                          {(item.name || 'S').charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-sm font-outfit">
+                          {item.name}
+                        </h4>
+                        <p className="text-xs text-blue-600 font-medium">
+                          {item.role}
+                        </p>
+                        <p className="text-[11px] text-slate-400">
+                          {item.course}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {testimonials.length > 1 && (
+              <div className="flex items-center justify-center gap-3 mt-10">
+                <button
+                  type="button"
+                  onClick={prevTestimonial}
+                  className="md:hidden w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200"
+                  aria-label="Previous testimonial"
+                >
+                  <FaChevronLeft size={13} />
+                </button>
+                {testimonials.map((item, index) => (
+                  <button
+                    key={item._id || item.id || index}
+                    type="button"
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`h-2.5 rounded-full transition-all ${index === currentTestimonial ? 'w-8 bg-blue-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}`}
+                    aria-label={`Show testimonial ${index + 1}`}
+                  />
+                ))}
+                <button
+                  type="button"
+                  onClick={nextTestimonial}
+                  className="md:hidden w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200"
+                  aria-label="Next testimonial"
+                >
+                  <FaChevronRight size={13} />
+                </button>
+              </div>
+            )}
           </div>
 
         </div>

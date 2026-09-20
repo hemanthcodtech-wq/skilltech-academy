@@ -46,7 +46,7 @@ const ProfileMenu = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-cream pt-4 md:pt-16 pb-24 md:pb-12 font-inter">
+    <div className="dashboard-page min-h-screen pt-4 md:pt-16 pb-24 md:pb-12 font-inter">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         
         {/* Mobile Header (Hidden on Desktop) */}

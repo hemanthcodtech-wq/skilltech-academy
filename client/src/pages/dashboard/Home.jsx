@@ -62,18 +62,18 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-20 md:pb-12 md:pt-28 px-4 lg:px-8">
+    <div className="dashboard-page min-h-screen pt-8 pb-20 md:pb-12 px-4 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Welcome Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">
-              Welcome back, <span className="text-indigo-600">{displayName}</span> <span className="inline-block animate-wave">👋</span>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight font-outfit">
+              Welcome back, <span className="text-blue-600">{displayName}</span> <span className="inline-block animate-wave">👋</span>
             </h1>
-            <p className="text-gray-500 mt-2 font-medium">Continue your journey of learning and growth.</p>
+            <p className="text-slate-500 mt-2 font-medium">Continue your journey of learning and growth.</p>
           </div>
-          <button onClick={() => navigate('/courses')} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-full font-semibold shadow-sm transition-colors w-max">
+          <button onClick={() => navigate('/courses')} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5 w-max">
             Explore Courses
           </button>
         </div>
@@ -84,7 +84,7 @@ const Home = () => {
             <motion.div 
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
               key={i} 
-              className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4"
+              className="bg-white/90 rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4 backdrop-blur-sm"
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
                 <stat.icon size={20} />
@@ -141,7 +141,7 @@ const Home = () => {
           <div className="space-y-6">
             
             {/* Resume Learning Card */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+              <div className="bg-white/90 rounded-3xl p-6 border border-slate-200 shadow-sm backdrop-blur-sm">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-bold text-gray-900">Resume Learning</h3>
               </div>
@@ -171,7 +171,7 @@ const Home = () => {
             </div>
 
             {/* Quick Links */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+            <div className="bg-white/90 rounded-3xl p-6 border border-slate-200 shadow-sm backdrop-blur-sm">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <button onClick={() => navigate('/dashboard/learning')} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group border border-transparent hover:border-gray-100">

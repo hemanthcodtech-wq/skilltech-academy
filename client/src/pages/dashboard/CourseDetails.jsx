@@ -2,12 +2,138 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaClock, FaGlobe, FaCheck, FaUser, FaHeart, FaRegHeart } from 'react-icons/fa';
+import {
+  FaClock, FaGlobe, FaCheck, FaUser, FaHeart, FaRegHeart,
+  FaLock, FaPaperPlane, FaPlayCircle
+} from 'react-icons/fa';
 import { useLanguage, useAutoTranslate } from '../../context/LanguageContext';
 import SEO from '../../components/common/SEO';
 
+const EMPTY_ACCESS_FORM = {
+  name: '',
+  email: '',
+  phone: '',
+  qualification: '',
+  interest: '',
+  message: ''
+};
+
+const AccessRequestForm = ({
+  compact = false,
+  accessForm = EMPTY_ACCESS_FORM,
+  setAccessForm,
+  handleAccessRequest,
+  submittingAccessRequest,
+  accessRequestError
+}) => {
+  const form = { ...EMPTY_ACCESS_FORM, ...(accessForm || {}) };
+  const updateField = (field, value) => {
+    setAccessForm((prev) => ({ ...EMPTY_ACCESS_FORM, ...(prev || {}), [field]: value }));
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`${compact ? 'p-5 rounded-3xl' : 'p-8 lg:p-10 rounded-3xl'} bg-white/70 backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/70`}
+    >
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 text-indigo-700 flex items-center justify-center border border-indigo-600/20 shrink-0">
+          <FaLock />
+        </div>
+        <div>
+          <h2 className={`${compact ? 'text-xl' : 'text-3xl'} font-bold font-playfair text-gray-900`}>
+            Unlock Course Content Preview
+          </h2>
+          <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+            Submit your details to view the course outline. Full classes, videos, and materials unlock after enrollment.
+          </p>
+        </div>
+      </div>
+
+      <form onSubmit={handleAccessRequest} className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input
+            type="text"
+            required
+            value={form.name}
+            onChange={(e) => updateField('name', e.target.value)}
+            placeholder="Full name *"
+            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
+          />
+          <input
+            type="email"
+            required
+            value={form.email}
+            onChange={(e) => updateField('email', e.target.value)}
+            placeholder="Email address *"
+            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input
+            type="tel"
+            value={form.phone}
+            onChange={(e) => updateField('phone', e.target.value)}
+            placeholder="Phone number"
+            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
+          />
+          <input
+            type="text"
+            value={form.qualification}
+            onChange={(e) => updateField('qualification', e.target.value)}
+            placeholder="Qualification"
+            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
+          />
+        </div>
+        <input
+          type="text"
+          value={form.interest}
+          onChange={(e) => updateField('interest', e.target.value)}
+          placeholder="What are you interested in learning?"
+          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
+        />
+        <textarea
+          rows="3"
+          value={form.message}
+          onChange={(e) => updateField('message', e.target.value)}
+          placeholder="Message or career goal"
+          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 resize-none"
+        />
+
+        {accessRequestError && (
+          <p className="text-sm font-bold text-red-600 bg-red-50 border border-red-100 px-4 py-3 rounded-2xl">
+            {accessRequestError}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={submittingAccessRequest}
+          className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold transition-all shadow-lg disabled:opacity-60"
+        >
+          <FaPaperPlane size={13} />
+          {submittingAccessRequest ? 'Submitting...' : 'Submit & View Course Content'}
+        </button>
+      </form>
+    </motion.div>
+  );
+};
+
 // Inner component — allows calling useAutoTranslate per course field
-const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleToggleWishlist }) => {
+const CourseContent = ({
+  course,
+  handleEnroll,
+  isEnrolled,
+  isWishlisted,
+  handleToggleWishlist,
+  canShowCourseContent,
+  accessForm,
+  setAccessForm,
+  handleAccessRequest,
+  submittingAccessRequest,
+  accessRequestError
+}) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
@@ -19,9 +145,80 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
   const learnStrTe = course.whatYouWillLearn_te?.join(' || ') || '';
   const learnTranslated = useAutoTranslate(learnStr, learnStrTe);
   const learnItems = learnTranslated ? learnTranslated.split(' || ').filter(Boolean) : [];
+  const hasCurriculum = course.sections?.some(section => section.title || section.lessons?.length) || course.topics?.length;
+
+  const CurriculumPreview = ({ compact = false }) => {
+    if (!hasCurriculum) return null;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className={`${compact ? 'mb-8 p-5 rounded-3xl' : 'p-8 lg:p-10 rounded-3xl'} bg-white/40 backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60`}
+      >
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <h2 className={`${compact ? 'text-[22px]' : 'text-4xl'} font-bold font-playfair text-gray-900 mb-3`}>
+              Course Content Preview
+            </h2>
+            <div className="w-16 h-1 bg-indigo-600 rounded-full"></div>
+          </div>
+          {!isEnrolled && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 text-[11px] font-extrabold uppercase tracking-wider shrink-0">
+              <FaLock size={10} /> Preview Only
+            </span>
+          )}
+        </div>
+
+        {course.sections?.length > 0 ? (
+          <div className="space-y-4">
+            {course.sections.map((section, sectionIndex) => (
+              <div key={section._id || sectionIndex} className="bg-white/70 border border-white/70 rounded-2xl p-4">
+                <h3 className="font-black text-gray-900 mb-3">
+                  {section.title || `Module ${sectionIndex + 1}`}
+                </h3>
+                <div className="space-y-2">
+                  {(section.lessons || []).map((lesson, lessonIndex) => (
+                    <div key={lesson._id || lessonIndex} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                      <span className="flex items-center gap-2 text-sm font-bold text-gray-700">
+                        <FaPlayCircle className="text-indigo-600 shrink-0" />
+                        {lesson.title || `Lesson ${lessonIndex + 1}`}
+                      </span>
+                      <span className="text-[11px] font-bold text-gray-400 shrink-0">
+                        {isEnrolled ? (lesson.duration || 'Class') : 'Locked'}
+                      </span>
+                    </div>
+                  ))}
+                  {(!section.lessons || section.lessons.length === 0) && (
+                    <p className="text-sm text-gray-500 font-semibold">Lessons will be updated soon.</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(course.topics || []).map((topic, index) => (
+              <div key={index} className="flex items-start gap-3 bg-white/70 p-4 rounded-2xl border border-white/70">
+                <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                <span className="text-sm text-gray-700 font-bold">{topic}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!isEnrolled && (
+          <div className="mt-6 p-4 rounded-2xl bg-indigo-50 border border-indigo-100 text-sm text-indigo-900 font-semibold">
+            This is a content outline only. Enroll to access live classes, recordings, PDFs, and course materials.
+          </div>
+        )}
+      </motion.div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-bg-cream relative overflow-x-hidden font-sans">
+    <div className="dashboard-page min-h-screen relative overflow-x-hidden font-sans">
       <SEO 
         title={course.title}
         description={course.description ? course.description.slice(0, 160) : 'Comprehensive professional skill development course from Skill Tech Academy.'}
@@ -86,19 +283,33 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
             <p className="text-[15px] font-inter text-gray-700 leading-relaxed">{descTe}</p>
           </div>
 
-          {/* What You Will Learn */}
-          {learnItems.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">{t('course_learn')}</h2>
-              <ul className="space-y-3">
-                {learnItems.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
-                    <span className="text-sm text-gray-700 font-semibold">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {canShowCourseContent ? (
+            <>
+              {/* What You Will Learn */}
+              {learnItems.length > 0 && (
+                <div className="mb-8">
+                  <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">{t('course_learn')}</h2>
+                  <ul className="space-y-3">
+                    {learnItems.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                        <span className="text-sm text-gray-700 font-semibold">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <CurriculumPreview compact />
+            </>
+          ) : (
+            <AccessRequestForm
+              compact
+              accessForm={accessForm}
+              setAccessForm={setAccessForm}
+              handleAccessRequest={handleAccessRequest}
+              submittingAccessRequest={submittingAccessRequest}
+              accessRequestError={accessRequestError}
+            />
           )}
         </div>
 
@@ -184,22 +395,35 @@ const CourseContent = ({ course, handleEnroll, isEnrolled, isWishlisted, handleT
                 <p className="text-gray-700 font-inter leading-relaxed text-lg">{descTe}</p>
               </motion.div>
 
-              {/* What You Will Learn Block */}
-              {learnItems.length > 0 && (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
-                  <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">{t('course_learn')}</h2>
-                  <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {learnItems.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
-                        <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
-                          <FaCheck className="text-indigo-800 text-[14px]" />
-                        </div>
-                        <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
+              {canShowCourseContent ? (
+                <>
+                  {/* What You Will Learn Block */}
+                  {learnItems.length > 0 && (
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
+                      <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">{t('course_learn')}</h2>
+                      <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {learnItems.map((item, idx) => (
+                          <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
+                            <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
+                              <FaCheck className="text-indigo-800 text-[14px]" />
+                            </div>
+                            <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </motion.div>
+                    </motion.div>
+                  )}
+                  <CurriculumPreview />
+                </>
+              ) : (
+                <AccessRequestForm
+                  accessForm={accessForm}
+                  setAccessForm={setAccessForm}
+                  handleAccessRequest={handleAccessRequest}
+                  submittingAccessRequest={submittingAccessRequest}
+                  accessRequestError={accessRequestError}
+                />
               )}
             </div>
 
@@ -269,6 +493,10 @@ const CourseDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [hasRequestedAccess, setHasRequestedAccess] = useState(false);
+  const [submittingAccessRequest, setSubmittingAccessRequest] = useState(false);
+  const [accessRequestError, setAccessRequestError] = useState('');
+  const [accessForm, setAccessForm] = useState(EMPTY_ACCESS_FORM);
 
   const handleEnroll = () => {
     if (isEnrolled && course?._id) {
@@ -302,14 +530,35 @@ const CourseDetails = () => {
     }
   };
 
+  const handleAccessRequest = async (e) => {
+    e.preventDefault();
+    if (!course?._id) return;
+
+    setSubmittingAccessRequest(true);
+    setAccessRequestError('');
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/courses/${course._id}/access-request`, accessForm);
+      localStorage.setItem(`courseAccessRequest:${course._id}`, 'submitted');
+      setHasRequestedAccess(true);
+    } catch (err) {
+      setAccessRequestError(err.response?.data?.message || 'Unable to submit the form. Please try again.');
+    } finally {
+      setSubmittingAccessRequest(false);
+    }
+  };
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/courses/public/${slug}`);
         setCourse(data.data);
+        setHasRequestedAccess(localStorage.getItem(`courseAccessRequest:${data.data._id}`) === 'submitted');
 
         // Check if student is already enrolled & wishlisted
         const token = localStorage.getItem('token');
+        if (token) {
+          setHasRequestedAccess(true);
+        }
         if (token && data.data?._id) {
           try {
             const [histRes, wishRes] = await Promise.all([
@@ -367,9 +616,14 @@ const CourseDetails = () => {
       isEnrolled={isEnrolled} 
       isWishlisted={isWishlisted} 
       handleToggleWishlist={handleToggleWishlist} 
+      canShowCourseContent={Boolean(localStorage.getItem('token')) || hasRequestedAccess}
+      accessForm={accessForm}
+      setAccessForm={setAccessForm}
+      handleAccessRequest={handleAccessRequest}
+      submittingAccessRequest={submittingAccessRequest}
+      accessRequestError={accessRequestError}
     />
   );
 };
 
 export default CourseDetails;
-

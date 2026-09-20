@@ -59,7 +59,7 @@ const PaymentHistory = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-24 md:pb-8 px-4 md:px-0 font-inter">
+    <div className="dashboard-page max-w-5xl mx-auto space-y-6 pb-24 md:pb-8 px-4 md:px-0 font-inter">
       
       {/* Mobile Header */}
       <div className="flex items-center mb-6 mt-2 md:hidden">

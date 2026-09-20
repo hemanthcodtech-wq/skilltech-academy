@@ -260,7 +260,7 @@ const CourseList = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="dashboard-page min-h-screen">
       <SEO 
         title="Professional Courses & Skills Training Catalog"
         description="Explore career-focused practical training programs in Digital Marketing, Computer Hardware, CSC Digital Seva, Tailoring, Web Development, and Tally Prime at Skill Tech Academy."

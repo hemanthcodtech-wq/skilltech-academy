@@ -5,12 +5,14 @@ import BottomNav from './BottomNav';
 
 const DashboardLayout = () => {
   return (
-    <div className="min-h-screen bg-slate-50 font-inter">
+    <div className="dashboard-shell min-h-screen font-inter">
       <TopNav />
       
       {/* Main Content Area: clearance for fixed TopNav and sticky BottomNav */}
-      <main className="pt-20 pb-24 md:pb-8 min-h-screen">
-        <Outlet />
+      <main className="dashboard-main pt-20 pb-24 md:pb-8 min-h-screen">
+        <div className="dashboard-content">
+          <Outlet />
+        </div>
       </main>
 
       <BottomNav />

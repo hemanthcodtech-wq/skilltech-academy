@@ -146,7 +146,7 @@ const StudentClasses = () => {
   todayMidnight.setHours(0, 0, 0, 0);
 
   return (
-    <div className="min-h-screen bg-[#F9F7F5] pb-24 md:pb-12 pt-20 md:pt-10">
+    <div className="dashboard-page min-h-screen pb-24 md:pb-12 pt-20 md:pt-10">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         
         {/* Back Button */}

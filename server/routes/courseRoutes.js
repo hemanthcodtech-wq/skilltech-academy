@@ -2,10 +2,28 @@ const express = require('express');
 const { protect, admin } = require('../middleware/authMiddleware');
 const Course = require('../models/Course');
 const Class = require('../models/Class');
+const CourseAccessRequest = require('../models/CourseAccessRequest');
 const { createZoomMeeting } = require('../services/zoomService');
 const upload = require('../middleware/upload');
 
 const router = express.Router();
+
+const sanitizePublicCourse = (courseDoc) => {
+  const course = courseDoc.toObject ? courseDoc.toObject() : courseDoc;
+  return {
+    ...course,
+    contentUrl: undefined,
+    sections: (course.sections || []).map((section) => ({
+      _id: section._id,
+      title: section.title,
+      lessons: (section.lessons || []).map((lesson) => ({
+        _id: lesson._id,
+        title: lesson.title,
+        duration: lesson.duration
+      }))
+    }))
+  };
+};
 
 // Get all courses (admin)
 router.get('/', protect, admin, async (req, res) => {
@@ -34,7 +52,7 @@ router.get('/:id/enrollments', protect, admin, async (req, res) => {
 router.get('/public', async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true }).sort('-createdAt');
-    res.json({ success: true, data: courses });
+    res.json({ success: true, data: courses.map(sanitizePublicCourse) });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
@@ -58,9 +76,44 @@ router.get('/public/:slugOrId', async (req, res) => {
     }
 
     if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
-    res.json({ success: true, data: course });
+    res.json({ success: true, data: sanitizePublicCourse(course) });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+});
+
+// Public: submit a request before viewing public curriculum preview
+router.post('/:id/access-request', async (req, res) => {
+  try {
+    const { name, email, phone, qualification, interest, message } = req.body;
+
+    if (!name?.trim() || !email?.trim()) {
+      return res.status(400).json({ success: false, message: 'Name and email are required.' });
+    }
+
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    const request = await CourseAccessRequest.create({
+      course: course._id,
+      courseTitle: course.title,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone?.trim() || '',
+      qualification: qualification?.trim() || '',
+      interest: interest?.trim() || '',
+      message: message?.trim() || ''
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Thank you. Course content preview is now unlocked.',
+      data: request
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error submitting request', error: error.message });
   }
 });
 

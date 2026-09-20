@@ -13,7 +13,7 @@ const BottomNav = () => {
   const pathname = location.pathname;
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const isDashboardRoute = pathname.startsWith('/dashboard');
+  const isDashboardRoute = !!token;
 
   // Dashboard Items
   if (isDashboardRoute) {

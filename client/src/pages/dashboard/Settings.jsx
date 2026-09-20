@@ -66,11 +66,11 @@ const Settings = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-20"><div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div></div>;
+    return <div className="dashboard-page flex justify-center py-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 pb-24 md:pb-8 px-4 py-4 md:px-0 font-inter">
+    <div className="dashboard-page max-w-3xl mx-auto space-y-6 pb-24 md:pb-8 px-4 py-4 md:px-0 font-inter">
       <div className="flex items-center mb-6 mt-2 md:hidden">
         <button onClick={() => navigate(-1)} className="mr-4 text-indigo-600">
           <FaArrowLeft size={20} />
