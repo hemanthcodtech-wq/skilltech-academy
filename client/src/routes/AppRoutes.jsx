@@ -37,6 +37,7 @@ import MaterialManagement from '../pages/admin/MaterialManagement';
 import AdminRecords from '../pages/admin/AdminRecords';
 import BlogManagement from '../pages/admin/BlogManagement';
 import PartnerManagement from '../pages/admin/PartnerManagement';
+import CollaboratorManagement from '../pages/admin/CollaboratorManagement';
 import TestimonialManagement from '../pages/admin/TestimonialManagement';
 import CourseAccessRequests from '../pages/admin/CourseAccessRequests';
 
@@ -103,6 +104,7 @@ const AppRoutes = () => {
             <Route path="records" element={<AdminRecords />} />
             <Route path="users" element={<UserManagement />} />
             <Route path="partners" element={<PartnerManagement />} />
+            <Route path="collaborators" element={<CollaboratorManagement />} />
           </Route>
         </Route>
 

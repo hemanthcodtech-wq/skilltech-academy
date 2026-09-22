@@ -234,7 +234,7 @@ const UserManagement = () => {
                             <div>
                               <span className="text-gray-400 block font-medium">Certificate:</span>
                               <span className={`font-mono font-bold ${enrollment.completed ? 'text-indigo-600' : 'text-amber-600'}`}>
-                                {enrollment.completed ? (enrollment.certificateId || 'SDF-CERT-Issued') : 'Pending Completion'}
+                                {enrollment.completed ? (enrollment.certificateId || 'skill-cert-issued') : 'Pending Completion'}
                               </span>
                             </div>
                           </div>

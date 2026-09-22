@@ -148,7 +148,7 @@ const TermsAndConditions = () => {
               <p className="text-xs text-gray-500 mt-0.5">Reach out to our legal and support compliance team.</p>
             </div>
             <a 
-              href="mailto:support@skilltechacademy.com"
+              href="mailto:support@skilltechacademy.online"
               className="px-5 py-2.5 bg-brand-green text-white text-xs font-bold rounded-xl hover:bg-brand-green-dark transition-all shadow-xs shrink-0"
             >
               Contact Support

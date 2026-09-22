@@ -41,7 +41,7 @@ router.get('/invoice/:enrollmentId/download', protect, async (req, res) => {
     }
 
     const invoiceBuffer = await generateInvoicePDF({
-      invoiceNumber: enrollment.invoiceNumber || `SDF-INV-${enrollment._id.toString().slice(-6).toUpperCase()}`,
+      invoiceNumber: enrollment.invoiceNumber || `skill-invoice-${enrollment._id.toString().slice(-6).toUpperCase()}`,
       studentName,
       studentEmail: enrollment.studentEmail,
       courseTitle: enrollment.course?.title || 'Yoga Course',
@@ -51,7 +51,7 @@ router.get('/invoice/:enrollmentId/download', protect, async (req, res) => {
     });
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=Invoice-${enrollment.invoiceNumber || 'SDF-Receipt'}.pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename=Invoice-${enrollment.invoiceNumber || 'skill-invoice-receipt'}.pdf`);
     res.send(invoiceBuffer);
   } catch (error) {
     console.error('Error downloading invoice:', error);
@@ -113,7 +113,7 @@ router.post('/verify-payment', protect, async (req, res) => {
     const isAuthentic = expectedSignature === razorpay_signature;
 
     if (isAuthentic || process.env.NODE_ENV === 'development') {
-      const invoiceNumber = `SDF-INV-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
+      const invoiceNumber = `skill-invoice-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
       const finalAmount = amountPaid !== undefined ? amountPaid : course.price;
 
       // Create Enrollment

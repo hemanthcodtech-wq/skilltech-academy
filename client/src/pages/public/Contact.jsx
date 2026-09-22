@@ -62,7 +62,7 @@ const Contact = () => {
     <div className="bg-slate-50 pb-20 min-h-screen font-inter text-slate-800">
       <SEO 
         title="Contact Us - Skill Tech Academy | Admissions & Inquiries"
-        description="Get in touch with Skill Tech Academy in Yenugonda, Mahabubnagar, Telangana. Phone: +91 9900 864 102, Email: srinivasuluthuppudu@gmail.com"
+        description="Get in touch with Skill Tech Academy at Kamla Nehru Colony, Geetha Hotel Line, Mahabubnagar, Telangana. Phone: +91 9100228578 / +91 9908864102, Email: info@skilltechacademy.online"
         url="https://skill-tech-academy.vercel.app/contact"
       />
 
@@ -127,8 +127,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-0.5">Telephone</h5>
-                    <a href="tel:+919900864102" className="text-slate-300 hover:text-white transition-colors text-xs sm:text-sm font-medium">
-                      +91 9900 864 102
+                    <a href="tel:+919100228578" className="text-slate-300 hover:text-white transition-colors text-xs sm:text-sm font-medium">
+                      +91 9100228578 / +91 9908864102
                     </a>
                   </div>
                 </div>
@@ -139,8 +139,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-0.5">Email</h5>
-                    <a href="mailto:srinivasuluthuppudu@gmail.com" className="text-slate-300 hover:text-white transition-colors text-xs sm:text-sm">
-                      srinivasuluthuppudu@gmail.com
+                    <a href="mailto:info@skilltechacademy.online" className="text-slate-300 hover:text-white transition-colors text-xs sm:text-sm">
+                      info@skilltechacademy.online
                     </a>
                   </div>
                 </div>
@@ -162,7 +162,7 @@ const Contact = () => {
             {/* Quick WhatsApp trigger */}
             <div className="pt-8 relative z-10">
               <a
-                href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20course%20information."
+                href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20course%20information."
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all"

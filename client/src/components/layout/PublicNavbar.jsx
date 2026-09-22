@@ -99,14 +99,14 @@ const PublicNavbar = () => {
             <div className="hidden lg:flex items-center space-x-3">
               {/* Quick WhatsApp Support */}
               <a
-                href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20your%20training%20courses."
+                href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20your%20training%20courses."
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition-all"
                 title="Chat with Advisor"
               >
                 <FaWhatsapp className="text-emerald-600 text-sm" />
-                <span>+91 9900 864 102</span>
+                <span>+91 9100228578</span>
               </a>
 
               {/* Language Selector */}
@@ -185,12 +185,12 @@ const PublicNavbar = () => {
             <div className="flex flex-col space-y-4">
               {/* Contact Banner */}
               <a
-                href="tel:+919900864102"
+                href="tel:+919100228578"
                 className="flex items-center justify-between p-3 rounded-2xl bg-blue-50 border border-blue-100 text-blue-800"
               >
                 <div className="flex items-center gap-2.5">
                   <FaPhoneAlt className="text-blue-600 text-sm" />
-                  <span className="text-xs font-bold">+91 9900 864 102</span>
+                  <span className="text-xs font-bold">+91 9100228578</span>
                 </div>
                 <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-100/60 px-2 py-0.5 rounded-full">Call Us</span>
               </a>

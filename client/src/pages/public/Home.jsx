@@ -413,6 +413,7 @@ const Home = () => {
   const [courses, setCourses] = useState(DEFAULT_COURSES);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [collaborators, setCollaborators] = useState([]);
 
   // Testimonials Slider State
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -459,6 +460,19 @@ const Home = () => {
       }
     };
     fetchTestimonials();
+  }, []);
+
+  useEffect(() => {
+    const fetchCollaborators = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/collaborators`);
+        const list = response?.data?.data || [];
+        setCollaborators(Array.isArray(list) ? list : []);
+      } catch (error) {
+        setCollaborators([]);
+      }
+    };
+    fetchCollaborators();
   }, []);
 
   useEffect(() => {
@@ -778,6 +792,35 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {collaborators.length > 0 && (
+        <section className="py-16 bg-white border-t border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-600 bg-cyan-50 inline-block px-3 py-1.5 rounded-full">
+                Collaborative Partners
+              </p>
+              <h2 className="mt-4 text-3xl font-black text-slate-900 font-outfit tracking-tight">
+                Trusted by Leading Collaborators
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center">
+              {collaborators.map((collab) => (
+                <div key={collab._id} className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm hover:shadow-md hover:border-cyan-300 transition-all">
+                  <div className="h-20 flex items-center justify-center rounded-xl bg-white p-3">
+                    <img
+                      src={collab.imageUrl}
+                      alt={collab.name}
+                      className="max-h-full max-w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ========================================================================= */}
       {/* 🏢 ABOUT SKILL TECH ACADEMY SPOTLIGHT ("WHO WE ARE")                      */}
@@ -1290,7 +1333,7 @@ const Home = () => {
             </Link>
 
             <a
-              href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20enroll%20in%20a%20course."
+              href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20enroll%20in%20a%20course."
               target="_blank"
               rel="noreferrer"
               className="px-8 py-4 rounded-full bg-emerald-500 text-white font-bold text-base shadow-2xl hover:bg-emerald-600 hover:scale-105 transition-all duration-300 flex items-center gap-2"
@@ -1300,11 +1343,11 @@ const Home = () => {
             </a>
 
             <a
-              href="tel:+919900864102"
+              href="tel:+919100228578"
               className="px-6 py-4 rounded-full bg-blue-900/60 border border-white/20 text-white font-bold text-base hover:bg-blue-900 transition-all duration-300 flex items-center gap-2"
             >
               <FaPhoneAlt className="text-sm" />
-              <span>+91 9900 864 102</span>
+              <span>+91 9100228578</span>
             </a>
           </div>
         </div>

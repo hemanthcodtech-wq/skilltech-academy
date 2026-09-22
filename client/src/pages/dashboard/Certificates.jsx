@@ -159,10 +159,6 @@ const Certificates = () => {
   const activeCert = completedEnrollments[selectedCertIndex] || null;
   const currentPrintedName = activeCert?.studentName || studentName;
   const certCourse = activeCert?.course || {};
-  const instructorName = certCourse.instructorId?.name || certCourse.instructor || 'Lead Instructor';
-  const categoryName = certCourse.category || 'Professional Skills';
-  const levelName = certCourse.level || 'All Levels';
-  const durationName = certCourse.duration || `${certCourse.sessionDates?.length || 30} Live Sessions`;
   const issueDateFormatted = activeCert?.completionDate 
     ? new Date(activeCert.completionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
     : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -222,7 +218,7 @@ const Certificates = () => {
                     <div className="min-w-0 pr-2">
                       <h4 className="font-extrabold text-sm truncate">{enr.course?.title || 'Course Program'}</h4>
                       <p className={`text-xs mt-0.5 ${selectedCertIndex === idx ? 'text-green-100' : 'text-gray-400'}`}>
-                        {enr.certificateId || `ID: STA-CERT-${enr._id.slice(-6).toUpperCase()}`}
+                        {enr.certificateId || `ID: skill-cert-${enr._id.slice(-6).toUpperCase()}`}
                       </p>
                     </div>
                     <FaAward className={selectedCertIndex === idx ? 'text-yellow-300' : 'text-indigo-600'} size={22} />
@@ -268,11 +264,11 @@ const Certificates = () => {
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="w-full bg-[#FCFAF6] rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] border-4 border-[#0A4F2A]/30 relative overflow-hidden flex flex-col items-center justify-between text-center select-none"
-                    style={{ aspectRatio: '1.414/1' }}
+                    style={{ aspectRatio: '3 / 2' }}
                   >
                     {/* Official Certificate Template Background Image */}
                     <img 
-                      src="/certificate_template.jpg" 
+                      src="/certificate_template.png"
                       alt="Certificate Background" 
                       className="absolute inset-0 w-full h-full object-fill pointer-events-none"
                     />
@@ -280,62 +276,29 @@ const Certificates = () => {
                     {/* Certificate Foreground Overlays */}
                     <div className="relative z-10 w-full h-full flex flex-col justify-between p-4 md:p-6 text-left">
                       
-                      {/* Left Sidebar Meta Information Overlay */}
-                      <div className="absolute left-[12%] top-[39.5%] text-[7.5px] md:text-[9.5px] font-bold text-gray-900 text-left w-[12%] pl-1">
-                        {activeCert.studentId || `SDWFY${activeCert._id.slice(-6).toUpperCase()}`}
+                      {/* Skill Tech template metadata overlays */}
+                      <div className="absolute left-[4.1%] top-[85.7%] w-[19.6%] text-center text-[7px] md:text-[9px] font-mono font-bold text-gray-900 whitespace-nowrap">
+                        {activeCert.certificateId || `skill-cert-${activeCert._id.slice(-8).toUpperCase()}`}
                       </div>
-                      <div className="absolute left-[12%] top-[51%] text-[7.5px] md:text-[9.5px] font-bold text-gray-900 text-left w-[12%] pl-1">
+                      <div className="absolute left-[76.6%] top-[89.1%] w-[17.8%] text-center text-[6.5px] md:text-[8px] font-bold text-gray-900 whitespace-nowrap">
                         {issueDateFormatted}
-                      </div>
-                      <div className="absolute left-[12%] top-[58.5%] text-[7px] md:text-[9px] font-bold text-gray-900 text-left w-[12%] bg-[#FAF7F2] py-0.5 pl-1 rounded">
-                        <div>{durationName?.includes('(') ? durationName.split('(')[0] : (durationName || '30 Days')}</div>
-                        <div className="text-[6.5px] md:text-[8px] text-gray-800">{durationName?.includes('(') ? `(${durationName.split('(')[1]}` : '(20 Hours)'}</div>
-                      </div>
-                      <div className="absolute left-[12%] top-[70.5%] text-[7px] md:text-[9px] font-bold text-gray-900 text-left w-[12%] pl-1">
-                        {activeCert.certificateId || `SDWFY${activeCert._id.slice(-8).toUpperCase()}`}
                       </div>
 
                       {/* Recipient Student Name (Center, above green line) */}
-                      <div className="absolute left-[20%] right-[20%] top-[48.5%] text-center">
-                        <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif italic font-black text-[#0A4F2A] truncate tracking-wide px-2">
+                      <div className="absolute left-[20.2%] right-[19.8%] top-[42.8%] text-center">
+                        <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif italic font-black text-[#0f172a] truncate tracking-wide px-2">
                           {currentPrintedName}
                         </h1>
                       </div>
 
                       {/* Dynamic Course Title (Center, below 'has successfully completed the') */}
                       {certCourse.title && (
-                        <div className="absolute left-[24%] right-[20%] top-[61.5%] text-center bg-[#FAF7F2] py-0.5 rounded px-2">
+                        <div className="absolute left-[27.3%] right-[27.3%] top-[58.2%] text-center py-0.5 px-2">
                           <h4 className="text-xs sm:text-sm md:text-base font-extrabold text-gray-900 truncate">
                             {certCourse.title}
                           </h4>
                         </div>
                       )}
-
-                      {/* Bottom Instructor Details (Left, Centered under left diamond ornament) */}
-                      <div className="absolute left-[24.5%] -translate-x-1/2 bottom-[9%] text-center w-[22%]">
-                        <p className="font-extrabold text-[8px] md:text-[10px] text-[#0A4F2A] uppercase tracking-tight">
-                          {instructorName || 'LEAD INSTRUCTOR'}
-                        </p>
-                        <p className="text-[6.5px] md:text-[8px] text-gray-600 font-medium">
-                          Technical Instructor
-                        </p>
-                        <p className="text-[6px] md:text-[7px] text-gray-500">
-                          Certified Professional
-                        </p>
-                      </div>
-
-                      {/* Bottom Director Details (Right, Centered under right diamond ornament) */}
-                      <div className="absolute left-[64%] -translate-x-1/2 bottom-[9%] text-center w-[22%]">
-                        <p className="font-extrabold text-[8px] md:text-[10px] text-[#0A4F2A] uppercase tracking-tight">
-                          SKILL TECH ACADEMY
-                        </p>
-                        <p className="text-[6.5px] md:text-[8px] text-gray-600 font-medium">
-                          Director of Training
-                        </p>
-                        <p className="text-[6px] md:text-[7px] text-gray-500">
-                          Unrelenting Evolution Pvt. Ltd.
-                        </p>
-                      </div>
 
                     </div>
                   </motion.div>

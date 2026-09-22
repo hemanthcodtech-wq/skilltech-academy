@@ -71,8 +71,8 @@ const Checkout = () => {
         key: key,
         amount: order.amount,
         currency: order.currency,
-        name: 'Swamy Dwija Foundation',
-        description: `Enrollment for ${course.title}`,
+        name: 'Skill Tech Academy',
+        description: `Course enrollment: ${course.title}`,
         image: '/logo.png',
         order_id: order.id,
         handler: async function (response) {
@@ -109,7 +109,7 @@ const Checkout = () => {
           contact: ''
         },
         theme: {
-          color: '#297838'
+          color: '#4f46e5'
         },
         modal: {
           ondismiss: function() {

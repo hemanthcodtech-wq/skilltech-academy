@@ -366,7 +366,7 @@ const About = () => {
                 className="bg-white border border-slate-200 rounded-[30px] shadow-[0_18px_50px_-26px_rgba(15,23,42,0.45)] hover:shadow-[0_24px_60px_-28px_rgba(59,130,246,0.38)] transition-all duration-300 p-5 sm:p-7 md:p-8 lg:p-10"
               >
                 <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-7 lg:gap-8">
-                  <motion.div
+                  {member.image && <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true, amount: 0.35 }}
@@ -385,7 +385,7 @@ const About = () => {
                       alt={member.name}
                       className="relative w-full h-full object-cover rounded-[28px] border-2 border-white/50 shadow-inner"
                     />
-                  </motion.div>
+                  </motion.div>}
 
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4 mb-4">
@@ -398,7 +398,7 @@ const About = () => {
                         </p>
                       </div>
 
-                      <div className="flex flex-wrap gap-2.5 sm:gap-3 justify-start xl:justify-end">
+                      {member.links?.length > 0 && <div className="flex flex-wrap gap-2.5 sm:gap-3 justify-start xl:justify-end">
                         {member.links.map(({ label, href, icon }) => {
                           const Icon = icon === 'linkedin' ? FaLinkedin : FaExternalLinkAlt;
                           return (
@@ -417,7 +417,7 @@ const About = () => {
                             </motion.a>
                           );
                         })}
-                      </div>
+                      </div>}
                     </div>
 
                     <p className="text-slate-600 text-sm sm:text-base md:text-lg leading-relaxed text-justify sm:text-left max-w-5xl">

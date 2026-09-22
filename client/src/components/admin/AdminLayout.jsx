@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate, Link, useLocation } from 'react-router-do
 import { 
   FaTachometerAlt, FaBook, FaUsers, FaCalendarAlt, FaSignOutAlt, 
   FaFolderOpen, FaExternalLinkAlt, FaShieldAlt, FaAward, 
-  FaChalkboardTeacher, FaUserShield, FaNewspaper, FaBars, FaTimes, FaComments,
+  FaChalkboardTeacher, FaUserShield, FaNewspaper, FaBars, FaTimes, FaComments, FaImages,
   FaEnvelopeOpenText
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,6 +29,7 @@ const AdminLayout = () => {
     { name: 'Certificates & Invoices', path: '/admin/records', icon: FaAward },
     { name: 'Learners', path: '/admin/users', icon: FaUsers },
     { name: 'Partners', path: '/admin/partners', icon: FaUserShield },
+    { name: 'Collaborators', path: '/admin/collaborators', icon: FaImages },
   ];
 
   return (

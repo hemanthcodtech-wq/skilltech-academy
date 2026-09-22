@@ -180,9 +180,6 @@ const Register = () => {
               <span className="font-outfit font-black text-lg text-slate-900 tracking-tight block">
                 Skill Tech <span className="text-blue-600">Academy</span>
               </span>
-              <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">
-                Unrelenting Evolution Pvt. Ltd.
-              </span>
             </div>
           </Link>
 

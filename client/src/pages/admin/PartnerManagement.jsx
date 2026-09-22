@@ -236,6 +236,7 @@ const PartnerManagement = () => {
         </AnimatePresence>,
         document.body
       )}
+
     </div>
   );
 };

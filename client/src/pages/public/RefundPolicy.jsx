@@ -155,10 +155,10 @@ const RefundPolicy = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <a 
-                href="mailto:support@skilltechacademy.com?subject=Refund%20or%20Cancellation%20Request"
+                href="mailto:support@skilltechacademy.online?subject=Refund%20or%20Cancellation%20Request"
                 className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-brand-green text-white text-xs font-bold hover:bg-brand-green-dark transition-all shadow-xs"
               >
-                <FaEnvelope /> Email Support (support@skilltechacademy.com)
+                <FaEnvelope /> Email Support (support@skilltechacademy.online)
               </a>
               <Link 
                 to="/dashboard/support"

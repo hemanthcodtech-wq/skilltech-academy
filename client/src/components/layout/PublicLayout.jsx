@@ -81,19 +81,19 @@ const PublicLayout = () => {
                 <div className="flex items-start gap-3">
                   <FaMapMarkerAlt className="text-blue-400 shrink-0 mt-1" size={15} />
                   <span className="leading-relaxed text-slate-300">
-                    Yenugonda, Mahabubnagar, Telangana - 509001
+                    Kamla Nehru Colony, Geetha Hotel Line, Mahabubnagar, Telangana, 509001
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaEnvelope className="text-blue-400 shrink-0" size={15} />
-                  <a href="mailto:srinivasuluthuppudu@gmail.com" className="hover:text-white transition-colors">
-                    srinivasuluthuppudu@gmail.com
+                  <a href="mailto:info@skilltechacademy.online" className="hover:text-white transition-colors">
+                    info@skilltechacademy.online
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaPhoneAlt className="text-blue-400 shrink-0" size={14} />
-                  <a href="tel:+919900864102" className="hover:text-white transition-colors font-medium">
-                    +91 9900 864 102 (Mon - Sat, 9 AM - 6:30 PM)
+                  <a href="tel:+919100228578" className="hover:text-white transition-colors font-medium">
+                    +91 9100228578 / +91 9908864102 (Mon - Sat, 9 AM - 6:30 PM)
                   </a>
                 </div>
               </div>
@@ -101,7 +101,7 @@ const PublicLayout = () => {
               {/* WhatsApp & Call Direct Action */}
               <div className="flex items-center gap-3 pt-2">
                 <a
-                  href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20enrolling."
+                  href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20am%20interested%20in%20enrolling."
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-md shadow-emerald-900/30"
@@ -110,7 +110,7 @@ const PublicLayout = () => {
                   <span>WhatsApp Inquiry</span>
                 </a>
                 <a
-                  href="tel:+919900864102"
+                  href="tel:+919100228578"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-900/30"
                 >
                   <FaPhoneAlt size={12} />

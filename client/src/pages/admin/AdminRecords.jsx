@@ -6,7 +6,7 @@ import {
   FaDownload, FaExternalLinkAlt, FaTimes, FaShieldAlt, FaSyncAlt, 
   FaRupeeSign, FaEnvelope, FaTrashAlt, FaFileCsv, FaEye, FaUserGraduate,
   FaEdit, FaPlus, FaPaperPlane, FaMagic, FaCalendarAlt, FaUser, FaBook,
-  FaIdCard, FaChalkboardTeacher
+  FaIdCard
 } from 'react-icons/fa';
 
 const AdminRecords = () => {
@@ -90,7 +90,7 @@ const AdminRecords = () => {
   const generateNewCertId = () => {
     const timestamp = Date.now().toString().slice(-6);
     const rand = Math.floor(100 + Math.random() * 900);
-    return `SDF-CERT-${timestamp}${rand}`;
+    return `skill-cert-${timestamp}${rand}`;
   };
 
   // Quick Select Course Handler
@@ -161,7 +161,7 @@ const AdminRecords = () => {
       studentEmail: record.studentEmail || '',
       courseTitle: fullCourse.title || 'Yoga for Wellness and Inner Balance',
       completionDate: parsedDate,
-      certificateId: record.certificateId || generateNewCertId(),
+      certificateId: record.certificateId ? record.certificateId.replace(/^SDF-CERT-/i, 'skill-cert-') : generateNewCertId(),
       studentId: record.studentEmail ? `SDWFY${record.studentEmail.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase()}` : 'SDWFY250501',
       duration: courseDuration,
       instructorName: instName,
@@ -381,7 +381,6 @@ const AdminRecords = () => {
       <div className="bg-white/70 backdrop-blur-2xl rounded-[2.5rem] p-6 lg:p-8 border border-white/90 shadow-[0_8px_32px_rgba(0,0,0,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
-            <FaShieldAlt /> Accreditation & Financial Records
           </div>
           <h1 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tight">Certificates & Invoices Hub</h1>
           <p className="text-gray-500 text-sm mt-1">
@@ -431,7 +430,6 @@ const AdminRecords = () => {
           </div>
           <div>
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">Certificates Issued</span>
-            <span className="text-2xl font-black text-gray-900">{totalCertificates}</span>
             <span className="text-[11px] text-indigo-600 font-semibold block mt-0.5">Verified Accreditations</span>
           </div>
         </div>
@@ -443,7 +441,6 @@ const AdminRecords = () => {
           </div>
           <div>
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">Revenue Collected</span>
-            <span className="text-2xl font-black text-gray-900">₹{totalRevenue.toLocaleString('en-IN')}</span>
             <span className="text-[11px] text-gray-500 font-semibold block mt-0.5">{records.length} Tax Invoices</span>
           </div>
         </div>
@@ -830,7 +827,7 @@ const AdminRecords = () => {
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. SDF-CERT-260823"
+                        placeholder="e.g. skill-cert-260823"
                         value={customForm.certificateId}
                         onChange={(e) => handleFormChange('certificateId', e.target.value)}
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono font-bold text-gray-900 focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none"
@@ -847,33 +844,6 @@ const AdminRecords = () => {
                         value={customForm.completionDate}
                         onChange={(e) => handleFormChange('completionDate', e.target.value)}
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Course Duration & Instructor Details */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700">Course Duration</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. 30 Days (20 Hours)"
-                        value={customForm.duration}
-                        onChange={(e) => handleFormChange('duration', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
-                        <FaChalkboardTeacher className="text-indigo-600" /> Instructor Name (Assigned Guru)
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Assigned Course Guru"
-                        value={customForm.instructorName}
-                        onChange={(e) => handleFormChange('instructorName', e.target.value)}
-                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-900 focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none uppercase"
                       />
                     </div>
                   </div>
@@ -918,91 +888,46 @@ const AdminRecords = () => {
                     </div>
 
                     {/* Official Template Canvas Image with Positioned Overlays */}
-                    <div className="relative w-full aspect-[842/595] rounded-2xl overflow-hidden shadow-xl border-2 border-[#D4AF37] select-none bg-[#FCFAF6]">
+                    <div className="relative w-full aspect-[3/2] rounded-2xl overflow-hidden shadow-xl border-2 border-[#D4AF37] select-none bg-[#FCFAF6]">
                       <img
-                        src="/certificate_template.jpg"
+                        src="/certificate_template.png"
                         alt="Official Certificate Template"
                         className="w-full h-full object-cover pointer-events-none"
                       />
 
-                      {/* 1. Left Sidebar Meta Information */}
-                      {/* Student ID */}
+                      {/* Template metadata: verification ID on the left and issue date on the right. */}
                       <div 
-                        style={{ top: '39.8%', left: '12.1%' }}
-                        className="absolute text-[7px] sm:text-[9px] font-bold text-gray-900 tracking-tight"
+                        style={{ top: '85.7%', left: '4.1%', width: '19.6%' }}
+                        className="absolute text-center text-[7px] sm:text-[9px] font-bold text-gray-900 tracking-tight whitespace-nowrap"
                       >
-                        {customForm.studentId || 'SDWFY250501'}
+                        {customForm.certificateId || 'skill-cert-sample'}
                       </div>
 
-                      {/* Issue Date */}
                       <div 
-                        style={{ top: '51.2%', left: '12.1%' }}
-                        className="absolute text-[7px] sm:text-[9px] font-bold text-gray-900 tracking-tight whitespace-nowrap"
+                        style={{ top: '89.1%', left: '76.6%', width: '17.8%' }}
+                        className="absolute text-center text-[6.5px] sm:text-[8px] font-bold text-gray-900 tracking-tight whitespace-nowrap"
                       >
                         {customForm.completionDate ? new Date(customForm.completionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : '23 August 2026'}
                       </div>
 
-                      {/* Course Duration */}
+                      {/* Recipient name sits between the introductory text and its rule. */}
                       <div 
-                        style={{ top: '58.5%', left: '12.1%' }}
-                        className="absolute text-[6.5px] sm:text-[8.5px] font-bold text-gray-900 tracking-tight leading-tight max-w-[20%]"
-                      >
-                        {customForm.duration || '30 Days (20 Hours)'}
-                      </div>
-
-                      {/* Certificate ID */}
-                      <div 
-                        style={{ top: '70.5%', left: '12.1%' }}
-                        className="absolute text-[6.5px] sm:text-[8.5px] font-mono font-bold text-gray-900 tracking-tight"
-                      >
-                        {customForm.certificateId || 'SDF-CERT-SAMPLE'}
-                      </div>
-
-                      {/* 2. Recipient Name (Calligraphy Center at top ~47.5%) */}
-                      <div 
-                        style={{ top: '47.5%', left: '20%', right: '20%' }}
+                        style={{ top: '42.8%', left: '20.2%', right: '19.8%' }}
                         className="absolute flex items-center justify-center text-center pointer-events-none"
                       >
-                        <span className="font-serif italic font-extrabold text-[#0A4F2A] text-[12px] sm:text-[16px] md:text-[18px] tracking-wide drop-shadow-xs line-clamp-1">
+                        <span className="font-serif italic font-extrabold text-[#0f172a] text-[12px] sm:text-[16px] md:text-[18px] tracking-wide drop-shadow-xs line-clamp-1">
                           {customForm.studentName || 'Learner Full Name'}
                         </span>
                       </div>
 
-                      {/* 3. Dynamic Course Title (Center at top ~61.5%) */}
+                      {/* Course title sits between the completion text and its rule. */}
                       <div 
-                        style={{ top: '61.5%', left: '24%', right: '24%' }}
+                        style={{ top: '58.2%', left: '27.3%', right: '27.3%' }}
                         className="absolute flex items-center justify-center text-center pointer-events-none"
                       >
-                        <span className="font-bold text-gray-900 text-[8px] sm:text-[10px] md:text-[11px] bg-slate-50/90 px-2 py-0.5 rounded shadow-xs line-clamp-1">
+                        <span className="font-bold text-gray-900 text-[9px] sm:text-[11px] md:text-[13px] px-2 py-0.5 shadow-xs line-clamp-1">
                           {customForm.courseTitle || 'Yoga for Wellness and Inner Balance'}
                         </span>
-                      </div>
-
-                      {/* 4. Bottom Signatures: Instructor Name (left) & Director (right) */}
-                      {/* Instructor Name (Center ~34.4%, Top ~86.7%) */}
-                      <div 
-                        style={{ top: '86.7%', left: '24%', width: '21%' }}
-                        className="absolute text-center leading-tight pointer-events-none"
-                      >
-                        <p className="text-[6.5px] sm:text-[8.5px] font-bold text-[#0A4F2A] uppercase tracking-wider truncate">
-                          {customForm.instructorName || 'Lead Yoga Guru'}
-                        </p>
-                        <p className="text-[5px] sm:text-[6.5px] text-gray-600 truncate">
-                          {customForm.instructorTitle || 'Yoga Instructor'}
-                        </p>
-                      </div>
-
-                      {/* Director Name (Center ~63.8%, Top ~86.7%) */}
-                      <div 
-                        style={{ top: '86.7%', left: '53.3%', width: '21%' }}
-                        className="absolute text-center leading-tight pointer-events-none"
-                      >
-                        <p className="text-[6.5px] sm:text-[8.5px] font-bold text-[#0A4F2A] uppercase tracking-wider truncate">
-                          SWAMY DWIJA
-                        </p>
-                        <p className="text-[5px] sm:text-[6.5px] text-gray-600 truncate">
-                          Founder & Director
-                        </p>
                       </div>
 
                     </div>
@@ -1075,7 +1000,7 @@ const AdminRecords = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-gray-900">Certificate Verification Engine</h3>
-                    <p className="text-xs text-gray-400">Authenticate any Swamy Dwija certificate credential</p>
+                    <p className="text-xs text-gray-400">Authenticate any Skill Tech Academy certificate credential</p>
                   </div>
                 </div>
                 <button 
@@ -1092,7 +1017,7 @@ const AdminRecords = () => {
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="e.g. SDF-CERT-2026-9941"
+                      placeholder="e.g. skill-cert-2026-9941"
                       value={verifyInput}
                       onChange={(e) => setVerifyInput(e.target.value)}
                       className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-mono font-bold text-gray-900 focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 outline-none"
@@ -1166,91 +1091,46 @@ const AdminRecords = () => {
               </div>
 
               {/* Certificate Canvas Mockup with Official Template Image */}
-              <div className="relative w-full aspect-[842/595] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#D4AF37] select-none bg-[#FCFAF6]">
+              <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#D4AF37] select-none bg-[#FCFAF6]">
                 <img
-                  src="/certificate_template.jpg"
+                  src="/certificate_template.png"
                   alt="Official Certificate Template"
                   className="w-full h-full object-cover pointer-events-none"
                 />
 
-                {/* 1. Left Sidebar Meta Information */}
-                {/* Student ID */}
+                {/* Skill Tech template metadata */}
                 <div 
-                  style={{ top: '39.8%', left: '12.1%' }}
-                  className="absolute text-[8px] sm:text-[11px] font-bold text-gray-900 tracking-tight"
+                  style={{ top: '85.7%', left: '4.1%', width: '19.6%' }}
+                  className="absolute text-center text-[7.5px] sm:text-[10px] font-mono font-bold text-gray-900 tracking-tight whitespace-nowrap"
                 >
-                  {previewRecord.studentEmail ? `SDWFY${previewRecord.studentEmail.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase()}` : 'SDWFY250501'}
+                  {previewRecord.certificateId || 'skill-cert-sample'}
                 </div>
 
-                {/* Issue Date */}
                 <div 
-                  style={{ top: '51.2%', left: '12.1%' }}
-                  className="absolute text-[8px] sm:text-[11px] font-bold text-gray-900 tracking-tight whitespace-nowrap"
+                  style={{ top: '89.1%', left: '76.6%', width: '17.8%' }}
+                  className="absolute text-center text-[7px] sm:text-[9px] font-bold text-gray-900 tracking-tight whitespace-nowrap"
                 >
                   {previewRecord.completionDate ? new Date(previewRecord.completionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}
                 </div>
 
-                {/* Course Duration */}
+                {/* Recipient Name */}
                 <div 
-                  style={{ top: '58.5%', left: '12.1%' }}
-                  className="absolute text-[7.5px] sm:text-[10px] font-bold text-gray-900 tracking-tight leading-tight max-w-[20%]"
-                >
-                  {previewRecord.course?.duration || '30 Days (20 Hours)'}
-                </div>
-
-                {/* Certificate ID */}
-                <div 
-                  style={{ top: '70.5%', left: '12.1%' }}
-                  className="absolute text-[7.5px] sm:text-[10px] font-mono font-bold text-gray-900 tracking-tight"
-                >
-                  {previewRecord.certificateId || 'SDF-CERT-SAMPLE'}
-                </div>
-
-                {/* 2. Recipient Name (Calligraphy Center at top ~47.5%) */}
-                <div 
-                  style={{ top: '47.5%', left: '20%', right: '20%' }}
+                  style={{ top: '42.8%', left: '20.2%', right: '19.8%' }}
                   className="absolute flex items-center justify-center text-center pointer-events-none"
                 >
-                  <span className="font-serif italic font-extrabold text-[#0A4F2A] text-[16px] sm:text-[22px] md:text-[26px] tracking-wide drop-shadow-xs line-clamp-1">
+                  <span className="font-serif italic font-extrabold text-[#0f172a] text-[16px] sm:text-[22px] md:text-[26px] tracking-wide drop-shadow-xs line-clamp-1">
                     {previewRecord.studentName || 'Learner Full Name'}
                   </span>
                 </div>
 
-                {/* 3. Dynamic Course Title (Center at top ~61.5%) */}
+                {/* Dynamic Course Title */}
                 <div 
-                  style={{ top: '61.5%', left: '24%', right: '24%' }}
+                  style={{ top: '58.2%', left: '27.3%', right: '27.3%' }}
                   className="absolute flex items-center justify-center text-center pointer-events-none"
                 >
-                  <span className="font-bold text-gray-900 text-[10px] sm:text-[13px] md:text-[15px] bg-slate-50/90 px-3 py-0.5 rounded shadow-xs line-clamp-1">
+                  <span className="font-bold text-gray-900 text-[11px] sm:text-[14px] md:text-[17px] px-3 py-0.5 shadow-xs line-clamp-1">
                     {previewRecord.course?.title || 'Yoga for Wellness and Inner Balance'}
                   </span>
-                </div>
-
-                {/* 4. Bottom Signatures: Instructor Name (left) & Director (right) */}
-                {/* Instructor Name (Center ~34.4%, Top ~86.7%) */}
-                <div 
-                  style={{ top: '86.7%', left: '24%', width: '21%' }}
-                  className="absolute text-center leading-tight pointer-events-none"
-                >
-                  <p className="text-[8px] sm:text-[10.5px] font-bold text-[#0A4F2A] uppercase tracking-wider truncate">
-                    {previewRecord.course?.instructorId?.name || previewRecord.course?.instructor || 'Lead Yoga Guru'}
-                  </p>
-                  <p className="text-[6px] sm:text-[8px] text-gray-600 truncate">
-                    {previewRecord.course?.instructorId?.speciality || 'Yoga Instructor'}
-                  </p>
-                </div>
-
-                {/* Director Name (Center ~63.8%, Top ~86.7%) */}
-                <div 
-                  style={{ top: '86.7%', left: '53.3%', width: '21%' }}
-                  className="absolute text-center leading-tight pointer-events-none"
-                >
-                  <p className="text-[8px] sm:text-[10.5px] font-bold text-[#0A4F2A] uppercase tracking-wider truncate">
-                    SWAMY DWIJA
-                  </p>
-                  <p className="text-[6px] sm:text-[8px] text-gray-600 truncate">
-                    Founder & Director
-                  </p>
                 </div>
 
               </div>

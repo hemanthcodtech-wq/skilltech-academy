@@ -35,6 +35,14 @@ const admin = (req, res, next) => {
   }
 };
 
+const partner = (req, res, next) => {
+  if (req.user && (req.user.role === 'partner' || req.user.role === 'admin')) {
+    return next();
+  } else {
+    return res.status(403).json({ success: false, message: 'Not authorized as a partner' });
+  }
+};
+
 const instructor = (req, res, next) => {
   if (req.user && (req.user.role === 'instructor' || req.user.role === 'admin')) {
     return next();
@@ -51,5 +59,5 @@ const moderator = (req, res, next) => {
   }
 };
 
-module.exports = { protect, admin, instructor, moderator };
+module.exports = { protect, admin, partner, instructor, moderator };
 

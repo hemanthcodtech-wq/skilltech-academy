@@ -5,11 +5,13 @@ const Course = require('../models/Course');
 const Class = require('../models/Class');
 const Enrollment = require('../models/Enrollment');
 const Testimonial = require('../models/Testimonial');
+const Collaborator = require('../models/Collaborator');
 const CourseAccessRequest = require('../models/CourseAccessRequest');
 const courseRoutes = require('./courseRoutes');
 const { generateInvoicePDF, generateCertificatePDF } = require('../utils/pdfGenerator');
 const { uploadBufferToCloudinary } = require('../utils/cloudinaryUploader');
 const { sendCourseEnrollmentEmail, sendCourseCompletionEmail } = require('../utils/emailService');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -56,6 +58,96 @@ const normalizeTestimonialPayload = (payload = {}) => ({
   text: payload.text?.trim(),
   published: payload.published !== undefined ? Boolean(payload.published) : true,
   sortOrder: Number(payload.sortOrder) || 0
+});
+
+const normalizeCollaboratorPayload = (payload = {}) => ({
+  name: payload.name?.trim(),
+  website: payload.website?.trim() || '',
+  imageUrl: payload.imageUrl?.trim() || '',
+  active: payload.active !== undefined ? Boolean(payload.active) : true,
+  sortOrder: Number(payload.sortOrder) || 0
+});
+
+// Public: Get active collaborators for Home page
+router.get('/collaborators', async (req, res) => {
+  try {
+    const collaborators = await Collaborator.find({ active: true }).sort({ sortOrder: 1, createdAt: -1 });
+    res.json({ success: true, data: collaborators });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch collaborators', error: error.message });
+  }
+});
+
+// Admin: Get all collaborators
+router.get('/collaborators/all', protect, admin, async (req, res) => {
+  try {
+    const collaborators = await Collaborator.find().sort({ sortOrder: 1, createdAt: -1 });
+    res.json({ success: true, data: collaborators });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch collaborators', error: error.message });
+  }
+});
+
+// Admin: Create collaborator image and metadata
+router.post('/collaborators', protect, admin, upload.single('image'), async (req, res) => {
+  try {
+    const payload = normalizeCollaboratorPayload({
+      ...req.body,
+      imageUrl: req.file?.secure_url || req.file?.url || req.file?.path || req.body.imageUrl
+    });
+
+    if (!payload.name) {
+      return res.status(400).json({ success: false, message: 'Collaborator name is required.' });
+    }
+    if (!payload.imageUrl) {
+      return res.status(400).json({ success: false, message: 'Collaborator image is required.' });
+    }
+
+    const collaborator = await Collaborator.create(payload);
+    res.status(201).json({ success: true, message: 'Collaborator created successfully', data: collaborator });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to create collaborator', error: error.message });
+  }
+});
+
+// Admin: Update collaborator
+router.put('/collaborators/:id', protect, admin, upload.single('image'), async (req, res) => {
+  try {
+    const payload = normalizeCollaboratorPayload({
+      ...req.body,
+      imageUrl: req.file?.secure_url || req.file?.url || req.file?.path || req.body.imageUrl
+    });
+
+    if (!payload.name) {
+      return res.status(400).json({ success: false, message: 'Collaborator name is required.' });
+    }
+
+    const collaborator = await Collaborator.findByIdAndUpdate(req.params.id, payload, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!collaborator) {
+      return res.status(404).json({ success: false, message: 'Collaborator not found' });
+    }
+
+    res.json({ success: true, message: 'Collaborator updated successfully', data: collaborator });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update collaborator', error: error.message });
+  }
+});
+
+// Admin: Delete collaborator
+router.delete('/collaborators/:id', protect, admin, async (req, res) => {
+  try {
+    const collaborator = await Collaborator.findByIdAndDelete(req.params.id);
+    if (!collaborator) {
+      return res.status(404).json({ success: false, message: 'Collaborator not found' });
+    }
+    res.json({ success: true, message: 'Collaborator deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete collaborator', error: error.message });
+  }
 });
 
 // Public: Get published testimonials for Home page slider
@@ -310,7 +402,7 @@ router.post('/resend-invoice/:enrollmentId', protect, admin, async (req, res) =>
       studentName = enrollment.studentEmail.split('@')[0];
     }
 
-    const invoiceNumber = enrollment.invoiceNumber || `SDF-INV-${Date.now().toString().slice(-6)}`;
+    const invoiceNumber = enrollment.invoiceNumber || `skill-invoice-${Date.now().toString().slice(-6)}`;
 
     // Generate Invoice PDF
     const invoicePdfBuffer = await generateInvoicePDF({
@@ -413,8 +505,8 @@ router.post('/certificate/custom-generate-and-send', protect, admin, async (req,
     }
 
     const finalCertId = certificateId && certificateId.trim()
-      ? certificateId.trim()
-      : `SDF-CERT-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
+      ? certificateId.trim().replace(/^SDF-CERT-/i, 'skill-cert-')
+      : `skill-cert-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
 
     const formattedDate = completionDate
       ? (typeof completionDate === 'string' && completionDate.includes('-') && completionDate.length === 10
@@ -489,13 +581,13 @@ router.post('/certificate/custom-generate-and-send', protect, admin, async (req,
     let emailSent = false;
     if (sendEmail && studentEmail) {
       try {
-        await sendCertificateEmail(
-          studentEmail.trim(),
-          studentName.trim(),
-          courseTitle.trim(),
-          certPdfBuffer,
-          finalCertId
-        );
+        await sendCourseCompletionEmail({
+          to: studentEmail.trim(),
+          studentName: studentName.trim(),
+          course: { title: courseTitle.trim() },
+          certId: finalCertId,
+          certificatePdfBuffer: certPdfBuffer
+        });
         emailSent = true;
       } catch (emailErr) {
         console.error('Failed to send certificate email:', emailErr.message);
@@ -544,7 +636,9 @@ router.post('/certificate/preview-pdf', protect, admin, async (req, res) => {
           : completionDate)
       : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
 
-    const finalCertId = certificateId || `SDF-CERT-PREVIEW`;
+    const finalCertId = certificateId
+      ? certificateId.replace(/^SDF-CERT-/i, 'skill-cert-')
+      : 'skill-cert-preview';
 
     let finalInstructorName = instructorName;
     let finalInstructorTitle = instructorTitle;

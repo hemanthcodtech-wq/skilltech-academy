@@ -438,7 +438,7 @@ router.post('/:id/complete', protect, async (req, res) => {
       return res.status(404).json({ success: false, message: 'You are not enrolled in this course' });
     }
 
-    const certId = enrollment.certificateId || `SDF-CERT-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
+    const certId = enrollment.certificateId?.replace(/^SDF-CERT-/i, 'skill-cert-') || `skill-cert-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
     const completionDate = enrollment.completionDate || new Date();
 
     enrollment.progress = 100;
@@ -529,7 +529,7 @@ router.post('/certificate/:enrollmentId/update-name', protect, async (req, res) 
     }
 
     enrollment.studentName = studentName.trim();
-    const certId = enrollment.certificateId || `SDF-CERT-${Date.now().toString().slice(-6)}`;
+    const certId = enrollment.certificateId?.replace(/^SDF-CERT-/i, 'skill-cert-') || `skill-cert-${Date.now().toString().slice(-6)}`;
     const compDate = enrollment.completionDate || new Date();
 
     const certPdfBuffer = await generateCertificatePDF({
@@ -576,7 +576,7 @@ router.post('/admin/issue-certificate/:enrollmentId', protect, admin, async (req
       return res.status(404).json({ success: false, message: 'Enrollment not found' });
     }
 
-    const certId = enrollment.certificateId || `SDF-CERT-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
+    const certId = enrollment.certificateId?.replace(/^SDF-CERT-/i, 'skill-cert-') || `skill-cert-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
     const completionDate = new Date();
 
     enrollment.progress = 100;
@@ -638,7 +638,7 @@ router.get('/certificate/:enrollmentId/download', protect, async (req, res) => {
       studentName = enrollment.studentEmail.split('@')[0];
     }
 
-    const certId = enrollment.certificateId || `SDF-CERT-${enrollment._id.toString().slice(-6).toUpperCase()}`;
+    const certId = enrollment.certificateId?.replace(/^SDF-CERT-/i, 'skill-cert-') || `skill-cert-${enrollment._id.toString().slice(-6).toUpperCase()}`;
     const compDate = enrollment.completionDate || enrollment.updatedAt || new Date();
 
     const certBuffer = await generateCertificatePDF({

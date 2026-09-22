@@ -112,7 +112,7 @@ const sendCourseEnrollmentEmail = async ({ to, studentName, course, invoiceNumbe
       `,
       attachments: invoicePdfBuffer ? [
         {
-          filename: `Invoice-${invoiceNumber || 'SDF-Receipt'}.pdf`,
+          filename: `Invoice-${invoiceNumber || 'skill-invoice-receipt'}.pdf`,
           content: invoicePdfBuffer,
           contentType: 'application/pdf'
         }
@@ -187,7 +187,7 @@ const sendCourseCompletionEmail = async ({ to, studentName, course, certId, cert
       `,
       attachments: certificatePdfBuffer ? [
         {
-          filename: `Certificate-${certId || 'SDF-Completion'}.pdf`,
+          filename: `Certificate-${certId || 'skill-cert-completion'}.pdf`,
           content: certificatePdfBuffer,
           contentType: 'application/pdf'
         }

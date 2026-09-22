@@ -102,7 +102,7 @@ const BottomNav = () => {
     <>
       {/* Floating WhatsApp Advisor button on mobile - placed safely above sticky bottom bar */}
       <a
-        href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20know%20more%20about%20your%20courses."
+        href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20know%20more%20about%20your%20courses."
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] right-4 z-40 md:hidden w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-600/40 border-2 border-white transform active:scale-90 transition-all hover:scale-105"

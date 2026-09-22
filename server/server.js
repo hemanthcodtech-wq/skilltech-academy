@@ -100,6 +100,7 @@ app.use('/api/payments', require('./routes/paymentRoutes'));
 app.use('/api/classes', require('./routes/classRoutes'));
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
+app.use('/api/partner', require('./routes/partnerRoutes'));
 app.use('/api/admin/users', require('./routes/userManagementRoutes'));
 app.use('/api/zoom', require('./routes/zoomWebhookRoutes'));
 app.use('/api/live-classes', require('./routes/liveClassRoutes'));

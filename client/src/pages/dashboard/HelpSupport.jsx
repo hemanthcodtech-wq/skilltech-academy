@@ -34,7 +34,7 @@ const HelpSupport = () => {
     },
     {
       q: "How can I contact Skill Tech Academy?",
-      a: "For course, batch, payment, or certificate questions, contact us on WhatsApp or call +91 9900 864 102. You can also email srinivasuluthuppudu@gmail.com. Our working hours are Monday to Saturday, 9:00 AM to 6:30 PM."
+      a: "For course, batch, payment, or certificate questions, contact us on WhatsApp or call +91 9100228578 / +91 9908864102. You can also email info@skilltechacademy.online. Our working hours are Monday to Saturday, 9:00 AM to 6:30 PM."
     }
   ];
 
@@ -56,7 +56,7 @@ const HelpSupport = () => {
       }, 5000);
     } catch (err) {
       console.error('Help support form submit error:', err);
-      alert('Could not submit your message. Please contact Skill Tech Academy on WhatsApp or call +91 9900 864 102.');
+      alert('Could not submit your message. Please contact Skill Tech Academy on WhatsApp or call +91 9100228578 / +91 9908864102.');
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ const HelpSupport = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* WhatsApp Support */}
         <a
-          href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20need%20assistance%20with%20my%20classes."
+          href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20need%20assistance%20with%20my%20classes."
           target="_blank"
           rel="noreferrer"
           className="bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
@@ -98,20 +98,20 @@ const HelpSupport = () => {
 
         {/* Email Support */}
         <a
-          href="mailto:srinivasuluthuppudu@gmail.com"
+          href="mailto:info@skilltechacademy.online"
           className="bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-600/30 p-6 rounded-3xl flex flex-col items-center text-center transition-all group shadow-sm"
         >
           <div className="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md group-hover:scale-110 transition-transform">
             <FaEnvelope />
           </div>
           <h3 className="font-bold text-gray-900 text-base">Academy Email</h3>
-          <p className="text-xs text-gray-500 mt-1 break-all">srinivasuluthuppudu@gmail.com</p>
+          <p className="text-xs text-gray-500 mt-1 break-all">info@skilltechacademy.online</p>
           <span className="mt-3 text-xs font-bold text-indigo-600 bg-white px-3 py-1 rounded-full shadow-xs">Send Email &rarr;</span>
         </a>
 
         {/* Helpline Support */}
         <a
-          href="tel:+919900864102"
+          href="tel:+919100228578"
           className="bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 p-6 rounded-3xl flex flex-col items-center text-center shadow-sm transition-all block"
         >
           <div className="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md mx-auto">
@@ -119,7 +119,7 @@ const HelpSupport = () => {
           </div>
           <h3 className="font-bold text-gray-900 text-base">Helpline Hours</h3>
           <p className="text-xs text-gray-500 mt-1">Mon - Sat: 9:00 AM - 6:30 PM</p>
-          <span className="mt-3 text-xs font-bold text-amber-700 bg-white px-3 py-1 rounded-full shadow-xs inline-block">+91 9900 864 102</span>
+          <span className="mt-3 text-xs font-bold text-amber-700 bg-white px-3 py-1 rounded-full shadow-xs inline-block">+91 9100228578</span>
         </a>
       </div>
 

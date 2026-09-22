@@ -13,5 +13,25 @@ export const teamMembers = [
       { label: 'Profile', href: 'https://en.wikiflux.org/wiki/index.php/Thuppudu_Srinivasulu', icon: 'external' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/srinivasulu-thuppudu-56956a249?originalSubdomain=in', icon: 'linkedin' }
     ]
+  },
+  {
+    name: 'K. Uday Kiran Goud',
+    role: 'B.Com (Computers) • Head of All Departments | 3+ Years Experience',
+    bio: 'A versatile professional overseeing departmental coordination, team operations, and organizational activities. Uday ensures smooth collaboration across departments while supporting efficient day-to-day management.',
+    highlights: [
+      'Oversees smooth department coordination and team operations.',
+      'Supports efficient day-to-day management across the organization.',
+      'Helps maintain collaboration and productivity across all departments.'
+    ]
+  },
+  {
+    name: 'L. C Rajesh',
+    role: 'MBA • Finance & Payments Lead | 3+ Years’ Experience',
+    bio: 'A finance-focused professional managing payments, financial coordination, and day-to-day financial operations. Rajesh ensures accurate, organized, and smooth handling of the organization’s financial activities.',
+    highlights: [
+      'Manages payment workflows and financial coordination efficiently.',
+      'Ensures day-to-day financial operations remain accurate and organized.',
+      'Supports strong financial discipline and smooth organizational processes.'
+    ]
   }
 ];
