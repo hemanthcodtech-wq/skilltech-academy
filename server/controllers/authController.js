@@ -232,7 +232,15 @@ exports.getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
     if (user) {
-      res.json({ success: true, data: user });
+      const nameParts = (user.name || '').trim().split(/\s+/).filter(Boolean);
+      res.json({
+        success: true,
+        data: {
+          ...user.toObject(),
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ')
+        }
+      });
     } else {
       res.status(404).json({ success: false, message: 'User not found' });
     }
@@ -246,21 +254,37 @@ exports.updateUserProfile = async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.firstName = req.body.firstName || user.firstName;
-      user.lastName = req.body.lastName || user.lastName;
-      user.emailOrPhone = req.body.emailOrPhone || user.emailOrPhone;
+      const firstName = (req.body.firstName ?? '').trim();
+      const lastName = (req.body.lastName ?? '').trim();
+      if (firstName || lastName) {
+        user.name = `${firstName} ${lastName}`.trim();
+      }
+
+      const newEmailOrPhone = (req.body.emailOrPhone || '').trim();
+      if (!newEmailOrPhone) {
+        return res.status(400).json({ success: false, message: 'Email or phone number is required.' });
+      }
+      if (newEmailOrPhone !== user.emailOrPhone) {
+        const existingUser = await User.findOne({ emailOrPhone: newEmailOrPhone, _id: { $ne: user._id } });
+        if (existingUser) {
+          return res.status(409).json({ success: false, message: 'That email or phone number is already in use.' });
+        }
+        user.emailOrPhone = newEmailOrPhone;
+      }
       
       if (req.body.password) {
         user.password = req.body.password;
       }
 
       const updatedUser = await user.save();
+      const updatedNameParts = (updatedUser.name || '').trim().split(/\s+/).filter(Boolean);
 
       res.json({
         success: true,
         _id: updatedUser._id,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
+        firstName: updatedNameParts[0] || '',
+        lastName: updatedNameParts.slice(1).join(' '),
+        name: updatedUser.name,
         emailOrPhone: updatedUser.emailOrPhone,
         role: updatedUser.role,
         token: generateToken(updatedUser._id),

@@ -18,6 +18,26 @@ const EMPTY_ACCESS_FORM = {
   message: ''
 };
 
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return '';
+  try {
+    const parsedUrl = new URL(url);
+    let videoId = parsedUrl.searchParams.get('v');
+    if (!videoId && parsedUrl.hostname === 'youtu.be') {
+      videoId = parsedUrl.pathname.slice(1).split('/')[0];
+    }
+    if (!videoId && parsedUrl.pathname.startsWith('/shorts/')) {
+      videoId = parsedUrl.pathname.split('/')[2];
+    }
+    if (!videoId && parsedUrl.pathname.startsWith('/embed/')) {
+      videoId = parsedUrl.pathname.split('/')[2];
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  } catch {
+    return '';
+  }
+};
+
 const AccessRequestForm = ({
   compact = false,
   accessForm = EMPTY_ACCESS_FORM,
@@ -139,6 +159,7 @@ const CourseContent = ({
 
   const titleTe   = useAutoTranslate(course.title,       course.title_te);
   const descTe    = useAutoTranslate(course.description,  course.description_te);
+  const youtubeEmbedUrl = getYouTubeEmbedUrl(course.youtubeUrl);
 
   // For whatYouWillLearn: join items → translate → split back
   const learnStr  = course.whatYouWillLearn?.join(' || ') || '';
@@ -235,7 +256,15 @@ const CourseContent = ({
 
         {/* Image Section with Wishlist Button */}
         <div className="w-full h-[280px] bg-gray-200 relative">
-          {course.thumbnailUrl ? (
+          {youtubeEmbedUrl ? (
+            <iframe
+              src={youtubeEmbedUrl}
+              title={`${course.title} video`}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : course.thumbnailUrl ? (
             <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-indigo-600/20 text-indigo-600 font-bold">No Image</div>
@@ -371,7 +400,15 @@ const CourseContent = ({
             <div className="w-full max-w-md lg:w-1/3 relative">
               <div className="absolute inset-[-10px] bg-white/40 backdrop-blur-2xl rounded-[2rem] border border-white/60 shadow-[0_20px_40px_rgba(0,0,0,0.06)] transform rotate-3"></div>
               <div className="relative h-[300px] rounded-[1.5rem] overflow-hidden shadow-lg bg-gray-100 z-10">
-                {course.thumbnailUrl ? (
+                {youtubeEmbedUrl ? (
+                  <iframe
+                    src={youtubeEmbedUrl}
+                    title={`${course.title} video`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                ) : course.thumbnailUrl ? (
                   <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-indigo-600 bg-indigo-600/10">No Image</div>

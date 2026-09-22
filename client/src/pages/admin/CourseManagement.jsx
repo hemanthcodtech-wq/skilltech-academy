@@ -9,6 +9,20 @@ import {
   FaPlayCircle, FaExternalLinkAlt, FaSyncAlt, FaWhatsapp
 } from 'react-icons/fa';
 
+const toDateInputValue = (value) => {
+  if (!value) return '';
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
+};
+
+const toLocalDateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+const parseDateOnly = (value) => {
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 const CourseManagement = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +46,7 @@ const CourseManagement = () => {
     language: 'English', 
     whatYouWillLearn: '',
     whatsappGroupLink: '',
+    youtubeUrl: '',
     courseType: 'online',
     sections: []
   });
@@ -120,8 +135,8 @@ const CourseManagement = () => {
         price: course.price !== undefined ? course.price : 0,
         duration: course.duration || '',
         durationMonths: course.durationMonths || 1,
-        startDate: course.startDate ? new Date(course.startDate).toISOString().split('T')[0] : '',
-        endDate: course.endDate ? new Date(course.endDate).toISOString().split('T')[0] : '',
+        startDate: toDateInputValue(course.startDate),
+        endDate: toDateInputValue(course.endDate),
         startTime: course.startTime || (course.timings ? course.timings.split(' to ')[0] : '06:00'),
         endTime: course.endTime || (course.timings ? course.timings.split(' to ')[1] : '07:15'),
         selectedSessionDates: course.sessionDates || [],
@@ -130,6 +145,7 @@ const CourseManagement = () => {
         language: course.language || 'English',
         whatYouWillLearn: course.whatYouWillLearn ? course.whatYouWillLearn.join('\n') : '',
         whatsappGroupLink: course.whatsappGroupLink || '',
+        youtubeUrl: course.youtubeUrl || '',
         courseType: course.courseType || 'online',
         sections: course.sections || []
       });
@@ -152,6 +168,7 @@ const CourseManagement = () => {
         language: 'English', 
         whatYouWillLearn: '',
         whatsappGroupLink: '',
+        youtubeUrl: '',
         courseType: 'online',
         sections: []
       });
@@ -806,7 +823,7 @@ const CourseManagement = () => {
                   {/* Course Title */}
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Course Title *</label>
-                    <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-medium" placeholder="e.g. Master Class in Asana & Pranayama" />
+                    <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-medium" placeholder="e.g. Digital Marketing Mastery" />
                   </div>
 
                   {/* Course Type Toggle */}
@@ -835,7 +852,7 @@ const CourseManagement = () => {
                       value={formData.price} 
                       onChange={e => setFormData({...formData, price: e.target.value})} 
                       className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-semibold" 
-                      placeholder="e.g. 999" 
+                      placeholder="e.g. 4,999"
                     />
                   </div>
                   
@@ -1016,8 +1033,8 @@ const CourseManagement = () => {
                       <div className="flex flex-col md:flex-row gap-6">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 w-full md:w-[320px] shrink-0">
                           {(() => {
-                            const start = new Date(formData.startDate);
-                            const end = new Date(formData.endDate);
+                            const start = parseDateOnly(formData.startDate);
+                            const end = parseDateOnly(formData.endDate);
                             const displayMonth = currentMonth || new Date(start.getFullYear(), start.getMonth(), 1);
                             
                             const nextMonth = () => setCurrentMonth(new Date(displayMonth.getFullYear(), displayMonth.getMonth() + 1, 1));
@@ -1046,7 +1063,7 @@ const CourseManagement = () => {
                                   {days.map((day, idx) => {
                                     if (!day) return <div key={`empty-${idx}`} className="p-2"></div>;
                                     
-                                    const dateStr = day.toISOString().split('T')[0];
+                                    const dateStr = toLocalDateKey(day);
                                     const isSelected = formData.selectedSessionDates.includes(dateStr);
                                     
                                     day.setHours(0,0,0,0);
@@ -1101,7 +1118,7 @@ const CourseManagement = () => {
                               <p className="text-sm text-gray-400 italic">Click dates on the calendar to select sessions.</p>
                             ) : (
                               formData.selectedSessionDates.map((date) => {
-                                const d = new Date(date);
+                                const d = parseDateOnly(date);
                                 const dateFmt = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                                 const dayName = d.toLocaleDateString('en-GB', { weekday: 'short' });
                                 return (
@@ -1144,7 +1161,7 @@ const CourseManagement = () => {
                               <div className="flex justify-between items-start gap-4 mb-3">
                                 <div className="flex-1">
                                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Section {sIndex + 1} Title</label>
-                                  <input type="text" value={section.title} onChange={e => updateSectionTitle(sIndex, e.target.value)} placeholder="e.g. Introduction to Yoga" className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-indigo-600 focus:bg-white text-sm font-semibold" required />
+                                  <input type="text" value={section.title} onChange={e => updateSectionTitle(sIndex, e.target.value)} placeholder="e.g. Getting Started with Digital Marketing" className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-indigo-600 focus:bg-white text-sm font-semibold" required />
                                 </div>
                                 <button type="button" onClick={() => removeSection(sIndex)} className="mt-6 text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
                                   <FaTrash size={14} />
@@ -1155,11 +1172,11 @@ const CourseManagement = () => {
                                 {section.lessons.map((lesson, lIndex) => (
                                   <div key={`lesson-${sIndex}-${lIndex}`} className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex flex-col md:flex-row gap-3 items-start md:items-center relative">
                                     <div className="flex-1 w-full">
-                                      <input type="text" value={lesson.title} onChange={e => updateLesson(sIndex, lIndex, 'title', e.target.value)} placeholder="Lesson Title" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs font-medium" required />
+                                      <input type="text" value={lesson.title} onChange={e => updateLesson(sIndex, lIndex, 'title', e.target.value)} placeholder="e.g. Setting Up Your First Campaign" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs font-medium" required />
                                     </div>
                                     <div className="flex-1 w-full flex items-center gap-2">
                                       <FaExternalLinkAlt className="text-gray-400 text-xs shrink-0" />
-                                      <input type="url" value={lesson.videoUrl} onChange={e => updateLesson(sIndex, lIndex, 'videoUrl', e.target.value)} placeholder="Video URL (e.g. YouTube link)" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" required />
+                                      <input type="url" value={lesson.videoUrl} onChange={e => updateLesson(sIndex, lIndex, 'videoUrl', e.target.value)} placeholder="https://www.youtube.com/watch?v=..." className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" required />
                                     </div>
                                     <div className="w-full md:w-28 flex items-center gap-2">
                                       <FaClock className="text-gray-400 text-xs shrink-0" />
@@ -1184,17 +1201,17 @@ const CourseManagement = () => {
 
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">About This Course</label>
-                    <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder="This course helps you relax your mind..."></textarea>
+                    <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder="Describe the skills, practical projects, and outcomes students can expect..."></textarea>
                   </div>
                   
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Topics Covered (One per line)</label>
-                    <textarea required rows="3" value={formData.topics} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Introduction to Asana\nPranayama Breathing\nVedic Meditation`}></textarea>
+                    <textarea required rows="3" value={formData.topics} onChange={e => setFormData({...formData, topics: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`SEO Fundamentals\nSocial Media Strategy\nCampaign Analytics`}></textarea>
                   </div>
                   
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">What You Will Learn (One per line)</label>
-                    <textarea required rows="3" value={formData.whatYouWillLearn} onChange={e => setFormData({...formData, whatYouWillLearn: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Stress relief techniques\nBreathing exercises\nHolistic wellness practices`}></textarea>
+                    <textarea required rows="3" value={formData.whatYouWillLearn} onChange={e => setFormData({...formData, whatYouWillLearn: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Plan a digital campaign\nCreate performance reports\nBuild a professional portfolio`}></textarea>
                   </div>
 
                   {/* Media Uploads */}
@@ -1210,6 +1227,17 @@ const CourseManagement = () => {
                           <p className="text-xs text-gray-500 mt-1.5">{thumbnailFile ? thumbnailFile.name : (editingCourse?.thumbnailUrl ? 'Current image saved' : 'JPG, PNG formats')}</p>
                           <input type="file" className="hidden" accept="image/*" onChange={e => setThumbnailFile(e.target.files[0])} />
                         </label>
+                      </div>
+                      <div className="border border-white/60 bg-white/40 backdrop-blur-md rounded-2xl p-5 shadow-sm">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">YouTube Course Video URL</label>
+                        <input
+                          type="url"
+                          value={formData.youtubeUrl}
+                          onChange={e => setFormData({ ...formData, youtubeUrl: e.target.value })}
+                          placeholder="https://www.youtube.com/watch?v=..."
+                          className="w-full p-3 bg-white/70 border border-white/60 rounded-xl outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 text-sm"
+                        />
+                        <p className="text-xs text-gray-500 mt-2">Shown as the course video in the course details page.</p>
                       </div>
                     </div>
                   </div>

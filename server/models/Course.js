@@ -119,6 +119,11 @@ const courseSchema = new mongoose.Schema({
   thumbnailUrl: {
     type: String
   },
+  youtubeUrl: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   contentUrl: {
     type: String // PDF or Video URL
   },

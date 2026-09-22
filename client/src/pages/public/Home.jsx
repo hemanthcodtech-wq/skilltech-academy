@@ -138,7 +138,7 @@ const TiltedCard = ({ children, className = '' }) => {
 };
 
 // Default fallback courses matching Skill Tech Academy
-const DEFAULT_COURSES = [
+/* const DEFAULT_COURSES = [
   {
     _id: 'dm-1',
     title: 'Digital Marketing Mastery',
@@ -258,7 +258,7 @@ const DEFAULT_COURSES = [
     slug: 'smartphone-hardware-chip-repair',
     thumbnailUrl: 'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&q=80&w=800'
   }
-];
+]; */
 
 // Testimonials fallback data used when API data is unavailable
 const DEFAULT_TESTIMONIALS = [
@@ -410,7 +410,7 @@ const Home = () => {
   };
 
   // Courses state
-  const [courses, setCourses] = useState(DEFAULT_COURSES);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [collaborators, setCollaborators] = useState([]);
@@ -434,13 +434,9 @@ const Home = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/courses/public`);
         const list = response?.data?.data || (Array.isArray(response?.data) ? response.data : []);
-        if (Array.isArray(list) && list.length > 0) {
-          setCourses(list);
-        } else {
-          setCourses(DEFAULT_COURSES);
-        }
+        setCourses(Array.isArray(list) ? list : []);
       } catch (error) {
-        setCourses(DEFAULT_COURSES);
+        setCourses([]);
       } finally {
         setLoading(false);
       }

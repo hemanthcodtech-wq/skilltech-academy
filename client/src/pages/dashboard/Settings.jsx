@@ -54,8 +54,19 @@ const Settings = () => {
       });
       if (res.data.success) {
         setMessage({ type: 'success', text: 'Profile updated successfully!' });
-        localStorage.setItem('token', res.data.token);
-        setProfile({ ...profile, password: '' });
+        if (res.data.token) localStorage.setItem('token', res.data.token);
+        const updatedProfile = {
+          ...profile,
+          name: res.data.name || `${profile.firstName} ${profile.lastName}`.trim(),
+          password: ''
+        };
+        setProfile(updatedProfile);
+        localStorage.setItem('user', JSON.stringify({
+          ...(JSON.parse(localStorage.getItem('user') || '{}')),
+          ...res.data,
+          firstName: profile.firstName,
+          lastName: profile.lastName
+        }));
       }
     } catch (err) {
       console.error("Error updating profile:", err);

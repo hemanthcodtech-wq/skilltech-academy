@@ -47,7 +47,21 @@ const enrollmentSchema = new mongoose.Schema({
   invoiceUrl: {
     type: String,
     default: null
-  }
+  },
+  lessonProgress: [{
+    lessonId: {
+      type: String,
+      required: true
+    },
+    completed: {
+      type: Boolean,
+      default: false
+    },
+    completedAt: {
+      type: Date,
+      default: null
+    }
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Enrollment', enrollmentSchema);

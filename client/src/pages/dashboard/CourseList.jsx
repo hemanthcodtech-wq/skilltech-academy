@@ -7,7 +7,7 @@ import { useLanguage, useAutoTranslate } from '../../context/LanguageContext';
 import SEO from '../../components/common/SEO';
 
 // Fallback default courses matching Skill Tech Academy
-const FALLBACK_COURSES = [
+/* const FALLBACK_COURSES = [
   {
     _id: 'dm-1',
     title: 'Digital Marketing Mastery',
@@ -99,7 +99,7 @@ const FALLBACK_COURSES = [
     slug: 'smartphone-hardware-chip-repair',
     thumbnailUrl: 'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&q=80&w=800'
   }
-];
+]; */
 
 // Sub-component so useAutoTranslate hook can be called per card
 const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClick }) => {
@@ -162,7 +162,7 @@ const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClic
 };
 
 const CourseList = () => {
-  const [courses, setCourses] = useState(FALLBACK_COURSES);
+  const [courses, setCourses] = useState([]);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -181,14 +181,10 @@ const CourseList = () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/courses/public`);
       const list = response?.data?.data || (Array.isArray(response?.data) ? response.data : []);
-      if (Array.isArray(list) && list.length > 0) {
-        setCourses(list);
-      } else {
-        setCourses(FALLBACK_COURSES);
-      }
+      setCourses(Array.isArray(list) ? list : []);
     } catch (error) {
       console.error('Error fetching courses:', error);
-      setCourses(FALLBACK_COURSES);
+      setCourses([]);
     } finally {
       setLoading(false);
     }

@@ -82,6 +82,60 @@ router.get('/public/:slugOrId', async (req, res) => {
   }
 });
 
+// Get the full curriculum for an enrolled student, including lesson video URLs.
+router.get('/:id/learning', protect, async (req, res) => {
+  try {
+    const enrollment = await Enrollment.findOne({
+      course: req.params.id,
+      studentEmail: req.user.emailOrPhone
+    });
+
+    if (!enrollment && !['admin', 'superadmin'].includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: 'You are not enrolled in this course.' });
+    }
+
+    const course = await Course.findById(req.params.id).select('title courseType sections thumbnailUrl');
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    res.json({
+      success: true,
+      data: course,
+      lessonProgress: enrollment?.lessonProgress || []
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching course curriculum', error: error.message });
+  }
+});
+
+// Mark a prerecorded lesson complete for the enrolled student.
+router.post('/:id/lessons/:lessonId/complete', protect, async (req, res) => {
+  try {
+    const enrollment = await Enrollment.findOne({
+      course: req.params.id,
+      studentEmail: req.user.emailOrPhone
+    });
+
+    if (!enrollment) {
+      return res.status(403).json({ success: false, message: 'You are not enrolled in this course.' });
+    }
+
+    const existingProgress = enrollment.lessonProgress.find(item => item.lessonId === req.params.lessonId);
+    if (existingProgress) {
+      existingProgress.completed = true;
+      existingProgress.completedAt = existingProgress.completedAt || new Date();
+    } else {
+      enrollment.lessonProgress.push({ lessonId: req.params.lessonId, completed: true, completedAt: new Date() });
+    }
+
+    await enrollment.save();
+    res.json({ success: true, lessonProgress: enrollment.lessonProgress });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error saving lesson progress', error: error.message });
+  }
+});
+
 // Public: submit a request before viewing public curriculum preview
 router.post('/:id/access-request', async (req, res) => {
   try {
@@ -123,7 +177,7 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
     const { 
       title, description, category, courseType, durationMonths, startDate, endDate, level, language, 
       accessValidity, startTime, endTime, price, zoomMeetingLink,
-      whatsappGroupLink
+      whatsappGroupLink, youtubeUrl
     } = req.body;
 
     let whatYouWillLearn = [];
@@ -169,6 +223,7 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
       accessValidity: accessValidity || '2 Months',
       price: coursePrice,
       thumbnailUrl, 
+      youtubeUrl: (youtubeUrl || '').trim(),
       contentUrl,
       zoomMeetingLink: zoomMeetingLink || '',
       whatsappGroupLink: (whatsappGroupLink || '').trim()
@@ -236,7 +291,7 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
     const { 
       title, description, category, courseType, durationMonths, startDate, endDate, timings, level, 
       language, accessValidity, price, startTime, endTime, zoomMeetingLink,
-      whatsappGroupLink
+      whatsappGroupLink, youtubeUrl
     } = req.body;
     
     let whatYouWillLearn = course.whatYouWillLearn;
@@ -273,6 +328,10 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
 
     if (whatsappGroupLink !== undefined) {
       updateData.whatsappGroupLink = (whatsappGroupLink || '').trim();
+    }
+
+    if (youtubeUrl !== undefined) {
+      updateData.youtubeUrl = (youtubeUrl || '').trim();
     }
 
     if (req.body.topics) {
@@ -415,6 +474,7 @@ router.get('/:id/materials', protect, async (req, res) => {
 
 const Enrollment = require('../models/Enrollment');
 const User = require('../models/User');
+const Attendance = require('../models/Attendance');
 const { generateCertificatePDF } = require('../utils/pdfGenerator');
 const { uploadBufferToCloudinary } = require('../utils/cloudinaryUploader');
 
@@ -436,6 +496,26 @@ router.post('/:id/complete', protect, async (req, res) => {
 
     if (!enrollment) {
       return res.status(404).json({ success: false, message: 'You are not enrolled in this course' });
+    }
+
+    if (req.user.role !== 'admin' && req.user.role !== 'superadmin') {
+      const scheduledClasses = await Class.find({ courseId: courseId }).select('_id');
+      if (scheduledClasses.length === 0) {
+        return res.status(400).json({ success: false, message: 'Certificate becomes available after the course sessions are completed.' });
+      }
+
+      const attendedClasses = await Attendance.countDocuments({
+        classId: { $in: scheduledClasses.map(liveClass => liveClass._id) },
+        studentEmail: req.user.emailOrPhone,
+        status: { $in: ['Present', 'Late'] }
+      });
+
+      if (attendedClasses < scheduledClasses.length) {
+        return res.status(400).json({
+          success: false,
+          message: `Attend all course sessions before claiming your certificate. Completed ${attendedClasses} of ${scheduledClasses.length}.`
+        });
+      }
     }
 
     const certId = enrollment.certificateId?.replace(/^SDF-CERT-/i, 'skill-cert-') || `skill-cert-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;

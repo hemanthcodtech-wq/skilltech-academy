@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import SEO from '../../components/common/SEO';
 
-const FALLBACK_BLOGS = [
+/* const FALLBACK_BLOGS = [
   {
     _id: 'fb1',
     title: 'How to Launch a Profitable Smartphone Repair Business in 2026',
@@ -66,10 +66,10 @@ const FALLBACK_BLOGS = [
     views: 215,
     createdAt: new Date().toISOString()
   }
-];
+]; */
 
 const BlogList = () => {
-  const [blogs, setBlogs] = useState(FALLBACK_BLOGS);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -85,11 +85,10 @@ const BlogList = () => {
         selectedCategory !== 'All' ? `?category=${encodeURIComponent(selectedCategory)}` : ''
       }`;
       const res = await axios.get(url, { timeout: 8000 });
-      if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        setBlogs(res.data.data);
-      }
+      setBlogs(res.data?.success && Array.isArray(res.data.data) ? res.data.data : []);
     } catch (err) {
-      console.warn('Using fallback blog articles due to API error:', err.message);
+      setBlogs([]);
+      console.warn('Failed to load blog articles:', err.message);
     } finally {
       setLoading(false);
     }

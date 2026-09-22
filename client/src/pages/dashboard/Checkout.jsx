@@ -73,7 +73,7 @@ const Checkout = () => {
         currency: order.currency,
         name: 'Skill Tech Academy',
         description: `Course enrollment: ${course.title}`,
-        image: '/logo.png',
+        image: `${window.location.origin}/logo.png`,
         order_id: order.id,
         handler: async function (response) {
           try {
