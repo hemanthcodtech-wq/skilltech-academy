@@ -44,7 +44,10 @@ const Login = () => {
     }
     setIsLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, formData, { timeout: 10000 });
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        ...formData,
+        portal: 'student'
+      }, { timeout: 10000 });
       if (response.data.success) {
         redirectAfterLogin(response.data);
       }

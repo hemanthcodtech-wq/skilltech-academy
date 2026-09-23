@@ -183,7 +183,7 @@ exports.registerUser = async (req, res, next) => {
 // 4. Enhanced Login supporting either Phone or Email + Password
 exports.loginUser = async (req, res, next) => {
   try {
-    const { emailOrPhone, password } = req.body;
+    const { emailOrPhone, password, portal = 'student' } = req.body;
 
     if (!emailOrPhone || !password) {
       return res.status(400).json({ success: false, message: 'Email/Phone and Password are required' });
@@ -201,6 +201,13 @@ exports.loginUser = async (req, res, next) => {
     });
 
     if (user && (await user.comparePassword(password))) {
+      if (user.role === 'partner' && portal !== 'admin') {
+        return res.status(403).json({
+          success: false,
+          message: 'Partner accounts must sign in through the admin login portal.'
+        });
+      }
+
       if (user.status === 'inactive') {
         return res.status(403).json({ 
           success: false, 

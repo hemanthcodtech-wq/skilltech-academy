@@ -32,6 +32,7 @@ const CourseManagement = () => {
   const [formData, setFormData] = useState({
     title: '', 
     description: '', 
+    instructorProfile: { name: '', experience: '', description: '', linkedin: '' },
     category: 'Digital Marketing', 
     price: '', 
     duration: '', 
@@ -131,6 +132,12 @@ const CourseManagement = () => {
       setFormData({
         title: course.title || '',
         description: course.description || '',
+        instructorProfile: {
+          name: course.instructorProfile?.name || '',
+          experience: course.instructorProfile?.experience || '',
+          description: course.instructorProfile?.description || '',
+          linkedin: course.instructorProfile?.linkedin || ''
+        },
         category: course.category || 'Digital Marketing',
         price: course.price !== undefined ? course.price : 0,
         duration: course.duration || '',
@@ -154,6 +161,7 @@ const CourseManagement = () => {
       setFormData({ 
         title: '', 
         description: '', 
+        instructorProfile: { name: '', experience: '', description: '', linkedin: '' },
         category: 'Digital Marketing', 
         price: '', 
         duration: '', 
@@ -348,6 +356,8 @@ const CourseManagement = () => {
           data.append('selectedSessionDates', JSON.stringify(formData.selectedSessionDates));
         } else if (key === 'sections') {
           data.append('sections', JSON.stringify(formData.sections));
+        } else if (key === 'instructorProfile') {
+          data.append('instructorProfile', JSON.stringify(formData.instructorProfile));
         } else if (key === 'durationMonths') {
           data.append('durationMonths', computedDurationMonths);
         } else if (key === 'price') {
@@ -1202,6 +1212,28 @@ const CourseManagement = () => {
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">About This Course</label>
                     <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder="Describe the skills, practical projects, and outcomes students can expect..."></textarea>
+                  </div>
+
+                  <div className="col-span-full bg-white/50 backdrop-blur-md border border-white/60 p-5 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]">
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2"><FaChalkboardTeacher className="text-indigo-600" /> Instructor Profile</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Instructor Name</label>
+                        <input type="text" value={formData.instructorProfile.name} onChange={e => setFormData({...formData, instructorProfile: {...formData.instructorProfile, name: e.target.value}})} className="w-full p-3.5 bg-white/70 border border-white/60 rounded-xl outline-none focus:border-indigo-600" placeholder="e.g. Srinivasulu Thuppudu" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Experience</label>
+                        <input type="text" value={formData.instructorProfile.experience} onChange={e => setFormData({...formData, instructorProfile: {...formData.instructorProfile, experience: e.target.value}})} className="w-full p-3.5 bg-white/70 border border-white/60 rounded-xl outline-none focus:border-indigo-600" placeholder="e.g. 10+ years in digital marketing" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Instructor Description</label>
+                        <textarea rows="3" value={formData.instructorProfile.description} onChange={e => setFormData({...formData, instructorProfile: {...formData.instructorProfile, description: e.target.value}})} className="w-full p-3.5 bg-white/70 border border-white/60 rounded-xl outline-none focus:border-indigo-600 resize-none" placeholder="Tell students about the instructor's teaching background and expertise..." />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">LinkedIn Profile URL</label>
+                        <input type="url" value={formData.instructorProfile.linkedin} onChange={e => setFormData({...formData, instructorProfile: {...formData.instructorProfile, linkedin: e.target.value}})} className="w-full p-3.5 bg-white/70 border border-white/60 rounded-xl outline-none focus:border-indigo-600" placeholder="https://www.linkedin.com/in/instructor-name" />
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="col-span-full">

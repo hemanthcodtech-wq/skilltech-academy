@@ -4,7 +4,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import {
   FaClock, FaGlobe, FaCheck, FaUser, FaHeart, FaRegHeart,
-  FaLock, FaPaperPlane, FaPlayCircle
+  FaLock, FaPaperPlane, FaPlayCircle, FaLinkedin
 } from 'react-icons/fa';
 import { useLanguage, useAutoTranslate } from '../../context/LanguageContext';
 import SEO from '../../components/common/SEO';
@@ -12,10 +12,7 @@ import SEO from '../../components/common/SEO';
 const EMPTY_ACCESS_FORM = {
   name: '',
   email: '',
-  phone: '',
-  qualification: '',
-  interest: '',
-  message: ''
+  phone: ''
 };
 
 const getYouTubeEmbedUrl = (url) => {
@@ -55,24 +52,24 @@ const AccessRequestForm = ({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`${compact ? 'p-5 rounded-3xl' : 'p-8 lg:p-10 rounded-3xl'} bg-white/70 backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/70`}
+      className="w-full max-w-md mx-auto p-5 lg:p-6 rounded-2xl bg-white/70 backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/70"
     >
-      <div className="flex items-start gap-4 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 text-indigo-700 flex items-center justify-center border border-indigo-600/20 shrink-0">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-indigo-600/10 text-indigo-700 flex items-center justify-center border border-indigo-600/20 shrink-0">
           <FaLock />
         </div>
         <div>
-          <h2 className={`${compact ? 'text-xl' : 'text-3xl'} font-bold font-playfair text-gray-900`}>
+          <h2 className="text-xl lg:text-2xl font-bold font-playfair text-gray-900">
             Unlock Course Content Preview
           </h2>
-          <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+          <p className="text-xs lg:text-sm text-gray-600 mt-1 leading-relaxed">
             Submit your details to view the course outline. Full classes, videos, and materials unlock after enrollment.
           </p>
         </div>
       </div>
 
-      <form onSubmit={handleAccessRequest} className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <form onSubmit={handleAccessRequest} className="space-y-3">
+        <div className="grid grid-cols-1 gap-3">
           <input
             type="text"
             required
@@ -89,40 +86,18 @@ const AccessRequestForm = ({
             placeholder="Email address *"
             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
           />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
             type="tel"
+            required
             value={form.phone}
             onChange={(e) => updateField('phone', e.target.value)}
-            placeholder="Phone number"
-            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
-          />
-          <input
-            type="text"
-            value={form.qualification}
-            onChange={(e) => updateField('qualification', e.target.value)}
-            placeholder="Qualification"
+            placeholder="Phone number *"
             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
           />
         </div>
-        <input
-          type="text"
-          value={form.interest}
-          onChange={(e) => updateField('interest', e.target.value)}
-          placeholder="What are you interested in learning?"
-          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10"
-        />
-        <textarea
-          rows="3"
-          value={form.message}
-          onChange={(e) => updateField('message', e.target.value)}
-          placeholder="Message or career goal"
-          className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 resize-none"
-        />
 
         {accessRequestError && (
-          <p className="text-sm font-bold text-red-600 bg-red-50 border border-red-100 px-4 py-3 rounded-2xl">
+          <p className="text-xs font-bold text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
             {accessRequestError}
           </p>
         )}
@@ -130,7 +105,7 @@ const AccessRequestForm = ({
         <button
           type="submit"
           disabled={submittingAccessRequest}
-          className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold transition-all shadow-lg disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-extrabold transition-all shadow-lg disabled:opacity-60"
         >
           <FaPaperPlane size={13} />
           {submittingAccessRequest ? 'Submitting...' : 'Submit & View Course Content'}
@@ -167,6 +142,31 @@ const CourseContent = ({
   const learnTranslated = useAutoTranslate(learnStr, learnStrTe);
   const learnItems = learnTranslated ? learnTranslated.split(' || ').filter(Boolean) : [];
   const hasCurriculum = course.sections?.some(section => section.title || section.lessons?.length) || course.topics?.length;
+  const instructor = course.instructorProfile || {};
+  const hasInstructor = instructor.name || instructor.experience || instructor.description || instructor.linkedin || course.instructor;
+
+  const InstructorProfile = ({ compact = false }) => {
+    if (!hasInstructor) return null;
+
+    return (
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={`${compact ? 'mb-8 p-5 rounded-3xl' : 'p-8 lg:p-10 rounded-3xl'} bg-white/40 backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60`}>
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <h2 className={`${compact ? 'text-[22px]' : 'text-4xl'} font-bold font-playfair text-gray-900 mb-2`}>Your Instructor</h2>
+            <div className="w-16 h-1 bg-indigo-600 rounded-full"></div>
+          </div>
+          {instructor.linkedin && (
+            <a href={instructor.linkedin} target="_blank" rel="noreferrer" aria-label="View instructor LinkedIn profile" className="text-[#0a66c2] hover:text-[#004182] text-2xl">
+              <FaLinkedin />
+            </a>
+          )}
+        </div>
+        <h3 className="text-xl font-black text-gray-900">{instructor.name || course.instructor}</h3>
+        {instructor.experience && <p className="text-sm font-bold text-indigo-700 mt-1">{instructor.experience}</p>}
+        {instructor.description && <p className="text-gray-700 leading-relaxed mt-3">{instructor.description}</p>}
+      </motion.div>
+    );
+  };
 
   const CurriculumPreview = ({ compact = false }) => {
     if (!hasCurriculum) return null;
@@ -312,6 +312,8 @@ const CourseContent = ({
             <p className="text-[15px] font-inter text-gray-700 leading-relaxed">{descTe}</p>
           </div>
 
+          <InstructorProfile compact />
+
           {canShowCourseContent ? (
             <>
               {/* What You Will Learn */}
@@ -431,6 +433,8 @@ const CourseContent = ({
                 <div className="w-16 h-1 bg-indigo-600 mb-6 rounded-full"></div>
                 <p className="text-gray-700 font-inter leading-relaxed text-lg">{descTe}</p>
               </motion.div>
+
+              <InstructorProfile />
 
               {canShowCourseContent ? (
                 <>

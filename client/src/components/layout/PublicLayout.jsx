@@ -8,7 +8,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import {
   FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaShieldAlt,
   FaAward, FaWhatsapp, FaGraduationCap, FaArrowRight,
-  FaCheckCircle, FaLaptopCode, FaTools, FaShareAlt
+  FaCheckCircle, FaLaptopCode, FaTools, FaShareAlt, FaSearch, FaTimes
 } from 'react-icons/fa';
 
 const PublicLayout = () => {
@@ -17,6 +17,10 @@ const PublicLayout = () => {
   const isLoggedIn = !!token;
 
   const [popularPrograms, setPopularPrograms] = useState([]);
+  const [certificateId, setCertificateId] = useState('');
+  const [certificateResult, setCertificateResult] = useState(null);
+  const [certificateError, setCertificateError] = useState('');
+  const [verifyingCertificate, setVerifyingCertificate] = useState(false);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -37,6 +41,24 @@ const PublicLayout = () => {
     };
     fetchPrograms();
   }, []);
+
+  const handleCertificateVerification = async (event) => {
+    event.preventDefault();
+    const value = certificateId.trim();
+    if (!value) return;
+
+    setVerifyingCertificate(true);
+    setCertificateResult(null);
+    setCertificateError('');
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/verify-certificate/${encodeURIComponent(value)}`);
+      setCertificateResult(res.data.data);
+    } catch (error) {
+      setCertificateError(error.response?.data?.message || 'Certificate ID not found or unverified.');
+    } finally {
+      setVerifyingCertificate(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col font-inter bg-slate-50 selection:bg-blue-600 selection:text-white">
@@ -125,31 +147,13 @@ const PublicLayout = () => {
                 Popular Courses
               </h4>
               <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400">
-                <li>
-                  <Link to="/courses" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <span className="text-blue-500">›</span> Digital Marketing Mastery
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/courses" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <span className="text-blue-500">›</span> Basic Computer & Hardware Tech
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/courses" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <span className="text-blue-500">›</span> Digital Seva & E-Governance (CSC)
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/courses" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <span className="text-blue-500">›</span> Tailoring & Fashion Design
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/courses" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <span className="text-blue-500">›</span> Web Development & Coding
-                  </Link>
-                </li>
+                {popularPrograms.map((program) => (
+                  <li key={program._id || program.slug}>
+                    <Link to={`/courses/${program.slug}`} className="hover:text-blue-400 transition-colors flex items-center gap-2">
+                      <span className="text-blue-500">›</span> {program.title}
+                    </Link>
+                  </li>
+                ))}
                 <li>
                   <Link to="/courses" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors inline-flex items-center gap-1 mt-2">
                     <span>View All 50+ Courses</span>
@@ -171,6 +175,7 @@ const PublicLayout = () => {
                 <li><Link to="/terms" className="hover:text-blue-400 transition-colors">Terms & Conditions</Link></li>
                 <li><Link to="/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/refund-policy" className="hover:text-blue-400 transition-colors">Refund Policy</Link></li>
+                <li><Link to="/verify-certificate" className="hover:text-blue-400 transition-colors">Verify Certificate</Link></li>
               </ul>
             </div>
 
@@ -201,9 +206,44 @@ const PublicLayout = () => {
                     <span className="text-slate-400 text-[11px]">Resume support, mock interviews, and startup mentoring.</span>
                   </div>
                 </div>
+                <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3">
+                  <div className="w-16 h-14 rounded-lg bg-white flex items-center justify-center p-1.5 shrink-0">
+                    <img src="/msme.png" alt="MSME recognition" className="max-w-full max-h-full object-contain" />
+                  </div>
+                  <div>
+                    <strong className="text-white block font-medium">MSME Recognition</strong>
+                    <span className="text-slate-400 text-[11px]">Supporting practical skills and small-business growth.</span>
+                  </div>
+                </div>
               </div>
             </div>
 
+          </div>
+
+          {/* Certificate Verification */}
+          <div className="mt-8 pt-8 border-t border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider font-outfit">Verify Certificate</h4>
+              <p className="text-xs text-slate-400 mt-1">Enter a certificate ID to confirm its authenticity.</p>
+            </div>
+            <form onSubmit={handleCertificateVerification} className="flex w-full lg:w-auto flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                required
+                value={certificateId}
+                onChange={(event) => setCertificateId(event.target.value)}
+                placeholder="Certificate ID"
+                className="w-full sm:w-64 px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              />
+              <button
+                type="submit"
+                disabled={verifyingCertificate || !certificateId.trim()}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors disabled:opacity-60"
+              >
+                <FaSearch size={12} />
+                {verifyingCertificate ? 'Checking...' : 'Verify'}
+              </button>
+            </form>
           </div>
 
           {/* Bottom Bar: Copyright & Accreditation */}
@@ -213,14 +253,56 @@ const PublicLayout = () => {
             </p>
             <div className="flex items-center gap-6">
               <Link to="/privacy" className="hover:text-blue-400 transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-blue-400 transition-colors">Terms</Link>
+              <Link to="/terms" className="hover:text-blue-400 transition-colors">Terms &amp; Conditions</Link>
               <Link to="/refund-policy" className="hover:text-blue-400 transition-colors">Refund</Link>
+              <Link to="/verify-certificate" className="hover:text-blue-400 transition-colors">Verify Certificate</Link>
               <Link to="/contact" className="hover:text-blue-400 transition-colors">Support</Link>
             </div>
           </div>
 
         </div>
       </footer>
+
+      {(certificateResult || certificateError) && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 sm:p-8 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => { setCertificateResult(null); setCertificateError(''); }}
+              className="absolute right-4 top-4 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              aria-label="Close certificate verification"
+            >
+              <FaTimes />
+            </button>
+
+            {certificateError ? (
+              <div className="pr-8">
+                <h3 className="text-xl font-black text-slate-900">Certificate Not Verified</h3>
+                <p className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">{certificateError}</p>
+              </div>
+            ) : (
+              <div className="pr-8">
+                <div className="flex items-center gap-2 text-emerald-600">
+                  <FaCheckCircle />
+                  <h3 className="text-xl font-black text-slate-900">Certificate Verified</h3>
+                </div>
+                <div className="mt-5 space-y-3 text-sm">
+                  <p><strong className="text-slate-500">Certificate ID:</strong> <span className="font-mono font-bold text-slate-900">{certificateResult.certificateId}</span></p>
+                  <p><strong className="text-slate-500">Student:</strong> <span className="font-bold text-slate-900">{certificateResult.studentName}</span></p>
+                  <p><strong className="text-slate-500">Course:</strong> <span className="font-bold text-slate-900">{certificateResult.courseTitle || 'Skill Tech Academy Course'}</span></p>
+                  <p><strong className="text-slate-500">Date of Issue:</strong> <span className="text-slate-700">{certificateResult.issueDate ? new Date(certificateResult.issueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Not available'}</span></p>
+                  <p><strong className="text-slate-500">Issued By:</strong> <span className="text-slate-700">{certificateResult.issuer}</span></p>
+                </div>
+                {certificateResult.certificateUrl && (
+                  <a href={certificateResult.certificateUrl} target="_blank" rel="noreferrer" className="inline-flex mt-5 text-sm font-bold text-blue-700 hover:text-blue-900">
+                    View certificate PDF &rarr;
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Mobile Bottom Navigation Bar */}
       <BottomNav />

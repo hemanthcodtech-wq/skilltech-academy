@@ -357,7 +357,7 @@ router.get('/verify-certificate/:certId', async (req, res) => {
         issueDate: enrollment.completionDate || enrollment.updatedAt,
         certificateUrl: enrollment.certificateUrl,
         status: 'Authentic & Verified',
-        issuer: 'Swamy Dwija Foundation Academy of Yoga & Vedic Sciences'
+        issuer: 'Skill Tech Academy (Unrelenting Evolution Pvt. Ltd.)'
       }
     });
   } catch (error) {

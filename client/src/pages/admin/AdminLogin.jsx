@@ -40,7 +40,8 @@ const AdminLogin = () => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
         emailOrPhone: formData.email.trim(),
-        password: formData.password
+        password: formData.password,
+        portal: 'admin'
       });
 
       if (response.data.success) {

@@ -22,6 +22,7 @@ import Contact from '../pages/public/Contact';
 import TermsAndConditions from '../pages/public/TermsAndConditions';
 import PrivacyPolicy from '../pages/public/PrivacyPolicy';
 import RefundPolicy from '../pages/public/RefundPolicy';
+import CertificateVerification from '../pages/public/CertificateVerification';
 import BlogList from '../pages/public/BlogList';
 import BlogDetails from '../pages/public/BlogDetails';
 
@@ -83,6 +84,7 @@ const AppRoutes = () => {
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/return-policy" element={<RefundPolicy />} />
           <Route path="/cancellation-policy" element={<RefundPolicy />} />
+          <Route path="/verify-certificate" element={<CertificateVerification />} />
           {/* Auth Routes inside PublicLayout for Navbar */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

@@ -184,6 +184,7 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
     let topics = [];
     let selectedSessionDates = [];
     let sections = [];
+    let instructorProfile = {};
     
     if (req.body.whatYouWillLearn) {
       try { whatYouWillLearn = JSON.parse(req.body.whatYouWillLearn); } catch (e) {}
@@ -196,6 +197,9 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
     }
     if (req.body.sections) {
       try { sections = JSON.parse(req.body.sections); } catch (e) {}
+    }
+    if (req.body.instructorProfile) {
+      try { instructorProfile = JSON.parse(req.body.instructorProfile); } catch (e) {}
     }
     
     let thumbnailUrl = '';
@@ -217,6 +221,7 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
       timings, 
       sessionDates: selectedSessionDates,
       sections,
+      instructorProfile,
       topics, 
       level, 
       language: language || 'English',
@@ -295,10 +300,14 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
     } = req.body;
     
     let whatYouWillLearn = course.whatYouWillLearn;
+    let instructorProfile = course.instructorProfile;
     if (req.body.whatYouWillLearn) {
       try {
         whatYouWillLearn = JSON.parse(req.body.whatYouWillLearn);
       } catch (e) {}
+    }
+    if (req.body.instructorProfile) {
+      try { instructorProfile = JSON.parse(req.body.instructorProfile); } catch (e) {}
     }
 
     let slug = course.slug;
@@ -308,7 +317,7 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
 
     let updateData = { 
       title, slug, description, category, durationMonths, startDate, endDate, 
-      level, language: language || 'English', whatYouWillLearn 
+      level, language: language || 'English', whatYouWillLearn, instructorProfile
     };
     if (courseType) updateData.courseType = courseType;
 

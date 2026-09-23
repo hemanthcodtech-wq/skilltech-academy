@@ -27,6 +27,12 @@ const courseSchema = new mongoose.Schema({
   description_te: {
     type: String
   },
+  instructorProfile: {
+    name: { type: String, trim: true, default: '' },
+    experience: { type: String, trim: true, default: '' },
+    description: { type: String, trim: true, default: '' },
+    linkedin: { type: String, trim: true, default: '' }
+  },
   category: {
     type: String,
     required: true,
