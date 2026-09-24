@@ -62,7 +62,7 @@ const About = () => {
       <SEO 
         title="About Skill Tech Academy - Empowering Skills, Building Careers"
         description="Skill Tech Academy empowers learners with practical, accessible, and career-focused digital skills for real-world opportunities."
-        url="https://skill-tech-academy.vercel.app/about"
+        url="https://skilltechacademy.online/about"
       />
 
       {/* --- HERO BANNER --- */}

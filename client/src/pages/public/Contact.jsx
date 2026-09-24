@@ -63,7 +63,7 @@ const Contact = () => {
       <SEO 
         title="Contact Us - Skill Tech Academy | Admissions & Inquiries"
         description="Get in touch with Skill Tech Academy at Kamla Nehru Colony, Geetha Hotel Line, Mahabubnagar, Telangana. Phone: +91 9100228578 / +91 9908864102, Email: info@skilltechacademy.online"
-        url="https://skill-tech-academy.vercel.app/contact"
+        url="https://skilltechacademy.online/contact"
       />
 
       {/* Header */}

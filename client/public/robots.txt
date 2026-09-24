@@ -23,4 +23,4 @@ Disallow: /checkout/*
 Disallow: /api/
 
 # Sitemap Location
-Sitemap: https://skill-tech-academy.vercel.app/sitemap.xml
+Sitemap: https://skilltechacademy.online/sitemap.xml

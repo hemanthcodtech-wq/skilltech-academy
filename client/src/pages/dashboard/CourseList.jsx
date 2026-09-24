@@ -261,7 +261,7 @@ const CourseList = () => {
         title="Professional Courses & Skills Training Catalog"
         description="Explore career-focused practical training programs in Digital Marketing, Computer Hardware, CSC Digital Seva, Tailoring, Web Development, and Tally Prime at Skill Tech Academy."
         keywords="Skill Tech Academy courses, computer courses Mahabubnagar, digital marketing training, hardware tech, digital seva csc, tailoring institute"
-        url="https://skill-tech-academy.vercel.app/courses"
+        url="https://skilltechacademy.online/courses"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 md:py-10">
         

@@ -507,7 +507,7 @@ const Home = () => {
         title="Skill Tech Academy - Learn Digital Skills & Professional Courses"
         description="Empowering individuals with practical digital skills, computer hardware, digital seva, and tailoring courses in Telangana. Unrelenting Evolution Pvt. Ltd."
         keywords="Skill Tech Academy, computer courses Mahabubnagar, digital marketing training, hardware tech, digital seva csc, tailoring institute"
-        url="https://skill-tech-academy.vercel.app/"
+        url="https://skilltechacademy.online/"
       />
 
       {/* Top Scroll Indicator */}
