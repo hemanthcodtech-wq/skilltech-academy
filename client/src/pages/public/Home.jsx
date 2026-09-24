@@ -602,7 +602,7 @@ const Home = () => {
               </Link>
 
               <a
-                href="https://wa.me/919900864102?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20know%20more%20about%20your%20courses."
+                href="https://wa.me/919100228578?text=Hello%20Skill%20Tech%20Academy,%20I%20would%20like%20to%20know%20more%20about%20your%20courses."
                 target="_blank"
                 rel="noreferrer"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-sm sm:text-base shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2"
@@ -700,8 +700,8 @@ const Home = () => {
                       key={idx}
                       onClick={() => setCurrentSlide(idx)}
                       className={`h-2 rounded-full transition-all duration-300 ${idx === currentSlide
-                          ? 'w-6 sm:w-7 bg-blue-500 shadow-sm shadow-blue-400/50'
-                          : 'w-2 bg-white/40 hover:bg-white/75'
+                        ? 'w-6 sm:w-7 bg-blue-500 shadow-sm shadow-blue-400/50'
+                        : 'w-2 bg-white/40 hover:bg-white/75'
                         }`}
                       aria-label={`Slide ${idx + 1}`}
                     />
@@ -946,8 +946,8 @@ const Home = () => {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all ${selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
               >
                 {cat}
