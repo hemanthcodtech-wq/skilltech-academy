@@ -13,6 +13,7 @@ const emptyForm = {
   course: '',
   rating: 5,
   image: '',
+  imageFile: null,
   text: '',
   published: true,
   sortOrder: 0
@@ -70,6 +71,7 @@ const TestimonialManagement = () => {
       course: testimonial.course || '',
       rating: testimonial.rating || 5,
       image: testimonial.image || '',
+      imageFile: null,
       text: testimonial.text || '',
       published: testimonial.published !== false,
       sortOrder: testimonial.sortOrder || 0
@@ -86,7 +88,19 @@ const TestimonialManagement = () => {
         : `${import.meta.env.VITE_API_BASE_URL}/admin/testimonials`;
 
       const method = editingTestimonial ? 'put' : 'post';
-      await axios[method](url, formData, {
+      const payload = new FormData();
+      payload.append('name', formData.name);
+      payload.append('role', formData.role);
+      payload.append('course', formData.course);
+      payload.append('rating', String(formData.rating));
+      payload.append('text', formData.text);
+      payload.append('published', String(formData.published));
+      payload.append('sortOrder', String(formData.sortOrder));
+      if (formData.imageFile) {
+        payload.append('image', formData.imageFile);
+      }
+
+      await axios[method](url, payload, {
         headers: { Authorization: `Bearer ${adminToken}` }
       });
 
@@ -299,14 +313,19 @@ const TestimonialManagement = () => {
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">Student Image URL</label>
+                    <label className="block text-slate-700 font-semibold mb-1.5 text-sm">Student Image</label>
                     <input
-                      type="url"
-                      value={formData.image}
-                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      placeholder="https://..."
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFormData({ ...formData, imageFile: e.target.files?.[0] || null })}
                       className="w-full p-3.5 bg-white/60 border border-white/70 rounded-xl font-medium text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
                     />
+                    {formData.imageFile && (
+                      <p className="mt-2 text-xs text-slate-500">Selected: {formData.imageFile.name}</p>
+                    )}
+                    {formData.image && !formData.imageFile && (
+                      <p className="mt-2 text-xs text-slate-500">Current image will be kept unless you choose a replacement.</p>
+                    )}
                   </div>
 
                   <div>

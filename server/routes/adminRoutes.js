@@ -56,7 +56,9 @@ const normalizeTestimonialPayload = (payload = {}) => ({
   rating: Math.min(5, Math.max(1, Number(payload.rating) || 5)),
   image: payload.image?.trim() || '',
   text: payload.text?.trim(),
-  published: payload.published !== undefined ? Boolean(payload.published) : true,
+  published: payload.published !== undefined
+    ? (typeof payload.published === 'boolean' ? payload.published : payload.published === 'true')
+    : true,
   sortOrder: Number(payload.sortOrder) || 0
 });
 
@@ -172,9 +174,12 @@ router.get('/testimonials/all', protect, admin, async (req, res) => {
 });
 
 // Admin: Create testimonial
-router.post('/testimonials', protect, admin, async (req, res) => {
+router.post('/testimonials', protect, admin, upload.single('image'), async (req, res) => {
   try {
-    const data = normalizeTestimonialPayload(req.body);
+    const data = normalizeTestimonialPayload({
+      ...req.body,
+      image: req.file?.secure_url || req.file?.url || req.file?.path || req.body.image
+    });
     if (!data.name || !data.text) {
       return res.status(400).json({ success: false, message: 'Name and testimonial message are required.' });
     }
@@ -187,9 +192,15 @@ router.post('/testimonials', protect, admin, async (req, res) => {
 });
 
 // Admin: Update testimonial
-router.put('/testimonials/:id', protect, admin, async (req, res) => {
+router.put('/testimonials/:id', protect, admin, upload.single('image'), async (req, res) => {
   try {
+    const existingTestimonial = await Testimonial.findById(req.params.id);
+    if (!existingTestimonial) {
+      return res.status(404).json({ success: false, message: 'Testimonial not found' });
+    }
+
     const data = normalizeTestimonialPayload(req.body);
+    data.image = req.file?.secure_url || req.file?.url || req.file?.path || req.body.image || existingTestimonial.image;
     if (!data.name || !data.text) {
       return res.status(400).json({ success: false, message: 'Name and testimonial message are required.' });
     }
@@ -198,10 +209,6 @@ router.put('/testimonials/:id', protect, admin, async (req, res) => {
       new: true,
       runValidators: true
     });
-
-    if (!testimonial) {
-      return res.status(404).json({ success: false, message: 'Testimonial not found' });
-    }
 
     res.json({ success: true, message: 'Testimonial updated successfully', data: testimonial });
   } catch (error) {

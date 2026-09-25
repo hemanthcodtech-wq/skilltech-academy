@@ -8,14 +8,6 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
-const PRESET_IMAGES = [
-  { name: 'Hardware Repair', url: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=1200&auto=format&fit=crop&q=80' },
-  { name: 'Accounting & Tally', url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&auto=format&fit=crop&q=80' },
-  { name: 'Digital Marketing', url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80' },
-  { name: 'Coding & Web Dev', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&q=80' },
-  { name: 'Digital Citizen Services', url: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&auto=format&fit=crop&q=80' },
-];
-
 const CATEGORIES = [
   'Technology',
   'Mobile Hardware',
@@ -47,7 +39,8 @@ const BlogManagement = () => {
     content: '',
     category: 'Technology',
     tags: '',
-    coverImage: PRESET_IMAGES[0].url,
+    coverImage: '',
+    coverImageFile: null,
     authorName: 'Skill Tech Editorial',
     authorRole: 'Senior Technical Mentor',
     readingTime: '5 min read',
@@ -91,7 +84,8 @@ const BlogManagement = () => {
         content: blog.content || '',
         category: blog.category || 'Technology',
         tags: blog.tags ? blog.tags.join(', ') : '',
-        coverImage: blog.coverImage || PRESET_IMAGES[0].url,
+        coverImage: blog.coverImage || '',
+        coverImageFile: null,
         authorName: blog.author?.name || 'Skill Tech Editorial',
         authorRole: blog.author?.role || 'Senior Technical Mentor',
         readingTime: blog.readingTime || '5 min read',
@@ -107,7 +101,8 @@ const BlogManagement = () => {
         content: '',
         category: 'Technology',
         tags: '',
-        coverImage: PRESET_IMAGES[0].url,
+        coverImage: '',
+        coverImageFile: null,
         authorName: 'Skill Tech Editorial',
         authorRole: 'Senior Technical Mentor',
         readingTime: '5 min read',
@@ -140,25 +135,27 @@ const BlogManagement = () => {
       alert('Please fill in Title, Excerpt, and Content.');
       return;
     }
+    if (!editingBlog && !formData.coverImageFile) {
+      alert('Please upload a cover image.');
+      return;
+    }
 
     try {
       setSaving(true);
-      const payload = {
-        title: formData.title,
-        slug: formData.slug,
-        excerpt: formData.excerpt,
-        content: formData.content,
-        category: formData.category,
-        tags: formData.tags,
-        coverImage: formData.coverImage,
-        author: {
-          name: formData.authorName,
-          role: formData.authorRole
-        },
-        readingTime: formData.readingTime,
-        published: formData.published,
-        featured: formData.featured
-      };
+      const payload = new FormData();
+      payload.append('title', formData.title);
+      payload.append('slug', formData.slug);
+      payload.append('excerpt', formData.excerpt);
+      payload.append('content', formData.content);
+      payload.append('category', formData.category);
+      payload.append('tags', formData.tags);
+      payload.append('author', JSON.stringify({ name: formData.authorName, role: formData.authorRole }));
+      payload.append('readingTime', formData.readingTime);
+      payload.append('published', String(formData.published));
+      payload.append('featured', String(formData.featured));
+      if (formData.coverImageFile) {
+        payload.append('coverImage', formData.coverImageFile);
+      }
 
       if (editingBlog) {
         const res = await axios.put(
@@ -551,37 +548,26 @@ const BlogManagement = () => {
                   />
                 </div>
 
-                {/* Cover Image & Presets */}
+                {/* Cover Image Upload */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-slate-700 font-semibold mb-1.5 text-sm">
-                      Cover Image URL
-                    </label>
-                    <span className="text-[11px] text-slate-400">Quick Select Image:</span>
-                  </div>
+                  <label className="block text-slate-700 font-semibold mb-1.5 text-sm">
+                    Cover Image *
+                  </label>
                   <input
-                    type="url"
-                    value={formData.coverImage}
-                    onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none mb-2"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setFormData({ ...formData, coverImageFile: file });
+                    }}
+                    className="w-full p-3 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl font-medium text-slate-800 focus:bg-white/70 focus:border-indigo-600 focus:outline-none"
                   />
-                  <div className="flex flex-wrap gap-2">
-                    {PRESET_IMAGES.map((img) => (
-                      <button
-                        type="button"
-                        key={img.name}
-                        onClick={() => setFormData({ ...formData, coverImage: img.url })}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors ${
-                          formData.coverImage === img.url 
-                            ? 'bg-blue-600 text-white border-blue-600' 
-                            : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
-                        }`}
-                      >
-                        {img.name}
-                      </button>
-                    ))}
-                  </div>
+                  {formData.coverImageFile && (
+                    <p className="mt-2 text-xs text-slate-500">Selected: {formData.coverImageFile.name}</p>
+                  )}
+                  {formData.coverImage && !formData.coverImageFile && (
+                    <p className="mt-2 text-xs text-slate-500">Current image will be kept unless you choose a replacement.</p>
+                  )}
                 </div>
 
                 {/* Author Info & Reading Time */}

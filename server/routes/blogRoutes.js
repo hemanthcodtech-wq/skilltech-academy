@@ -1,6 +1,7 @@
 const express = require('express');
 const { protect, admin } = require('../middleware/authMiddleware');
 const Blog = require('../models/Blog');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -12,6 +13,22 @@ const generateSlug = (title) => {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim();
+};
+
+const parseBoolean = (value, fallback) => {
+  if (value === undefined) return fallback;
+  if (typeof value === 'boolean') return value;
+  return value === 'true';
+};
+
+const parseAuthor = (author) => {
+  if (!author) return {};
+  if (typeof author === 'object') return author;
+  try {
+    return JSON.parse(author);
+  } catch {
+    return {};
+  }
 };
 
 // ─── PUBLIC ROUTES ───
@@ -86,7 +103,7 @@ router.get('/admin/all', protect, admin, async (req, res) => {
 });
 
 // POST /api/blogs - Admin: Create a new blog
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, admin, upload.single('coverImage'), async (req, res) => {
   try {
     const {
       title,
@@ -96,11 +113,13 @@ router.post('/', protect, admin, async (req, res) => {
       category,
       tags,
       coverImage,
-      author,
+      author: rawAuthor,
       readingTime,
       published,
       featured
     } = req.body;
+    const author = parseAuthor(rawAuthor);
+    const coverImageUrl = req.file?.secure_url || req.file?.url || req.file?.path || coverImage;
 
     if (!title || !content || !excerpt) {
       return res.status(400).json({ success: false, message: 'Title, excerpt, and content are required.' });
@@ -130,15 +149,15 @@ router.post('/', protect, admin, async (req, res) => {
       content,
       category: category || 'Technology',
       tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
-      coverImage: coverImage || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&auto=format&fit=crop&q=80',
+      coverImage: coverImageUrl || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&auto=format&fit=crop&q=80',
       author: {
         name: author?.name || req.user.name || 'Skill Tech Admin',
         role: author?.role || 'Senior Technical Mentor',
         avatar: author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
       },
       readingTime: calcReadingTime || '3 min read',
-      published: published !== undefined ? published : true,
-      featured: featured || false
+      published: parseBoolean(published, true),
+      featured: parseBoolean(featured, false)
     });
 
     await newBlog.save();
@@ -149,7 +168,7 @@ router.post('/', protect, admin, async (req, res) => {
 });
 
 // PUT /api/blogs/:id - Admin: Update an existing blog
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, admin, upload.single('coverImage'), async (req, res) => {
   try {
     const { id } = req.params;
     const blog = await Blog.findById(id);
@@ -166,21 +185,23 @@ router.put('/:id', protect, admin, async (req, res) => {
       category,
       tags,
       coverImage,
-      author,
+      author: rawAuthor,
       readingTime,
       published,
       featured
     } = req.body;
+    const author = parseAuthor(rawAuthor);
+    const coverImageUrl = req.file?.secure_url || req.file?.url || req.file?.path || coverImage;
 
     if (title) blog.title = title;
     if (customSlug) blog.slug = generateSlug(customSlug);
     if (excerpt) blog.excerpt = excerpt;
     if (content) blog.content = content;
     if (category) blog.category = category;
-    if (coverImage) blog.coverImage = coverImage;
+    if (coverImageUrl) blog.coverImage = coverImageUrl;
     if (author) blog.author = { ...blog.author, ...author };
-    if (published !== undefined) blog.published = published;
-    if (featured !== undefined) blog.featured = featured;
+    if (published !== undefined) blog.published = parseBoolean(published, blog.published);
+    if (featured !== undefined) blog.featured = parseBoolean(featured, blog.featured);
     if (tags !== undefined) {
       blog.tags = Array.isArray(tags) ? tags : tags.split(',').map(t => t.trim()).filter(Boolean);
     }
