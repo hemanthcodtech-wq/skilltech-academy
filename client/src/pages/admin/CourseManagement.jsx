@@ -6,7 +6,8 @@ import {
   FaPlus, FaEdit, FaTrash, FaTimes, FaCloudUploadAlt, 
   FaImage, FaChalkboardTeacher, FaShieldAlt, FaClock, 
   FaCheckCircle, FaUserCheck, FaCalendarAlt, FaHistory,
-  FaPlayCircle, FaExternalLinkAlt, FaSyncAlt, FaWhatsapp
+  FaPlayCircle, FaExternalLinkAlt, FaSyncAlt, FaWhatsapp,
+  FaChevronDown, FaChevronRight
 } from 'react-icons/fa';
 
 const toDateInputValue = (value) => {
@@ -28,6 +29,7 @@ const CourseManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
+  const [openSectionIndex, setOpenSectionIndex] = useState(0);
 
   const [formData, setFormData] = useState({
     title: '', 
@@ -183,6 +185,7 @@ const CourseManagement = () => {
     }
     setNewSessionDate('');
     setThumbnailFile(null);
+    setOpenSectionIndex(0);
     setIsModalOpen(true);
   };
 
@@ -300,6 +303,7 @@ const CourseManagement = () => {
       ...formData,
       sections: [...formData.sections, { title: '', lessons: [] }]
     });
+    setOpenSectionIndex(formData.sections.length);
   };
 
   const updateSectionTitle = (index, title) => {
@@ -1170,7 +1174,15 @@ const CourseManagement = () => {
                             <div key={`section-${sIndex}`} className="bg-white/80 border border-gray-200 rounded-xl p-4 shadow-sm">
                               <div className="flex justify-between items-start gap-4 mb-3">
                                 <div className="flex-1">
-                                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Section {sIndex + 1} Title</label>
+                                  <div 
+                                    className="flex items-center gap-2 mb-1 cursor-pointer w-max"
+                                    onClick={() => setOpenSectionIndex(openSectionIndex === sIndex ? null : sIndex)}
+                                  >
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer">Section {sIndex + 1} Title</label>
+                                    <div className="text-indigo-600">
+                                      {openSectionIndex === sIndex ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
+                                    </div>
+                                  </div>
                                   <input type="text" value={section.title} onChange={e => updateSectionTitle(sIndex, e.target.value)} placeholder="e.g. Getting Started with Digital Marketing" className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-indigo-600 focus:bg-white text-sm font-semibold" required />
                                 </div>
                                 <button type="button" onClick={() => removeSection(sIndex)} className="mt-6 text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
@@ -1178,8 +1190,9 @@ const CourseManagement = () => {
                                 </button>
                               </div>
 
-                              <div className="pl-4 border-l-2 border-indigo-600/30 space-y-3 mt-4">
-                                {section.lessons.map((lesson, lIndex) => (
+                              {openSectionIndex === sIndex && (
+                                <div className="pl-4 border-l-2 border-indigo-600/30 space-y-3 mt-4">
+                                  {section.lessons.map((lesson, lIndex) => (
                                   <div key={`lesson-${sIndex}-${lIndex}`} className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex flex-col md:flex-row gap-3 items-start md:items-center relative">
                                     <div className="flex-1 w-full">
                                       <input type="text" value={lesson.title} onChange={e => updateLesson(sIndex, lIndex, 'title', e.target.value)} placeholder="e.g. Setting Up Your First Campaign" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs font-medium" required />
@@ -1202,6 +1215,7 @@ const CourseManagement = () => {
                                   <FaPlus size={10} /> Add Lesson
                                 </button>
                               </div>
+                              )}
                             </div>
                           ))}
                         </div>
