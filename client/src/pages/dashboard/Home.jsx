@@ -120,7 +120,7 @@ const Home = () => {
                   <span className="text-xs font-bold text-white uppercase tracking-wider">Up Next</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white max-w-lg leading-tight mb-2">
-                  {upcomingClass ? (upcomingClass.title || upcomingClass.course?.title || 'Live Class Session') : 'Welcome to SDF Learning'}
+                  {upcomingClass ? (upcomingClass.title || upcomingClass.course?.title || 'Live Class Session') : 'Welcome to Skill Tech Academy'}
                 </h2>
                 <p className="text-gray-300 mb-8 max-w-md line-clamp-2">
                   {upcomingClass ? `Join your upcoming session on ${new Date(upcomingClass.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} at ${upcomingClass.time}.` : 'Explore our catalog and start a new journey today.'}
@@ -140,36 +140,6 @@ const Home = () => {
           {/* Sidebar Area */}
           <div className="space-y-6">
             
-            {/* Resume Learning Card */}
-              <div className="bg-white/90 rounded-3xl p-6 border border-slate-200 shadow-sm backdrop-blur-sm">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-bold text-gray-900">Resume Learning</h3>
-              </div>
-
-              <div className="group cursor-pointer">
-                <div className="w-full h-32 rounded-xl bg-gray-100 overflow-hidden mb-4 relative">
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
-                  <div className="w-full h-full bg-[#E5D9C5] flex items-center justify-center">
-                    <FaBookOpen className="text-indigo-600 opacity-50" size={40}/>
-                  </div>
-                  <div className="absolute inset-0 z-20 flex items-center justify-center">
-                    <div className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-                      <FaPlay className="text-indigo-600 ml-1" size={14}/>
-                    </div>
-                  </div>
-                </div>
-                <h4 className="font-bold text-gray-800 text-base leading-tight mb-1 group-hover:text-indigo-600 transition-colors">Mindfulness Fundamentals</h4>
-                <p className="text-xs text-gray-500 mb-3">Module 3: Breathing Techniques</p>
-                
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-indigo-600 rounded-full" style={{ width: '65%' }}></div>
-                  </div>
-                  <span className="text-xs font-bold text-gray-700">65%</span>
-                </div>
-              </div>
-            </div>
-
             {/* Quick Links */}
             <div className="bg-white/90 rounded-3xl p-6 border border-slate-200 shadow-sm backdrop-blur-sm">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>

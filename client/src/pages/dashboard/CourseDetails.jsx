@@ -308,7 +308,7 @@ const CourseContent = ({
 
           {/* About */}
           <div className="mb-8">
-            <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-3">{t('course_about')}</h2>
+            <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-3">About this Course</h2>
             <p className="text-[15px] font-inter text-gray-700 leading-relaxed">{descTe}</p>
           </div>
 
@@ -319,7 +319,7 @@ const CourseContent = ({
               {/* What You Will Learn */}
               {learnItems.length > 0 && (
                 <div className="mb-8">
-                  <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">{t('course_learn')}</h2>
+                  <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">What You Will Learn</h2>
                   <ul className="space-y-3">
                     {learnItems.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-3">
@@ -354,7 +354,7 @@ const CourseContent = ({
                 : 'bg-indigo-600-dark hover:bg-indigo-600 text-white shadow-[0_8px_20px_rgba(20,83,45,0.2)]'
             }`}
           >
-            {isEnrolled ? 'Go to Learning (Enrolled)' : t('course_enroll')}
+            {isEnrolled ? 'Go to Learning (Enrolled)' : 'Enroll Now'}
           </button>
         </div>
       </div>
@@ -429,7 +429,7 @@ const CourseContent = ({
               
               {/* About Block */}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
-                <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-5">{t('course_about')}</h2>
+                <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-5">About this Course</h2>
                 <div className="w-16 h-1 bg-indigo-600 mb-6 rounded-full"></div>
                 <p className="text-gray-700 font-inter leading-relaxed text-lg">{descTe}</p>
               </motion.div>
@@ -441,7 +441,7 @@ const CourseContent = ({
                   {/* What You Will Learn Block */}
                   {learnItems.length > 0 && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
-                      <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">{t('course_learn')}</h2>
+                      <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">What You Will Learn</h2>
                       <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {learnItems.map((item, idx) => (
@@ -471,7 +471,7 @@ const CourseContent = ({
             {/* Sticky Sidebar Action */}
             <div className="w-full lg:w-96">
               <div className="sticky top-36 bg-white/40 backdrop-blur-3xl rounded-[2.5rem] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-white/80">
-                <h3 className="text-2xl font-black text-gray-900 text-center mb-6">{isEnrolled ? 'Already Enrolled' : t('course_ready')}</h3>
+                <h3 className="text-2xl font-black text-gray-900 text-center mb-6">{isEnrolled ? 'Already Enrolled' : 'Ready to Learn?'}</h3>
                 
                 {isEnrolled && (
                   <div className="mb-6 p-3.5 bg-emerald-50 rounded-xl border border-green-200 text-center">
@@ -490,7 +490,7 @@ const CourseContent = ({
                         : 'bg-indigo-600 hover:bg-indigo-600-dark shadow-[0_10px_25px_rgba(41,120,56,0.4)]'
                     }`}
                   >
-                    {isEnrolled ? 'Go to Learning' : t('course_enroll')}
+                    {isEnrolled ? 'Go to Learning' : 'Enroll Now'}
                   </button>
                   <button
                     onClick={handleToggleWishlist}
@@ -500,19 +500,19 @@ const CourseContent = ({
                     {isWishlisted ? <FaHeart className="text-red-500 text-xl" /> : <FaRegHeart className="text-xl" />}
                   </button>
                 </div>
-                <p className="text-center text-sm text-gray-600 mt-5 font-semibold">{isEnrolled ? 'Access live classes and materials anytime.' : t('course_join_thousands')}</p>
+                <p className="text-center text-sm text-gray-600 mt-5 font-semibold">{isEnrolled ? 'Access live classes and materials anytime.' : 'Join thousands of learners today.'}</p>
                 <div className="mt-8 pt-6 border-t border-gray-300/50 space-y-5">
                   <div className="flex justify-between items-center text-base">
-                    <span className="text-gray-600 font-semibold">{t('course_access')}</span>
-                    <span className="font-bold text-gray-900">{course.accessValidity ? `${course.accessValidity} after completion` : t('course_lifetime')}</span>
+                    <span className="text-gray-600 font-semibold">Access Duration</span>
+                    <span className="font-bold text-gray-900">{course.accessValidity ? course.accessValidity : 'Lifetime'}</span>
                   </div>
                   <div className="flex justify-between items-center text-base">
                     <span className="text-gray-600 font-semibold">Language</span>
                     <span className="font-bold text-gray-900">{course.language || 'English'}</span>
                   </div>
                   <div className="flex justify-between items-center text-base">
-                    <span className="text-gray-600 font-semibold">{t('course_format')}</span>
-                    <span className="font-bold text-gray-900">{t('course_ondemand')}</span>
+                    <span className="text-gray-600 font-semibold">Format</span>
+                    <span className="font-bold text-gray-900">On-Demand Video</span>
                   </div>
                 </div>
               </div>
