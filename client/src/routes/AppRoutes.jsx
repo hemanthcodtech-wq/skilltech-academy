@@ -16,6 +16,7 @@ import PublicLayout from '../components/layout/PublicLayout';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 // Public Pages
+import Launch from '../pages/public/Launch';
 import Home from '../pages/public/Home';
 import About from '../pages/public/About';
 import Contact from '../pages/public/Contact';
@@ -67,6 +68,9 @@ const AppRoutes = () => {
     <Router>
       <ScrollToTop />
       <Routes>
+        {/* Launch Screen (No Layout) */}
+        <Route path="/launch" element={<Launch />} />
+
         {/* Public Routes with PublicLayout */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
