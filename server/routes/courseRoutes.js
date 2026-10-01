@@ -51,7 +51,7 @@ router.get('/:id/enrollments', protect, admin, async (req, res) => {
 // Get all courses (public)
 router.get('/public', async (req, res) => {
   try {
-    const courses = await Course.find({ isPublished: true }).sort('-createdAt');
+    const courses = await Course.find({ isPublished: true, isActive: true }).sort('-createdAt');
     res.json({ success: true, data: courses.map(sanitizePublicCourse) });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
@@ -177,7 +177,7 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
     const { 
       title, description, category, courseType, durationMonths, startDate, endDate, level, language, 
       accessValidity, startTime, endTime, price, zoomMeetingLink,
-      whatsappGroupLink, youtubeUrl
+      whatsappGroupLink, youtubeUrl, isActive
     } = req.body;
 
     let whatYouWillLearn = [];
@@ -231,7 +231,8 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
       youtubeUrl: (youtubeUrl || '').trim(),
       contentUrl,
       zoomMeetingLink: zoomMeetingLink || '',
-      whatsappGroupLink: (whatsappGroupLink || '').trim()
+      whatsappGroupLink: (whatsappGroupLink || '').trim(),
+      isActive: isActive !== undefined ? isActive === 'true' || isActive === true : true
     });
 
     // Handle automated Class and Zoom meeting generation with sequential Session and Topic names
@@ -296,7 +297,7 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
     const { 
       title, description, category, courseType, durationMonths, startDate, endDate, timings, level, 
       language, accessValidity, price, startTime, endTime, zoomMeetingLink,
-      whatsappGroupLink, youtubeUrl
+      whatsappGroupLink, youtubeUrl, isActive
     } = req.body;
     
     let whatYouWillLearn = course.whatYouWillLearn;
@@ -319,6 +320,9 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
       title, slug, description, category, durationMonths, startDate, endDate, 
       level, language: language || 'English', whatYouWillLearn, instructorProfile
     };
+    if (isActive !== undefined) {
+      updateData.isActive = isActive === 'true' || isActive === true;
+    }
     if (courseType) updateData.courseType = courseType;
 
     if (startTime !== undefined) updateData.startTime = startTime;

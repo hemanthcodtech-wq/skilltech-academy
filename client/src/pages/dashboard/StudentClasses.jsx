@@ -3,7 +3,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaCalendarAlt, FaVideo, FaFilePdf, FaTimes, FaBook, 
-  FaArrowLeft, FaChevronRight, FaAward, FaPlayCircle, FaWhatsapp 
+  FaArrowLeft, FaChevronRight, FaChevronDown, FaAward, FaPlayCircle, FaWhatsapp 
 } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router-dom';
 import ZoomLiveClassroom from '../../components/classroom/ZoomLiveClassroom';
@@ -25,6 +25,11 @@ const StudentClasses = () => {
   const maxWatchedSecondsRef = useRef(0);
   
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const [openSections, setOpenSections] = useState({});
+
+  const toggleSection = (idx) => {
+    setOpenSections(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
 
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
@@ -173,7 +178,15 @@ const StudentClasses = () => {
       if (cancelled || !window.YT?.Player) return;
       youtubePlayerRef.current = new window.YT.Player('lesson-youtube-player', {
         videoId,
-        playerVars: { controls: 1, disablekb: 1, rel: 0, modestbranding: 1 },
+        playerVars: { 
+          controls: 1, 
+          disablekb: 1, 
+          rel: 0, 
+          modestbranding: 1,
+          iv_load_policy: 3,
+          showinfo: 0,
+          fs: 0
+        },
         events: {
           onReady: (event) => {
             maxWatchedSecondsRef.current = 0;
@@ -366,22 +379,40 @@ const StudentClasses = () => {
                     
                     {isPrerecorded && (
                       courseCurriculum?.sections?.length > 0 ? courseCurriculum.sections.map((section, sectionIndex) => (
-                        <div key={section._id || sectionIndex} className="col-span-full bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
-                          <h2 className="text-lg font-black text-gray-800 mb-4">Section {sectionIndex + 1}: {section.title || 'Course Lessons'}</h2>
-                          <div className="space-y-3">
-                            {(section.lessons || []).map((lesson, lessonIndex) => (
-                              <div key={lesson._id || lessonIndex} className="flex items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4">
-                                <div className="flex items-center gap-3 min-w-0">
-                                  <div className="w-9 h-9 rounded-lg bg-indigo-600/10 text-indigo-600 flex items-center justify-center shrink-0"><FaPlayCircle /></div>
-                                  <div className="min-w-0">
-                                    <p className="font-bold text-gray-800 truncate">{lessonIndex + 1}. {lesson.title || 'Untitled lesson'}</p>
-                                    {lesson.duration && <p className="text-xs text-gray-500 mt-1">{lesson.duration}</p>}
-                                  </div>
-                                </div>
-                                {lesson.videoUrl ? <button onClick={() => setSelectedLesson(lesson)} className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${lessonProgress.some(item => item.lessonId === lesson._id && item.completed) ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>{lessonProgress.some(item => item.lessonId === lesson._id && item.completed) ? 'WATCHED' : 'WATCH'}</button> : <span className="text-xs text-gray-400">Video pending</span>}
-                              </div>
-                            ))}
+                        <div key={section._id || sectionIndex} className="col-span-full bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all">
+                          <div 
+                            className="flex justify-between items-center p-5 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => toggleSection(sectionIndex)}
+                          >
+                            <div>
+                              <h2 className="text-lg font-black text-gray-800">
+                                Section {sectionIndex + 1}: {section.title || 'Course Lessons'}
+                              </h2>
+                              <p className="text-sm text-gray-500 font-medium mt-1">
+                                {section.lessons?.length || 0} Lessons
+                              </p>
+                            </div>
+                            <div className={`text-gray-400 transition-transform duration-300 ${openSections[sectionIndex] ? 'rotate-180' : ''}`}>
+                              <FaChevronDown size={14} />
+                            </div>
                           </div>
+                          
+                          {openSections[sectionIndex] && (
+                            <div className="p-5 pt-3 border-t border-gray-100 space-y-3 bg-white">
+                              {(section.lessons || []).map((lesson, lessonIndex) => (
+                                <div key={lesson._id || lessonIndex} className="flex items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4">
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-9 h-9 rounded-lg bg-indigo-600/10 text-indigo-600 flex items-center justify-center shrink-0"><FaPlayCircle /></div>
+                                    <div className="min-w-0">
+                                      <p className="font-bold text-gray-800 truncate">{lessonIndex + 1}. {lesson.title || 'Untitled lesson'}</p>
+                                      {lesson.duration && <p className="text-xs text-gray-500 mt-1">{lesson.duration}</p>}
+                                    </div>
+                                  </div>
+                                  {lesson.videoUrl ? <button onClick={() => setSelectedLesson(lesson)} className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${lessonProgress.some(item => item.lessonId === lesson._id && item.completed) ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>{lessonProgress.some(item => item.lessonId === lesson._id && item.completed) ? 'WATCHED' : 'WATCH'}</button> : <span className="text-xs text-gray-400">Video pending</span>}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )) : <div className="col-span-full text-center p-12 bg-white rounded-3xl border border-dashed border-gray-300 text-gray-500 font-medium">No lessons added to this course yet.</div>
                     )}
@@ -517,20 +548,55 @@ const StudentClasses = () => {
       {/* Prerecorded lesson viewer */}
       <AnimatePresence>
         {selectedLesson && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedLesson(null)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden relative z-10">
-              <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="font-bold text-lg text-gray-900">{selectedLesson.title}</h3>
-                <button onClick={() => setSelectedLesson(null)} className="p-2 text-gray-400 hover:text-red-500 rounded-full"><FaTimes /></button>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setSelectedLesson(null)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-2xl md:rounded-3xl shadow-2xl w-full max-w-5xl flex flex-col relative z-10 overflow-hidden">
+              <div className="px-4 py-3 md:px-6 md:py-4 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white">
+                <h3 className="font-bold text-base md:text-lg text-gray-900 line-clamp-1 pr-4">{selectedLesson.title}</h3>
+                <button onClick={() => setSelectedLesson(null)} className="p-1.5 md:p-2 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-full transition-colors shrink-0"><FaTimes /></button>
               </div>
-              <div className="aspect-video bg-black">
+              <div id="lesson-video-container" className="w-full bg-black relative flex items-center justify-center group" style={{ aspectRatio: '16/9', maxHeight: 'calc(100vh - 120px)' }}>
                 {getYouTubeEmbedUrl(selectedLesson.videoUrl) ? (
-                  <div id="lesson-youtube-player" className="w-full h-full" />
+                  <>
+                    <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                       {/* We wrap iframe in pointer-events-none ONLY if we were blocking everything, but we want native controls. So we don't. */}
+                    </div>
+                    <div id="lesson-youtube-player" className="absolute top-0 left-0 w-full h-full" />
+                    
+                    {/* Top Blocker to hide YouTube Title & Channel Link */}
+                    <div className="absolute top-0 left-0 w-full h-[70px] bg-gradient-to-b from-black via-black/90 to-transparent z-10 flex items-start pt-4 px-4 pointer-events-auto">
+                       <span className="text-white font-bold text-lg drop-shadow-md">{selectedLesson.title}</span>
+                    </div>
+
+                    {/* Bottom Right Blocker to hide "Watch on YouTube" logo and add Custom Fullscreen */}
+                    <div className="absolute bottom-0 right-0 w-[160px] h-[60px] z-10 flex items-end justify-end pointer-events-auto">
+                       <div className="absolute inset-0 bg-black/90 rounded-tl-2xl"></div>
+                       <div 
+                         className="relative w-[50px] h-[50px] mr-2 mb-1 hover:bg-white/10 rounded-xl flex items-center justify-center transition-colors cursor-pointer"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           const elem = document.getElementById('lesson-video-container');
+                           if (!document.fullscreenElement) {
+                             if (elem.requestFullscreen) elem.requestFullscreen();
+                             else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                             else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+                           } else {
+                             if (document.exitFullscreen) document.exitFullscreen();
+                             else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                             else if (document.msExitFullscreen) document.msExitFullscreen();
+                           }
+                         }}
+                         title="Full Screen"
+                       >
+                         <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" height="24" width="24" className="text-white"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                       </div>
+                    </div>
+                  </>
                 ) : (
                   <video
                     src={selectedLesson.videoUrl}
-                    className="w-full h-full"
+                    className="absolute top-0 left-0 w-full h-full"
+                    style={{ objectFit: 'contain' }}
                     controls
                     controlsList="nodownload noplaybackrate"
                     onContextMenu={(event) => event.preventDefault()}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, 
-  FaClock, FaPaperPlane, FaCheckCircle, FaGraduationCap
+  FaClock, FaPaperPlane, FaCheckCircle, FaGraduationCap,
+  FaInstagram, FaLinkedin
 } from 'react-icons/fa';
 import axios from 'axios';
 import { useLanguage } from '../../context/LanguageContext';
@@ -115,9 +116,9 @@ const Contact = () => {
                   </div>
                   <div>
                     <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-0.5">Campus Location</h5>
-                    <p className="text-slate-300 leading-relaxed text-xs sm:text-sm">
+                    <a href="https://share.google/Y7KMEjF22Awpm0dg4" target="_blank" rel="noreferrer" className="text-slate-300 leading-relaxed text-xs sm:text-sm hover:text-white transition-colors block">
                       {t('contact_address')}
-                    </p>
+                    </a>
                   </div>
                 </div>
 
@@ -155,6 +156,19 @@ const Contact = () => {
                       {t('contact_hours')}
                     </p>
                   </div>
+                </div>
+              </div>
+
+              {/* Social Media Links */}
+              <div className="pt-6 mt-4 border-t border-slate-700/50">
+                <h5 className="font-bold text-white text-xs uppercase tracking-wider mb-3">Connect on Social Media</h5>
+                <div className="flex gap-3">
+                  <a href="https://www.instagram.com/skilltechacademydigital?stkn=MWs1ZGNnODdnejhpaQ==" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-pink-600 flex items-center justify-center transition-all shadow-md">
+                    <FaInstagram size={18} />
+                  </a>
+                  <a href="https://www.linkedin.com/company/skill-tech-network?trk=blended-typeahead" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-blue-600 flex items-center justify-center transition-all shadow-md">
+                    <FaLinkedin size={18} />
+                  </a>
                 </div>
               </div>
             </div>

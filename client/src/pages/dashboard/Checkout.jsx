@@ -12,6 +12,13 @@ const Checkout = () => {
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [agreed, setAgreed] = useState(true);
+  
+  const [promoCodeInput, setPromoCodeInput] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoError, setPromoError] = useState('');
+  const [applyingPromo, setApplyingPromo] = useState(false);
+  const [showPromoInput, setShowPromoInput] = useState(false);
+
   const [email, setEmail] = useState(() => {
     try {
       const userStr = localStorage.getItem('user');
@@ -60,7 +67,7 @@ const Checkout = () => {
       const token = localStorage.getItem('token');
       const orderRes = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/payments/create-order`,
-        { courseId: course._id },
+        { courseId: course._id, promoCode: appliedPromo?.code },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -85,7 +92,7 @@ const Checkout = () => {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 courseId: course._id,
-                amountPaid: course.price,
+                amountPaid: appliedPromo ? appliedPromo.finalPrice : course.price,
                 studentEmail: email
               },
               { headers: { Authorization: `Bearer ${token}` } }
@@ -126,6 +133,33 @@ const Checkout = () => {
       alert(error.response?.data?.message || 'Error initializing checkout');
       setProcessing(false);
     }
+  };
+
+  const handleApplyPromo = async () => {
+    if (!promoCodeInput.trim()) return;
+    setApplyingPromo(true);
+    setPromoError('');
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/payments/validate-promo`,
+        { code: promoCodeInput, courseId: course._id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data.success) {
+        setAppliedPromo({ code: promoCodeInput.toUpperCase(), ...res.data.data });
+        setPromoCodeInput('');
+      }
+    } catch (error) {
+      setPromoError(error.response?.data?.message || 'Invalid promo code');
+    } finally {
+      setApplyingPromo(false);
+    }
+  };
+
+  const removePromo = () => {
+    setAppliedPromo(null);
+    setPromoError('');
   };
 
   if (loading) {
@@ -193,10 +227,10 @@ const Checkout = () => {
               </label>
 
               <div className="pt-2">
-                <button disabled={processing} type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-600-dark text-white text-lg font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-3">
+                <button disabled={processing} type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-3">
                   {processing ? <><div className="w-5 h-5 border-indigo-600 border-white border-t-transparent rounded-full animate-spin"></div> Processing...</> : (
                     <>
-                      Proceed to Pay ₹{course?.price}
+                      Proceed to Pay ₹{appliedPromo ? appliedPromo.finalPrice : course?.price}
                     </>
                   )}
                 </button>
@@ -225,18 +259,64 @@ const Checkout = () => {
             <div className="space-y-4 mb-8 flex-1">
               <div className="flex justify-between text-gray-600">
                 <span>Original Price</span>
-                <span>₹{course?.price}</span>
+                <span className={appliedPromo ? 'line-through text-gray-400' : ''}>₹{course?.price}</span>
               </div>
-              <div className="flex justify-between text-green-600 font-medium">
-                <span>Discount</span>
-                <span>-₹0.00</span>
-              </div>
+              
+              {/* Promo Code Input */}
+              {!appliedPromo ? (
+                <div className="pt-4 border-t border-gray-200 border-dashed">
+                  {!showPromoInput ? (
+                    <button 
+                      type="button" 
+                      onClick={() => setShowPromoInput(true)}
+                      className="text-indigo-600 text-sm font-semibold hover:underline"
+                    >
+                      Have a promo code?
+                    </button>
+                  ) : (
+                    <div>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          placeholder="Promo Code" 
+                          value={promoCodeInput}
+                          onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
+                          className="flex-1 p-2 bg-white border border-gray-300 rounded-lg text-sm font-bold uppercase focus:ring-2 focus:ring-indigo-600 outline-none"
+                        />
+                        <button 
+                          type="button" 
+                          onClick={handleApplyPromo}
+                          disabled={applyingPromo || !promoCodeInput}
+                          className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-bold disabled:opacity-50"
+                        >
+                          {applyingPromo ? '...' : 'Apply'}
+                        </button>
+                      </div>
+                      {promoError && <p className="text-red-500 text-xs font-semibold mt-2">{promoError}</p>}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="pt-4 border-t border-gray-200 border-dashed">
+                  <div className="flex justify-between items-center text-emerald-600 font-bold bg-emerald-50 p-2.5 rounded-lg border border-emerald-100">
+                    <div className="flex items-center gap-2">
+                      <FaCheckCircle />
+                      <span>{appliedPromo.code} applied</span>
+                    </div>
+                    <button type="button" onClick={removePromo} className="text-xs text-emerald-800 hover:underline">Remove</button>
+                  </div>
+                  <div className="flex justify-between text-emerald-600 font-medium mt-3">
+                    <span>Discount Applied</span>
+                    <span>-₹{appliedPromo.discountAmount}</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-gray-200 pt-6">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-gray-900 font-bold">Total</span>
-                <span className="text-3xl font-black text-gray-900">₹{course?.price}</span>
+                <span className="text-3xl font-black text-gray-900">₹{appliedPromo ? appliedPromo.finalPrice : course?.price}</span>
               </div>
             </div>
           </div>

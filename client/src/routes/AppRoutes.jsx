@@ -41,6 +41,7 @@ import PartnerManagement from '../pages/admin/PartnerManagement';
 import CollaboratorManagement from '../pages/admin/CollaboratorManagement';
 import TestimonialManagement from '../pages/admin/TestimonialManagement';
 import CourseAccessRequests from '../pages/admin/CourseAccessRequests';
+import PromoManagement from '../pages/admin/PromoManagement';
 
 // Partner
 import PartnerProtectedRoute from '../components/partner/PartnerProtectedRoute';
@@ -107,6 +108,7 @@ const AppRoutes = () => {
             <Route path="users" element={<UserManagement />} />
             <Route path="partners" element={<PartnerManagement />} />
             <Route path="collaborators" element={<CollaboratorManagement />} />
+            <Route path="promos" element={<PromoManagement />} />
           </Route>
         </Route>
 

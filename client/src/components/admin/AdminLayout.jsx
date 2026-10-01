@@ -4,7 +4,7 @@ import {
   FaTachometerAlt, FaBook, FaUsers, FaCalendarAlt, FaSignOutAlt, 
   FaFolderOpen, FaExternalLinkAlt, FaShieldAlt, FaAward, 
   FaChalkboardTeacher, FaUserShield, FaNewspaper, FaBars, FaTimes, FaComments, FaImages,
-  FaEnvelopeOpenText
+  FaEnvelopeOpenText, FaTag
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -30,6 +30,7 @@ const AdminLayout = () => {
     { name: 'Learners', path: '/admin/users', icon: FaUsers },
     { name: 'Partners', path: '/admin/partners', icon: FaUserShield },
     { name: 'Collaborators', path: '/admin/collaborators', icon: FaImages },
+    { name: 'Promo Codes', path: '/admin/promos', icon: FaTag },
   ];
 
   return (

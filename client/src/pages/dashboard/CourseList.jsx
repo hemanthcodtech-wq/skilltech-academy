@@ -111,9 +111,9 @@ const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClic
       className="bg-white rounded-2xl p-3 md:p-4 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 border border-slate-200/80 flex flex-row md:flex-col gap-4 md:gap-4 hover:-translate-y-1 transition-all duration-300 cursor-pointer group relative"
       onClick={onClick}
     >
-      <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-full md:h-48 shrink-0 relative overflow-hidden rounded-xl bg-slate-100">
+      <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-full md:h-48 shrink-0 relative overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center">
         {course.thumbnailUrl ? (
-          <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
+          <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-500 ease-out" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-slate-300"><FaImage size={24} className="md:w-10 md:h-10" /></div>
         )}
@@ -151,7 +151,12 @@ const CourseCard = ({ course, isEnrolled, isWishlisted, onToggleWishlist, onClic
           {course.level || 'Beginner'} • {course.duration || 'Flexible'}
         </p>
         <div className="flex items-center justify-between pt-1 md:pt-2 border-t border-slate-100 mt-auto">
-          <span className="text-base md:text-xl font-black text-indigo-600 font-outfit">₹{course.price}</span>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <span className="text-base md:text-xl font-black text-indigo-600 font-outfit">₹{course.price}</span>
+            {course.originalPrice && course.originalPrice > course.price && (
+              <span className="text-[10px] md:text-xs font-semibold text-slate-400 line-through">₹{course.originalPrice}</span>
+            )}
+          </div>
           <span className="text-[11px] font-bold text-indigo-600 group-hover:underline">
             View Details →
           </span>

@@ -7,6 +7,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const { generateInvoicePDF } = require('../utils/pdfGenerator');
 const { sendCourseEnrollmentEmail } = require('../utils/emailService');
+const PromoCode = require('../models/PromoCode');
 
 const router = express.Router();
 
@@ -74,7 +75,15 @@ router.post('/create-order', protect, async (req, res) => {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    const price = course.price !== undefined ? course.price : 0;
+    let price = course.price !== undefined ? course.price : 0;
+    
+    if (req.body.promoCode) {
+      const promo = await PromoCode.findOne({ code: req.body.promoCode.toUpperCase(), courseId, isActive: true });
+      if (promo) {
+        price = Math.max(0, promo.setAmount);
+      }
+    }
+
     const options = {
       amount: Math.round(price * 100), // paise
       currency: "INR",
@@ -91,6 +100,30 @@ router.post('/create-order', protect, async (req, res) => {
   } catch (error) {
     console.error("Order creation error", error);
     res.status(500).json({ success: false, message: 'Error creating order', error: error.message });
+  }
+});
+
+// Validate Promo Code
+router.post('/validate-promo', protect, async (req, res) => {
+  try {
+    const { code, courseId } = req.body;
+    if (!code || !courseId) return res.status(400).json({ success: false, message: 'Code and courseId required' });
+    
+    const promo = await PromoCode.findOne({ code: code.toUpperCase(), courseId, isActive: true });
+    
+    if (!promo) {
+      return res.status(400).json({ success: false, message: 'Invalid or inactive promo code.' });
+    }
+    
+    const course = await Course.findById(courseId);
+    if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
+    
+    const finalPrice = Math.max(0, promo.setAmount);
+    const discountAmount = Math.max(0, course.price - finalPrice);
+    
+    res.json({ success: true, data: { setAmount: promo.setAmount, discountAmount, finalPrice, originalPrice: course.price } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 });
 

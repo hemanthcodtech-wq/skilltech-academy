@@ -4,7 +4,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import {
   FaClock, FaGlobe, FaCheck, FaUser, FaHeart, FaRegHeart,
-  FaLock, FaPaperPlane, FaPlayCircle, FaLinkedin
+  FaLock, FaPaperPlane, FaPlayCircle, FaLinkedin, FaChevronDown, FaTimes, FaYoutube
 } from 'react-icons/fa';
 import { useLanguage, useAutoTranslate } from '../../context/LanguageContext';
 import SEO from '../../components/common/SEO';
@@ -15,7 +15,7 @@ const EMPTY_ACCESS_FORM = {
   phone: ''
 };
 
-const getYouTubeEmbedUrl = (url) => {
+const getYouTubeVideoId = (url) => {
   if (!url) return '';
   try {
     const parsedUrl = new URL(url);
@@ -29,7 +29,7 @@ const getYouTubeEmbedUrl = (url) => {
     if (!videoId && parsedUrl.pathname.startsWith('/embed/')) {
       videoId = parsedUrl.pathname.split('/')[2];
     }
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+    return videoId || '';
   } catch {
     return '';
   }
@@ -132,9 +132,12 @@ const CourseContent = ({
   const { t } = useLanguage();
   const navigate = useNavigate();
 
+  const [openSections, setOpenSections] = useState({});
+  const [showAccessModal, setShowAccessModal] = useState(false);
+
   const titleTe   = useAutoTranslate(course.title,       course.title_te);
   const descTe    = useAutoTranslate(course.description,  course.description_te);
-  const youtubeEmbedUrl = getYouTubeEmbedUrl(course.youtubeUrl);
+  const youtubeVideoId = getYouTubeVideoId(course.youtubeUrl);
 
   // For whatYouWillLearn: join items → translate → split back
   const learnStr  = course.whatYouWillLearn?.join(' || ') || '';
@@ -171,6 +174,14 @@ const CourseContent = ({
   const CurriculumPreview = ({ compact = false }) => {
     if (!hasCurriculum) return null;
 
+    const toggleSection = (idx) => {
+      if (!canShowCourseContent) {
+        setShowAccessModal(true);
+        return;
+      }
+      setOpenSections(prev => ({ ...prev, [idx]: !prev[idx] }));
+    };
+
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -195,38 +206,71 @@ const CourseContent = ({
         {course.sections?.length > 0 ? (
           <div className="space-y-4">
             {course.sections.map((section, sectionIndex) => (
-              <div key={section._id || sectionIndex} className="bg-white/70 border border-white/70 rounded-2xl p-4">
-                <h3 className="font-black text-gray-900 mb-3">
-                  {section.title || `Module ${sectionIndex + 1}`}
-                </h3>
-                <div className="space-y-2">
-                  {(section.lessons || []).map((lesson, lessonIndex) => (
-                    <div key={lesson._id || lessonIndex} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                        <FaPlayCircle className="text-indigo-600 shrink-0" />
-                        {lesson.title || `Lesson ${lessonIndex + 1}`}
-                      </span>
-                      <span className="text-[11px] font-bold text-gray-400 shrink-0">
-                        {isEnrolled ? (lesson.duration || 'Class') : 'Locked'}
-                      </span>
-                    </div>
-                  ))}
-                  {(!section.lessons || section.lessons.length === 0) && (
-                    <p className="text-sm text-gray-500 font-semibold">Lessons will be updated soon.</p>
-                  )}
+              <div key={section._id || sectionIndex} className="bg-white/70 border border-white/70 rounded-2xl overflow-hidden transition-all shadow-sm hover:shadow-md">
+                <div 
+                  className="flex justify-between items-center p-4 lg:p-5 cursor-pointer bg-white/50 hover:bg-white/90 transition-colors"
+                  onClick={() => toggleSection(sectionIndex)}
+                >
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg">
+                      {sectionIndex + 1}. {section.title || `Module ${sectionIndex + 1}`}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-medium mt-0.5">{section.lessons?.length || 0} Lessons</p>
+                  </div>
+                  <div className={`text-gray-400 transition-transform duration-300 ${openSections[sectionIndex] ? 'rotate-180' : ''}`}>
+                    <FaChevronDown size={14} />
+                  </div>
                 </div>
+
+                {openSections[sectionIndex] && (
+                  <div className="px-4 pb-4 lg:px-5 lg:pb-5 border-t border-gray-100 pt-4 bg-white/30 space-y-2">
+                    {(section.lessons || []).map((lesson, lessonIndex) => (
+                      <div key={lesson._id || lessonIndex} className="flex items-center justify-between gap-3 p-3 lg:p-4 rounded-xl bg-white border border-gray-100 shadow-sm">
+                        <span className="flex items-center gap-3 text-sm font-bold text-gray-700">
+                          <FaPlayCircle className="text-indigo-600 shrink-0 text-lg" />
+                          {lesson.title || `Lesson ${lessonIndex + 1}`}
+                        </span>
+                        <span className="text-[11px] font-bold text-gray-400 shrink-0">
+                          {isEnrolled ? (lesson.duration || 'Class') : 'Locked'}
+                        </span>
+                      </div>
+                    ))}
+                    {(!section.lessons || section.lessons.length === 0) && (
+                      <p className="text-sm text-gray-500 font-medium italic p-2">Lessons will be updated soon.</p>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(course.topics || []).map((topic, index) => (
-              <div key={index} className="flex items-start gap-3 bg-white/70 p-4 rounded-2xl border border-white/70">
-                <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
-                <span className="text-sm text-gray-700 font-bold">{topic}</span>
+          canShowCourseContent ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {(course.topics || []).map((topic, index) => (
+                <div key={index} className="flex items-start gap-3 bg-white/70 p-4 rounded-2xl border border-white/70 shadow-sm">
+                  <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                  <span className="text-sm text-gray-700 font-bold">{topic}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div 
+              className="bg-white/70 border border-white/70 rounded-2xl overflow-hidden transition-all shadow-sm hover:shadow-md cursor-pointer"
+              onClick={() => setShowAccessModal(true)}
+            >
+              <div className="flex justify-between items-center p-4 lg:p-5 bg-white/50 hover:bg-white/90 transition-colors">
+                <div>
+                  <h3 className="font-bold text-gray-900 text-lg">
+                    Live Class Topics
+                  </h3>
+                  <p className="text-sm text-gray-500 font-medium mt-0.5">{course.topics?.length || 0} Topics included</p>
+                </div>
+                <div className="text-gray-400">
+                  <FaLock size={14} />
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          )
         )}
 
         {!isEnrolled && (
@@ -255,10 +299,10 @@ const CourseContent = ({
       <div className="md:hidden pb-24">
 
         {/* Image Section with Wishlist Button */}
-        <div className="w-full h-[280px] bg-gray-200 relative">
-          {youtubeEmbedUrl ? (
+        <div className="w-full aspect-video bg-gray-200 relative overflow-hidden group">
+          {youtubeVideoId ? (
             <iframe
-              src={youtubeEmbedUrl}
+              src={`https://www.youtube.com/embed/${youtubeVideoId}?modestbranding=1&rel=0`}
               title={`${course.title} video`}
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -314,34 +358,50 @@ const CourseContent = ({
 
           <InstructorProfile compact />
 
-          {canShowCourseContent ? (
-            <>
-              {/* What You Will Learn */}
-              {learnItems.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">What You Will Learn</h2>
-                  <ul className="space-y-3">
-                    {learnItems.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
-                        <span className="text-sm text-gray-700 font-semibold">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <CurriculumPreview compact />
-            </>
-          ) : (
-            <AccessRequestForm
-              compact
-              accessForm={accessForm}
-              setAccessForm={setAccessForm}
-              handleAccessRequest={handleAccessRequest}
-              submittingAccessRequest={submittingAccessRequest}
-              accessRequestError={accessRequestError}
-            />
+          {/* What You Will Learn */}
+          {learnItems.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">What You Will Learn</h2>
+              <ul className="space-y-3">
+                {learnItems.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                    <span className="text-sm text-gray-700 font-semibold">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
+
+          {course.benefits?.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">Course Benefits</h2>
+              <ul className="space-y-3">
+                {course.benefits.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                    <span className="text-sm text-gray-700 font-semibold">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {course.careerOptions?.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-[22px] font-bold font-playfair text-gray-900 mb-4">Career Options</h2>
+              <ul className="space-y-3">
+                {course.careerOptions.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <FaCheck className="text-indigo-800 mt-0.5 shrink-0 text-sm" />
+                    <span className="text-sm text-gray-700 font-semibold">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <CurriculumPreview compact />
         </div>
 
         {/* Sticky Bottom Action */}
@@ -401,10 +461,10 @@ const CourseContent = ({
             {/* Right Image (Glassmorphism Frame) */}
             <div className="w-full max-w-md lg:w-1/3 relative">
               <div className="absolute inset-[-10px] bg-white/40 backdrop-blur-2xl rounded-[2rem] border border-white/60 shadow-[0_20px_40px_rgba(0,0,0,0.06)] transform rotate-3"></div>
-              <div className="relative h-[300px] rounded-[1.5rem] overflow-hidden shadow-lg bg-gray-100 z-10">
-                {youtubeEmbedUrl ? (
+              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden shadow-lg bg-gray-100 z-10 group">
+                {youtubeVideoId ? (
                   <iframe
-                    src={youtubeEmbedUrl}
+                    src={`https://www.youtube.com/embed/${youtubeVideoId}?modestbranding=1&rel=0`}
                     title={`${course.title} video`}
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -436,36 +496,61 @@ const CourseContent = ({
 
               <InstructorProfile />
 
-              {canShowCourseContent ? (
-                <>
-                  {/* What You Will Learn Block */}
-                  {learnItems.length > 0 && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
-                      <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">What You Will Learn</h2>
-                      <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {learnItems.map((item, idx) => (
-                          <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
-                            <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
-                              <FaCheck className="text-indigo-800 text-[14px]" />
-                            </div>
-                            <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
-                          </div>
-                        ))}
+              {/* What You Will Learn Block */}
+              {learnItems.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
+                  <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">What You Will Learn</h2>
+                  <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {learnItems.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
+                        <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
+                          <FaCheck className="text-indigo-800 text-[14px]" />
+                        </div>
+                        <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
                       </div>
-                    </motion.div>
-                  )}
-                  <CurriculumPreview />
-                </>
-              ) : (
-                <AccessRequestForm
-                  accessForm={accessForm}
-                  setAccessForm={setAccessForm}
-                  handleAccessRequest={handleAccessRequest}
-                  submittingAccessRequest={submittingAccessRequest}
-                  accessRequestError={accessRequestError}
-                />
+                    ))}
+                  </div>
+                </motion.div>
               )}
+
+              {/* Course Benefits Block */}
+              {course.benefits?.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
+                  <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">Course Benefits</h2>
+                  <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {course.benefits.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
+                        <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
+                          <FaCheck className="text-indigo-800 text-[14px]" />
+                        </div>
+                        <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Career Options Block */}
+              {course.careerOptions?.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white/40 backdrop-blur-3xl rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
+                  <h2 className="text-4xl font-bold font-playfair text-gray-900 mb-6">Career Options</h2>
+                  <div className="w-16 h-1 bg-indigo-600 mb-8 rounded-full"></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {course.careerOptions.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-4 bg-white/50 p-4 rounded-2xl border border-white/50 shadow-sm transition-transform hover:-translate-y-1">
+                        <div className="w-8 h-8 rounded-full bg-indigo-600/20 flex items-center justify-center shrink-0">
+                          <FaCheck className="text-indigo-800 text-[14px]" />
+                        </div>
+                        <span className="text-gray-800 font-bold text-[16px] mt-1">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              <CurriculumPreview />
             </div>
 
             {/* Sticky Sidebar Action */}
@@ -521,7 +606,34 @@ const CourseContent = ({
           </div>
         </div>
       </div>
-      
+
+      {/* Access Modal */}
+      {showAccessModal && !canShowCourseContent && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowAccessModal(false)}
+          />
+          <div className="relative z-10 w-full max-w-md">
+            <button 
+              onClick={() => setShowAccessModal(false)}
+              className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors cursor-pointer"
+            >
+              <FaTimes />
+            </button>
+            <AccessRequestForm
+              accessForm={accessForm}
+              setAccessForm={setAccessForm}
+              handleAccessRequest={handleAccessRequest}
+              submittingAccessRequest={submittingAccessRequest}
+              accessRequestError={accessRequestError}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

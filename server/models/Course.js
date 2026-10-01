@@ -113,10 +113,21 @@ const courseSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  benefits: {
+    type: [String],
+    default: []
+  },
+  careerOptions: {
+    type: [String],
+    default: []
+  },
   level: {
     type: String,
     enum: ['Beginner', 'Intermediate', 'Advanced'],
     default: 'Beginner'
+  },
+  originalPrice: {
+    type: Number
   },
   price: {
     type: Number,
@@ -134,6 +145,10 @@ const courseSchema = new mongoose.Schema({
     type: String // PDF or Video URL
   },
   isPublished: {
+    type: Boolean,
+    default: true
+  },
+  isActive: {
     type: Boolean,
     default: true
   }

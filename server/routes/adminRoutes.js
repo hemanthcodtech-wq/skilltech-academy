@@ -12,8 +12,51 @@ const { generateInvoicePDF, generateCertificatePDF } = require('../utils/pdfGene
 const { uploadBufferToCloudinary } = require('../utils/cloudinaryUploader');
 const { sendCourseEnrollmentEmail, sendCourseCompletionEmail } = require('../utils/emailService');
 const upload = require('../middleware/upload');
+const PromoCode = require('../models/PromoCode');
 
 const router = express.Router();
+
+// --- Promo Codes Management ---
+router.get('/promos', protect, admin, async (req, res) => {
+  try {
+    const promos = await PromoCode.find().populate('courseId', 'title').sort('-createdAt');
+    res.json({ success: true, data: promos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch promo codes', error: error.message });
+  }
+});
+
+router.post('/promos', protect, admin, async (req, res) => {
+  try {
+    const { code, courseId, setAmount, isActive } = req.body;
+    const promo = await PromoCode.create({ code: code.toUpperCase(), courseId, setAmount, isActive });
+    res.status(201).json({ success: true, message: 'Promo code created successfully', data: promo });
+  } catch (error) {
+    if (error.code === 11000) return res.status(400).json({ success: false, message: 'Promo code already exists' });
+    res.status(500).json({ success: false, message: 'Failed to create promo code', error: error.message });
+  }
+});
+
+router.put('/promos/:id', protect, admin, async (req, res) => {
+  try {
+    if (req.body.code) req.body.code = req.body.code.toUpperCase();
+    const promo = await PromoCode.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!promo) return res.status(404).json({ success: false, message: 'Promo code not found' });
+    res.json({ success: true, message: 'Promo code updated successfully', data: promo });
+  } catch (error) {
+    if (error.code === 11000) return res.status(400).json({ success: false, message: 'Promo code already exists' });
+    res.status(500).json({ success: false, message: 'Failed to update promo code', error: error.message });
+  }
+});
+
+router.delete('/promos/:id', protect, admin, async (req, res) => {
+  try {
+    await PromoCode.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Promo code deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete promo code', error: error.message });
+  }
+});
 
 router.use('/courses', courseRoutes);
 

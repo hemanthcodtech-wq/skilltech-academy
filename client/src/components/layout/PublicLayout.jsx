@@ -8,7 +8,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import {
   FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaShieldAlt,
   FaAward, FaWhatsapp, FaGraduationCap, FaArrowRight,
-  FaCheckCircle, FaLaptopCode, FaTools, FaShareAlt, FaSearch, FaTimes
+  FaCheckCircle, FaLaptopCode, FaTools, FaShareAlt, FaSearch, FaTimes,
+  FaInstagram, FaLinkedin
 } from 'react-icons/fa';
 
 const PublicLayout = () => {
@@ -102,9 +103,9 @@ const PublicLayout = () => {
               <div className="space-y-3 text-xs sm:text-sm text-slate-300 pt-2">
                 <div className="flex items-start gap-3">
                   <FaMapMarkerAlt className="text-blue-400 shrink-0 mt-1" size={15} />
-                  <span className="leading-relaxed text-slate-300">
+                  <a href="https://share.google/Y7KMEjF22Awpm0dg4" target="_blank" rel="noreferrer" className="leading-relaxed text-slate-300 hover:text-white transition-colors">
                     Kamla Nehru Colony, Geetha Hotel Line, Mahabubnagar, Telangana, 509001
-                  </span>
+                  </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaEnvelope className="text-blue-400 shrink-0" size={15} />
@@ -137,6 +138,17 @@ const PublicLayout = () => {
                 >
                   <FaPhoneAlt size={12} />
                   <span>Call Us</span>
+                </a>
+              </div>
+
+              {/* Social Media Links */}
+              <div className="flex items-center gap-4 pt-4 mt-2 border-t border-slate-800/50">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Follow Us:</span>
+                <a href="https://www.instagram.com/skilltechacademydigital?stkn=MWs1ZGNnODdnejhpaQ==" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all shadow-sm">
+                  <FaInstagram size={14} />
+                </a>
+                <a href="https://www.linkedin.com/company/skill-tech-network?trk=blended-typeahead" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                  <FaLinkedin size={14} />
                 </a>
               </div>
             </div>

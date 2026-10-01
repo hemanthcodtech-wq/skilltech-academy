@@ -48,10 +48,13 @@ const CourseManagement = () => {
     level: 'Beginner', 
     language: 'English', 
     whatYouWillLearn: '',
+    benefits: '',
+    careerOptions: '',
     whatsappGroupLink: '',
     youtubeUrl: '',
     courseType: 'online',
-    sections: []
+    sections: [],
+    isActive: true
   });
 
   const [newSessionDate, setNewSessionDate] = useState('');
@@ -141,6 +144,7 @@ const CourseManagement = () => {
           linkedin: course.instructorProfile?.linkedin || ''
         },
         category: course.category || 'Digital Marketing',
+        originalPrice: course.originalPrice !== undefined ? course.originalPrice : '',
         price: course.price !== undefined ? course.price : 0,
         duration: course.duration || '',
         durationMonths: course.durationMonths || 1,
@@ -153,10 +157,13 @@ const CourseManagement = () => {
         level: course.level || 'Beginner',
         language: course.language || 'English',
         whatYouWillLearn: course.whatYouWillLearn ? course.whatYouWillLearn.join('\n') : '',
+        benefits: course.benefits ? course.benefits.join('\n') : '',
+        careerOptions: course.careerOptions ? course.careerOptions.join('\n') : '',
         whatsappGroupLink: course.whatsappGroupLink || '',
         youtubeUrl: course.youtubeUrl || '',
         courseType: course.courseType || 'online',
-        sections: course.sections || []
+        sections: course.sections || [],
+        isActive: course.isActive !== undefined ? course.isActive : true
       });
     } else {
       setEditingCourse(null);
@@ -165,6 +172,7 @@ const CourseManagement = () => {
         description: '', 
         instructorProfile: { name: '', experience: '', description: '', linkedin: '' },
         category: 'Digital Marketing', 
+        originalPrice: '',
         price: '', 
         duration: '', 
         durationMonths: 1, 
@@ -177,10 +185,13 @@ const CourseManagement = () => {
         level: 'Beginner', 
         language: 'English', 
         whatYouWillLearn: '',
+        benefits: '',
+        careerOptions: '',
         whatsappGroupLink: '',
         youtubeUrl: '',
         courseType: 'online',
-        sections: []
+        sections: [],
+        isActive: true
       });
     }
     setNewSessionDate('');
@@ -353,6 +364,12 @@ const CourseManagement = () => {
         if (key === 'whatYouWillLearn') {
           const array = formData.whatYouWillLearn.split('\n').map(item => item.trim()).filter(item => item !== '');
           data.append('whatYouWillLearn', JSON.stringify(array));
+        } else if (key === 'benefits') {
+          const array = formData.benefits.split('\n').map(item => item.trim()).filter(item => item !== '');
+          data.append('benefits', JSON.stringify(array));
+        } else if (key === 'careerOptions') {
+          const array = formData.careerOptions.split('\n').map(item => item.trim()).filter(item => item !== '');
+          data.append('careerOptions', JSON.stringify(array));
         } else if (key === 'topics') {
           const array = formData.topics.split('\n').map(item => item.trim()).filter(item => item !== '');
           data.append('topics', JSON.stringify(array));
@@ -364,6 +381,8 @@ const CourseManagement = () => {
           data.append('instructorProfile', JSON.stringify(formData.instructorProfile));
         } else if (key === 'durationMonths') {
           data.append('durationMonths', computedDurationMonths);
+        } else if (key === 'originalPrice') {
+          data.append('originalPrice', formData.originalPrice !== undefined && formData.originalPrice !== '' ? formData.originalPrice : 0);
         } else if (key === 'price') {
           data.append('price', formData.price !== undefined && formData.price !== '' ? formData.price : 0);
         } else {
@@ -436,7 +455,7 @@ const CourseManagement = () => {
                 <div className="relative h-48 w-full bg-gray-100/80 overflow-hidden p-3 pb-0">
                   <div className="w-full h-full rounded-2xl overflow-hidden relative">
                     {course.thumbnailUrl ? (
-                      <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                      <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-700 ease-out" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-100"><FaImage size={32} /></div>
                     )}
@@ -449,6 +468,12 @@ const CourseManagement = () => {
                       <div className="absolute bottom-2.5 left-2.5 bg-black/75 backdrop-blur-md px-3 py-1 rounded-xl text-[11px] font-bold text-white shadow-xs flex items-center gap-1.5">
                         <FaClock size={10} className="text-emerald-400" />
                         <span>{course.timings || `${course.startTime} - ${course.endTime}`}</span>
+                      </div>
+                    )}
+                    
+                    {course.isActive === false && (
+                      <div className="absolute top-2.5 left-2.5 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-xl text-[10px] font-extrabold text-white shadow-xs uppercase tracking-wider">
+                        Hidden
                       </div>
                     )}
                   </div>
@@ -465,8 +490,13 @@ const CourseManagement = () => {
 
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-6 bg-slate-50 p-3.5 rounded-2xl border border-gray-200/50">
                     <div>
-                      <span className="text-[10px] uppercase font-bold text-gray-400 block">Fee</span>
-                      <span className="font-black text-indigo-700 text-sm">₹{course.price || 0}</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-400 block mb-0.5">Fee</span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-black text-indigo-700 text-sm">₹{course.price || 0}</span>
+                        {course.originalPrice && course.originalPrice > (course.price || 0) && (
+                          <span className="text-[10px] font-semibold text-gray-400 line-through">₹{course.originalPrice}</span>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <span className="text-[10px] uppercase font-bold text-gray-400 block">Level</span>
@@ -829,7 +859,22 @@ const CourseManagement = () => {
                 <FaTimes />
               </button>
               
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 relative z-10">{editingCourse ? 'Edit Course' : 'Create New Course'}</h2>
+              <div className="flex justify-start items-center gap-4 mb-6 relative z-10">
+                <h2 className="text-2xl font-bold text-gray-800">{editingCourse ? 'Edit Course' : 'Create New Course'}</h2>
+                
+                <label className="flex items-center gap-2 cursor-pointer bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white shadow-sm hover:bg-white transition-colors mt-1">
+                  <div className={`relative inline-block w-10 h-5 transition-colors duration-300 ease-in-out rounded-full ${formData.isActive ? 'bg-indigo-600' : 'bg-gray-300'}`}>
+                    <input 
+                      type="checkbox" 
+                      className="opacity-0 w-0 h-0 absolute" 
+                      checked={formData.isActive} 
+                      onChange={e => setFormData({...formData, isActive: e.target.checked})} 
+                    />
+                    <span className={`absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform duration-300 ease-in-out ${formData.isActive ? 'transform translate-x-5' : ''}`}></span>
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">{formData.isActive ? 'Active' : 'Hidden'}</span>
+                </label>
+              </div>
               
               <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
@@ -846,30 +891,41 @@ const CourseManagement = () => {
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                       <label className="flex items-center gap-2 cursor-pointer p-3 border border-white/60 bg-white/50 backdrop-blur-md rounded-xl w-full hover:bg-white/70 transition-colors">
                         <input type="radio" name="courseType" value="online" checked={formData.courseType === 'online'} onChange={e => setFormData({...formData, courseType: e.target.value})} className="text-indigo-600 focus:ring-indigo-600 h-4 w-4" />
-                        <span className="font-semibold text-gray-800">Live Classes (Online Zoom)</span>
+                        <span className="font-semibold text-gray-800">Live Classes (Zoom)</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer p-3 border border-white/60 bg-white/50 backdrop-blur-md rounded-xl w-full hover:bg-white/70 transition-colors">
                         <input type="radio" name="courseType" value="pre-recorded" checked={formData.courseType === 'pre-recorded'} onChange={e => setFormData({...formData, courseType: e.target.value})} className="text-indigo-600 focus:ring-indigo-600 h-4 w-4" />
-                        <span className="font-semibold text-gray-800">Pre-recorded (Udemy Style)</span>
+                        <span className="font-semibold text-gray-800">Pre-recorded</span>
                       </label>
                     </div>
                   </div>
 
 
 
-                  {/* Price */}
+                  {/* Original Price */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Course Fee (₹) *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Original Price (₹)</label>
+                    <input 
+                      type="number" 
+                      value={formData.originalPrice} 
+                      onChange={e => setFormData({...formData, originalPrice: e.target.value})} 
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-semibold text-gray-500" 
+                      placeholder="e.g. 9999"
+                    />
+                  </div>
+
+                  {/* Discounted Price */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Discounted Course Fee (₹) *</label>
                     <input 
                       type="number" 
                       required 
                       value={formData.price} 
                       onChange={e => setFormData({...formData, price: e.target.value})} 
-                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-semibold" 
-                      placeholder="e.g. 4,999"
+                      className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all font-bold text-emerald-600" 
+                      placeholder="e.g. 4999"
                     />
                   </div>
-                  
                   {/* Category */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category *</label>
@@ -1199,12 +1255,9 @@ const CourseManagement = () => {
                                     </div>
                                     <div className="flex-1 w-full flex items-center gap-2">
                                       <FaExternalLinkAlt className="text-gray-400 text-xs shrink-0" />
-                                      <input type="url" value={lesson.videoUrl} onChange={e => updateLesson(sIndex, lIndex, 'videoUrl', e.target.value)} placeholder="https://www.youtube.com/watch?v=..." className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" required />
+                                      <input type="url" value={lesson.videoUrl} onChange={e => updateLesson(sIndex, lIndex, 'videoUrl', e.target.value)} placeholder="https://www.youtube.com/watch?v=..." className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" />
                                     </div>
-                                    <div className="w-full md:w-28 flex items-center gap-2">
-                                      <FaClock className="text-gray-400 text-xs shrink-0" />
-                                      <input type="text" value={lesson.duration} onChange={e => updateLesson(sIndex, lIndex, 'duration', e.target.value)} placeholder="05:30" className="w-full p-2 bg-white border border-gray-200 rounded-md outline-none focus:border-indigo-600 text-xs" />
-                                    </div>
+
                                     <button type="button" onClick={() => removeLesson(sIndex, lIndex)} className="absolute -right-2 -top-2 md:static md:right-0 md:top-0 text-red-400 hover:text-red-600 bg-white md:bg-transparent rounded-full shadow-sm md:shadow-none p-1.5 md:p-1 transition-colors cursor-pointer">
                                       <FaTimes size={12} />
                                     </button>
@@ -1258,6 +1311,16 @@ const CourseManagement = () => {
                   <div className="col-span-full">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">What You Will Learn (One per line)</label>
                     <textarea required rows="3" value={formData.whatYouWillLearn} onChange={e => setFormData({...formData, whatYouWillLearn: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Plan a digital campaign\nCreate performance reports\nBuild a professional portfolio`}></textarea>
+                  </div>
+
+                  <div className="col-span-full">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Course Benefits (One per line)</label>
+                    <textarea rows="3" value={formData.benefits} onChange={e => setFormData({...formData, benefits: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Gain practical experience\nIndustry recognized certificate\n1-on-1 mentorship`}></textarea>
+                  </div>
+
+                  <div className="col-span-full">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Career Options (One per line)</label>
+                    <textarea rows="3" value={formData.careerOptions} onChange={e => setFormData({...formData, careerOptions: e.target.value})} className="w-full p-3.5 bg-white/50 backdrop-blur-md border border-white/60 rounded-xl focus:border-indigo-600 focus:bg-white/70 focus:ring-2 focus:ring-indigo-600/20 outline-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all resize-none font-medium" placeholder={`Digital Marketing Executive\nSEO Analyst\nSocial Media Manager`}></textarea>
                   </div>
 
                   {/* Media Uploads */}
