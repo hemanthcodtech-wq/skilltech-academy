@@ -195,6 +195,16 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
     if (req.body.selectedSessionDates) {
       try { selectedSessionDates = JSON.parse(req.body.selectedSessionDates); } catch (e) {}
     }
+    
+    let benefits = [];
+    let careerOptions = [];
+    if (req.body.benefits) {
+      try { benefits = JSON.parse(req.body.benefits); } catch (e) {}
+    }
+    if (req.body.careerOptions) {
+      try { careerOptions = JSON.parse(req.body.careerOptions); } catch (e) {}
+    }
+
     if (req.body.sections) {
       try { sections = JSON.parse(req.body.sections); } catch (e) {}
     }
@@ -225,6 +235,9 @@ router.post('/', protect, admin, upload.fields([{ name: 'thumbnail', maxCount: 1
       topics, 
       level, 
       language: language || 'English',
+      whatYouWillLearn,
+      benefits,
+      careerOptions,
       accessValidity: accessValidity || '2 Months',
       price: coursePrice,
       thumbnailUrl, 
@@ -301,11 +314,19 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
     } = req.body;
     
     let whatYouWillLearn = course.whatYouWillLearn;
+    let benefits = course.benefits;
+    let careerOptions = course.careerOptions;
     let instructorProfile = course.instructorProfile;
     if (req.body.whatYouWillLearn) {
       try {
         whatYouWillLearn = JSON.parse(req.body.whatYouWillLearn);
       } catch (e) {}
+    }
+    if (req.body.benefits) {
+      try { benefits = JSON.parse(req.body.benefits); } catch (e) {}
+    }
+    if (req.body.careerOptions) {
+      try { careerOptions = JSON.parse(req.body.careerOptions); } catch (e) {}
     }
     if (req.body.instructorProfile) {
       try { instructorProfile = JSON.parse(req.body.instructorProfile); } catch (e) {}
@@ -318,7 +339,7 @@ router.put('/:id', protect, admin, upload.fields([{ name: 'thumbnail', maxCount:
 
     let updateData = { 
       title, slug, description, category, durationMonths, startDate, endDate, 
-      level, language: language || 'English', whatYouWillLearn, instructorProfile
+      level, language: language || 'English', whatYouWillLearn, benefits, careerOptions, instructorProfile
     };
     if (isActive !== undefined) {
       updateData.isActive = isActive === 'true' || isActive === true;

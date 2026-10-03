@@ -71,7 +71,39 @@ const Checkout = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const { order, key } = orderRes.data;
+      const { order, key, isFree } = orderRes.data;
+
+      if (isFree || (order && order.amount === 0)) {
+        // Direct enrollment without Razorpay
+        try {
+          const verifyRes = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/payments/verify-payment`,
+            {
+              razorpay_order_id: order?.id || 'free_order',
+              razorpay_payment_id: 'free_payment',
+              razorpay_signature: 'free_signature',
+              courseId: course._id,
+              amountPaid: 0,
+              studentEmail: email,
+              isFree: true
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          if (verifyRes.data.success) {
+            setSuccess(true);
+            setTimeout(() => {
+              navigate(`/dashboard/learning/${course._id}`);
+            }, 2500);
+          }
+        } catch (verifyError) {
+          console.error('Free enrollment verification failed:', verifyError);
+          alert('Free enrollment failed. Please try again.');
+        } finally {
+          setProcessing(false);
+        }
+        return;
+      }
 
       // 2. Initialize Razorpay checkout
       const options = {

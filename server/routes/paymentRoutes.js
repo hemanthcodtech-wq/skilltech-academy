@@ -84,6 +84,14 @@ router.post('/create-order', protect, async (req, res) => {
       }
     }
 
+    if (price === 0) {
+      return res.json({
+        success: true,
+        isFree: true,
+        order: { amount: 0, currency: "INR", id: `free_${Date.now()}` }
+      });
+    }
+
     const options = {
       amount: Math.round(price * 100), // paise
       currency: "INR",
@@ -130,20 +138,26 @@ router.post('/validate-promo', protect, async (req, res) => {
 // Verify Razorpay Payment and send confirmation email with invoice PDF
 router.post('/verify-payment', protect, async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId, amountPaid } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId, amountPaid, isFree } = req.body;
 
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
 
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(body.toString())
-      .digest('hex');
+    let isAuthentic = false;
 
-    const isAuthentic = expectedSignature === razorpay_signature;
+    if (isFree && amountPaid === 0) {
+      isAuthentic = true;
+    } else {
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+        .update(body.toString())
+        .digest('hex');
+
+      isAuthentic = expectedSignature === razorpay_signature;
+    }
 
     if (isAuthentic || process.env.NODE_ENV === 'development') {
       const invoiceNumber = `skill-invoice-${Date.now().toString().slice(-6)}${Math.floor(100 + Math.random() * 900)}`;
